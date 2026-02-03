@@ -1,13 +1,13 @@
 import ProManager from '../pro/ProManager'
 import { AnalyticsLogger } from './emitter/AnalyticsLogger'
 import { ProEmitter } from './emitter/ProEmitter'
-import { ICapRoverEvent } from './ICapRoverEvent'
+import { IFlukeDeployEvent } from './IFlukeDeployEvent'
 import { IEventsEmitter } from './IEventsEmitter'
 
 export class EventLogger {
     constructor(private eventEmitters: IEventsEmitter[]) {}
 
-    trackEvent(event: ICapRoverEvent) {
+    trackEvent(event: IFlukeDeployEvent) {
         this.eventEmitters.forEach((ee) => {
             if (ee.isEventApplicable(event)) {
                 ee.emitEvent(event)

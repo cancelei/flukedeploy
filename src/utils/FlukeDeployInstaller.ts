@@ -1,7 +1,7 @@
 import DockerApi from '../docker/DockerApi'
 import { IAppEnvVar, IAppPort } from '../models/AppDefinition'
 import BackupManager from '../user/system/BackupManager'
-import CaptainConstants from './CaptainConstants'
+import FlukeDeployConstants from './FlukeDeployConstants'
 import EnvVar from './EnvVars'
 import http = require('http')
 import request = require('request')
@@ -36,7 +36,7 @@ function checkSystemReq() {
                 console.log('   Docker Version passed.')
             } else {
                 console.log(
-                    'Warning!! Minimum Docker version is 17.06.x CapRover may not run properly on your Docker version.'
+                    'Warning!! Minimum Docker version is 17.06.x FlukeDeploy may not run properly on your Docker version.'
                 )
             }
 
@@ -51,7 +51,7 @@ function checkSystemReq() {
                 console.log(' ')
                 console.log('******* ERROR *******')
                 console.log(
-                    'CapRover may not work properly on this host (Proxmox LXC containers).'
+                    'FlukeDeploy may not work properly on this host (Proxmox LXC containers).'
                 )
                 console.log(
                     'Proxmox containers are known to break Docker swarm networking.'
@@ -60,14 +60,14 @@ function checkSystemReq() {
                     'Consider using a different virtualization platform.'
                 )
 
-                throw new Error('Host is not compatible with CapRover.')
+                throw new Error('Host is not compatible with FlukeDeploy.')
             } else if (
                 output.KernelVersion &&
                 !output.KernelVersion.toLowerCase().includes('-generic')
             ) {
                 console.log('   Kernel version:', output.KernelVersion)
                 console.log(
-                    '   Warning: Non-generic kernel detected. CapRover compatibility may vary.'
+                    '   Warning: Non-generic kernel detected. FlukeDeploy compatibility may vary.'
                 )
             }
 
@@ -94,7 +94,7 @@ function checkSystemReq() {
                     }
                 } else {
                     console.log(
-                        '******* Warning *******    CapRover and Docker work best on Ubuntu - specially when it comes to storage drivers.'
+                        '******* Warning *******    FlukeDeploy and Docker work best on Ubuntu - specially when it comes to storage drivers.'
                     )
                 }
             }
@@ -135,7 +135,7 @@ function checkSystemReq() {
 
             if (totalMemInMb < 1000) {
                 console.log(
-                    '******* Warning *******   With less than 1GB RAM, Docker builds might fail, see CapRover system requirements.'
+                    '******* Warning *******   With less than 1GB RAM, Docker builds might fail, see FlukeDeploy system requirements.'
                 )
             } else {
                 console.log(`   Total RAM ${totalMemInMb} MB`)
@@ -179,7 +179,7 @@ function startServerOnPort_80_443_3000() {
             })
             res.write(FIREWALL_PASSED)
             res.end()
-        }).listen(CaptainConstants.serviceContainerPort3000)
+        }).listen(FlukeDeployConstants.serviceContainerPort3000)
 
         return new Promise<void>(function (resolve) {
             setTimeout(function () {
@@ -190,7 +190,7 @@ function startServerOnPort_80_443_3000() {
 }
 
 function checkPortOrThrow(ipAddr: string, portToTest: number) {
-    if (CaptainConstants.isDebug || !!EnvVar.BY_PASS_PROXY_CHECK) {
+    if (FlukeDeployConstants.isDebug || !!EnvVar.BY_PASS_PROXY_CHECK) {
         return Promise.resolve()
     }
 
@@ -198,7 +198,7 @@ function checkPortOrThrow(ipAddr: string, portToTest: number) {
         console.log(' ')
         console.log(' ')
         console.log(
-            'Are you trying to run CapRover on a local machine or a machine without a public IP?'
+            'Are you trying to run FlukeDeploy on a local machine or a machine without a public IP?'
         )
         console.log(
             'In that case, you need to add this to your installation command:'
@@ -208,7 +208,7 @@ function checkPortOrThrow(ipAddr: string, portToTest: number) {
         console.log(' ')
         console.log(' ')
         console.log(
-            'Otherwise, if you are running CapRover on a VPS with public IP:'
+            'Otherwise, if you are running FlukeDeploy on a VPS with public IP:'
         )
         console.log(
             `Your firewall may have been blocking an in-use port: ${portToTest}`
@@ -217,7 +217,7 @@ function checkPortOrThrow(ipAddr: string, portToTest: number) {
             'A simple solution on Ubuntu systems is to run "ufw disable" (security risk)'
         )
         console.log('Or [recommended] just allowing necessary ports:')
-        console.log(CaptainConstants.disableFirewallCommand)
+        console.log(FlukeDeployConstants.disableFirewallCommand)
         console.log('     ')
         console.log('     ')
         console.log('See docs for more details on how to fix firewall issues')
@@ -268,9 +268,9 @@ function checkPortOrThrow(ipAddr: string, portToTest: number) {
 
 function printTroubleShootingUrl() {
     console.log('     ')
-    console.log(' Installation of CapRover is starting...     ')
+    console.log(' Installation of FlukeDeploy is starting...     ')
     console.log(
-        'For troubleshooting, please see: https://caprover.com/docs/troubleshooting.html'
+        'For troubleshooting, please see: https://flukedeploy.com/docs/troubleshooting.html'
     )
     console.log('     ')
     console.log('     ')
@@ -295,7 +295,7 @@ export function install() {
                 -e ACCEPTED_TERMS=true
                 
                 Terms of service must be accepted before installation, view them here: 
-                https://github.com/caprover/caprover/blob/master/TERMS_AND_CONDITIONS.md
+                https://github.com/flukedeploy/flukedeploy/blob/master/TERMS_AND_CONDITIONS.md
                 `.trim()
                 )
             }
@@ -335,7 +335,7 @@ export function install() {
                 )
             }
 
-            if (CaptainConstants.isDebug) {
+            if (FlukeDeployConstants.isDebug) {
                 return new Promise<string>(function (resolve, reject) {
                     DockerApi.get()
                         .swarmLeave(true)
@@ -362,33 +362,33 @@ export function install() {
         .then(function () {
             return checkPortOrThrow(
                 myIp4,
-                CaptainConstants.configs.nginxPortNumber80 as any
+                FlukeDeployConstants.configs.nginxPortNumber80 as any
             )
         })
         .then(function () {
             return checkPortOrThrow(
                 myIp4,
-                CaptainConstants.configs.nginxPortNumber443 as any
+                FlukeDeployConstants.configs.nginxPortNumber443 as any
             )
         })
         .then(function () {
             return checkPortOrThrow(
                 myIp4,
-                CaptainConstants.configs.adminPortNumber3000 as any
+                FlukeDeployConstants.configs.adminPortNumber3000 as any
             )
         })
         .then(function () {
-            const imageName = CaptainConstants.configs.nginxImageName
+            const imageName = FlukeDeployConstants.configs.nginxImageName
             console.log(`Pulling: ${imageName}`)
             return DockerApi.get().pullImage(imageName, undefined)
         })
         .then(function () {
-            const imageName = CaptainConstants.configs.appPlaceholderImageName
+            const imageName = FlukeDeployConstants.configs.appPlaceholderImageName
             console.log(`Pulling: ${imageName}`)
             return DockerApi.get().pullImage(imageName, undefined)
         })
         .then(function () {
-            const imageName = CaptainConstants.configs.certbotImageName
+            const imageName = FlukeDeployConstants.configs.certbotImageName
             console.log(`Pulling: ${imageName}`)
             return DockerApi.get().pullImage(imageName, undefined)
         })
@@ -396,7 +396,7 @@ export function install() {
             return backupManger.checkAndPrepareRestoration()
         })
         .then(function () {
-            if (CaptainConstants.configs.useExistingSwarm) {
+            if (FlukeDeployConstants.configs.useExistingSwarm) {
                 return DockerApi.get().ensureSwarmExists()
             }
             return DockerApi.get().initSwarm(myIp4)
@@ -411,8 +411,8 @@ export function install() {
         .then(function (nodeId: string) {
             const volumeToMount = [
                 {
-                    hostPath: CaptainConstants.captainBaseDirectory,
-                    containerPath: CaptainConstants.captainBaseDirectory,
+                    hostPath: FlukeDeployConstants.captainBaseDirectory,
+                    containerPath: FlukeDeployConstants.captainBaseDirectory,
                 },
             ]
 
@@ -423,15 +423,15 @@ export function install() {
             })
             env.push({
                 key: EnvVar.keys.CAPTAIN_HOST_ADMIN_PORT,
-                value: CaptainConstants.configs.adminPortNumber3000 + '',
+                value: FlukeDeployConstants.configs.adminPortNumber3000 + '',
             })
             env.push({
                 key: EnvVar.keys.CAPTAIN_HOST_HTTP_PORT,
-                value: CaptainConstants.configs.nginxPortNumber80 + '',
+                value: FlukeDeployConstants.configs.nginxPortNumber80 + '',
             })
             env.push({
                 key: EnvVar.keys.CAPTAIN_HOST_HTTPS_PORT,
-                value: CaptainConstants.configs.nginxPortNumber443 + '',
+                value: FlukeDeployConstants.configs.nginxPortNumber443 + '',
             })
 
             if (EnvVar.DEFAULT_PASSWORD) {
@@ -448,8 +448,8 @@ export function install() {
                 })
             } else {
                 volumeToMount.push({
-                    hostPath: CaptainConstants.dockerSocketPath,
-                    containerPath: CaptainConstants.dockerSocketPath,
+                    hostPath: FlukeDeployConstants.dockerSocketPath,
+                    containerPath: FlukeDeployConstants.dockerSocketPath,
                 })
             }
 
@@ -462,11 +462,11 @@ export function install() {
 
             const ports: IAppPort[] = []
 
-            let captainNameAndVersion = `${CaptainConstants.configs.publishedNameOnDockerHub}:${CaptainConstants.configs.version}`
+            let captainNameAndVersion = `${FlukeDeployConstants.configs.publishedNameOnDockerHub}:${FlukeDeployConstants.configs.version}`
 
-            if (CaptainConstants.isDebug) {
+            if (FlukeDeployConstants.isDebug) {
                 captainNameAndVersion =
-                    CaptainConstants.configs.publishedNameOnDockerHub // debug doesn't have version.
+                    FlukeDeployConstants.configs.publishedNameOnDockerHub // debug doesn't have version.
 
                 env.push({
                     key: EnvVar.keys.CAPTAIN_IS_DEBUG,
@@ -474,8 +474,8 @@ export function install() {
                 })
 
                 volumeToMount.push({
-                    hostPath: CaptainConstants.debugSourceDirectory,
-                    containerPath: CaptainConstants.sourcePathInContainer,
+                    hostPath: FlukeDeployConstants.debugSourceDirectory,
+                    containerPath: FlukeDeployConstants.sourcePathInContainer,
                 })
 
                 ports.push({
@@ -487,13 +487,13 @@ export function install() {
             ports.push({
                 protocol: 'tcp',
                 publishMode: 'host',
-                containerPort: CaptainConstants.serviceContainerPort3000,
-                hostPort: CaptainConstants.configs.adminPortNumber3000,
+                containerPort: FlukeDeployConstants.serviceContainerPort3000,
+                hostPort: FlukeDeployConstants.configs.adminPortNumber3000,
             })
 
             return DockerApi.get().createServiceOnNodeId(
                 captainNameAndVersion,
-                CaptainConstants.captainServiceName,
+                FlukeDeployConstants.captainServiceName,
                 ports,
                 nodeId,
                 volumeToMount,
@@ -506,9 +506,9 @@ export function install() {
             )
         })
         .then(function () {
-            console.log('*** CapRover is initializing ***')
+            console.log('*** FlukeDeploy is initializing ***')
             console.log(
-                'Please wait at least 60 seconds before trying to access CapRover.'
+                'Please wait at least 60 seconds before trying to access FlukeDeploy.'
             )
         })
         .catch(function (error) {

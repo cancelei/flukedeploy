@@ -6,7 +6,7 @@ import DockerApi from '../../docker/DockerApi'
 import { GoAccessInfo } from '../../models/GoAccessInfo'
 import { IRegistryInfo, IRegistryTypes } from '../../models/IRegistryInfo'
 import { NetDataInfo } from '../../models/NetDataInfo'
-import CaptainConstants from '../../utils/CaptainConstants'
+import FlukeDeployConstants from '../../utils/FlukeDeployConstants'
 import Logger from '../../utils/Logger'
 import Utils from '../../utils/Utils'
 import Authenticator from '../Authenticator'
@@ -14,9 +14,9 @@ import FeatureFlags from '../FeatureFlags'
 import ServiceManager from '../ServiceManager'
 import { EventLoggerFactory } from '../events/EventLogger'
 import {
-    CapRoverEventFactory,
-    CapRoverEventType,
-} from '../events/ICapRoverEvent'
+    FlukeDeployEventFactory,
+    FlukeDeployEventType,
+} from '../events/IFlukeDeployEvent'
 import ProManager from '../pro/ProManager'
 import BackupManager from './BackupManager'
 import CertbotManager from './CertbotManager'
@@ -58,7 +58,7 @@ class CaptainManager {
 
         this.hasForceSsl = false
         this.dataStore = DataStoreProvider.getDataStore(
-            CaptainConstants.rootNameSpace
+            FlukeDeployConstants.rootNameSpace
         )
         this.dockerApi = dockerApi
         this.certbotManager = new CertbotManager(dockerApi)
@@ -97,7 +97,7 @@ class CaptainManager {
         self.refreshForceSslState()
             .then(function () {
                 return dockerApi.getNodeIdByServiceName(
-                    CaptainConstants.captainServiceName,
+                    FlukeDeployConstants.captainServiceName,
                     0
                 )
             })
@@ -121,40 +121,40 @@ class CaptainManager {
             .then(function () {
                 Logger.d('Emptying generated and temp folders.')
 
-                return fs.emptyDir(CaptainConstants.captainRootDirectoryTemp)
+                return fs.emptyDir(FlukeDeployConstants.captainRootDirectoryTemp)
             })
             .then(function () {
                 return fs.emptyDir(
-                    CaptainConstants.captainRootDirectoryGenerated
+                    FlukeDeployConstants.captainRootDirectoryGenerated
                 )
             })
             .then(function () {
                 Logger.d('Ensuring directories are available on host. Started.')
 
-                return fs.ensureDir(CaptainConstants.letsEncryptEtcPath)
+                return fs.ensureDir(FlukeDeployConstants.letsEncryptEtcPath)
             })
             .then(function () {
-                return fs.ensureDir(CaptainConstants.letsEncryptLibPath)
+                return fs.ensureDir(FlukeDeployConstants.letsEncryptLibPath)
             })
             .then(function () {
-                return fs.ensureDir(CaptainConstants.captainStaticFilesDir)
+                return fs.ensureDir(FlukeDeployConstants.captainStaticFilesDir)
             })
             .then(function () {
-                return fs.ensureDir(CaptainConstants.perAppNginxConfigPathBase)
+                return fs.ensureDir(FlukeDeployConstants.perAppNginxConfigPathBase)
             })
             .then(function () {
-                return fs.ensureFile(CaptainConstants.baseNginxConfigPath)
+                return fs.ensureFile(FlukeDeployConstants.baseNginxConfigPath)
             })
             .then(function () {
-                return fs.ensureDir(CaptainConstants.nginxSharedLogsPathOnHost)
+                return fs.ensureDir(FlukeDeployConstants.nginxSharedLogsPathOnHost)
             })
             .then(function () {
-                return fs.ensureDir(CaptainConstants.registryPathOnHost)
+                return fs.ensureDir(FlukeDeployConstants.registryPathOnHost)
             })
             .then(function () {
                 return dockerApi.ensureOverlayNetwork(
-                    CaptainConstants.captainNetworkName,
-                    CaptainConstants.configs.overlayNetworkOverride
+                    FlukeDeployConstants.captainNetworkName,
+                    FlukeDeployConstants.configs.overlayNetworkOverride
                 )
             })
             .then(function () {
@@ -163,23 +163,23 @@ class CaptainManager {
                 )
 
                 return dockerApi.ensureServiceConnectedToNetwork(
-                    CaptainConstants.captainServiceName,
-                    CaptainConstants.captainNetworkName
+                    FlukeDeployConstants.captainServiceName,
+                    FlukeDeployConstants.captainNetworkName
                 )
             })
             .then(function () {
-                const valueIfNotExist = CaptainConstants.isDebug
+                const valueIfNotExist = FlukeDeployConstants.isDebug
                     ? DEBUG_SALT
                     : uuid()
                 return dockerApi.ensureSecret(
-                    CaptainConstants.captainSaltSecretKey,
+                    FlukeDeployConstants.captainSaltSecretKey,
                     valueIfNotExist
                 )
             })
             .then(function () {
                 return dockerApi.ensureSecretOnService(
-                    CaptainConstants.captainServiceName,
-                    CaptainConstants.captainSaltSecretKey
+                    FlukeDeployConstants.captainServiceName,
+                    FlukeDeployConstants.captainSaltSecretKey
                 )
             })
             .then(function (secretHadExistedBefore) {
@@ -192,7 +192,7 @@ class CaptainManager {
                 }
             })
             .then(function () {
-                const secretFileName = `/run/secrets/${CaptainConstants.captainSaltSecretKey}`
+                const secretFileName = `/run/secrets/${FlukeDeployConstants.captainSaltSecretKey}`
 
                 if (!fs.pathExistsSync(secretFileName)) {
                     throw new Error(
@@ -272,8 +272,8 @@ class CaptainManager {
                 )
                     .getLogger()
                     .trackEvent(
-                        CapRoverEventFactory.create(
-                            CapRoverEventType.InstanceStarted,
+                        FlukeDeployEventFactory.create(
+                            FlukeDeployEventType.InstanceStarted,
                             {}
                         )
                     )
@@ -298,7 +298,7 @@ class CaptainManager {
     performHealthCheck() {
         const self = this
         const captainPublicDomain = `${
-            CaptainConstants.configs.captainSubDomain
+            FlukeDeployConstants.configs.captainSubDomain
         }.${self.dataStore.getRootDomain()}`
 
         function scheduleNextHealthCheck() {
@@ -309,7 +309,7 @@ class CaptainManager {
         }
 
         // For debug build, we'll turn off health check
-        if (CaptainConstants.isDebug || !self.dataStore.hasCustomDomain()) {
+        if (FlukeDeployConstants.isDebug || !self.dataStore.hasCustomDomain()) {
             scheduleNextHealthCheck()
             return
         }
@@ -326,7 +326,7 @@ class CaptainManager {
                 callback(false)
             }, TIMEOUT_HEALTH_CHECK)
 
-            if (CaptainConstants.configs.skipVerifyingDomains) {
+            if (FlukeDeployConstants.configs.skipVerifyingDomains) {
                 setTimeout(function () {
                     if (callbackCalled) {
                         return
@@ -337,7 +337,7 @@ class CaptainManager {
                 return
             }
 
-            const url = `http://${captainPublicDomain}${CaptainConstants.healthCheckEndPoint}`
+            const url = `http://${captainPublicDomain}${FlukeDeployConstants.healthCheckEndPoint}`
 
             request(
                 url,
@@ -548,8 +548,8 @@ class CaptainManager {
         return Promise.resolve()
             .then(function () {
                 return dockerApi.ensureContainerStoppedAndRemoved(
-                    CaptainConstants.netDataContainerName,
-                    CaptainConstants.captainNetworkName
+                    FlukeDeployConstants.netDataContainerName,
+                    FlukeDeployConstants.captainNetworkName
                 )
             })
             .then(function () {
@@ -667,10 +667,10 @@ class CaptainManager {
                     }
 
                     return dockerApi.createStickyContainer(
-                        CaptainConstants.netDataContainerName,
-                        CaptainConstants.configs.netDataImageName,
+                        FlukeDeployConstants.netDataContainerName,
+                        FlukeDeployConstants.configs.netDataImageName,
                         vols,
-                        CaptainConstants.captainNetworkName,
+                        FlukeDeployConstants.captainNetworkName,
                         envVars,
                         ['SYS_PTRACE'],
                         ['apparmor:unconfined'],
@@ -700,7 +700,7 @@ class CaptainManager {
         }
 
         const crontabFilePath = `${
-            CaptainConstants.goaccessConfigPathBase
+            FlukeDeployConstants.goaccessConfigPathBase
         }/crontab.txt`
 
         return Promise.resolve()
@@ -716,31 +716,31 @@ class CaptainManager {
             })
             .then(function () {
                 return dockerApi.ensureContainerStoppedAndRemoved(
-                    CaptainConstants.goAccessContainerName,
-                    CaptainConstants.captainNetworkName
+                    FlukeDeployConstants.goAccessContainerName,
+                    FlukeDeployConstants.captainNetworkName
                 )
             })
             .then(function () {
                 if (enabled) {
                     return dockerApi.createStickyContainer(
-                        CaptainConstants.goAccessContainerName,
-                        CaptainConstants.configs.goAccessImageName,
+                        FlukeDeployConstants.goAccessContainerName,
+                        FlukeDeployConstants.configs.goAccessImageName,
                         [
                             {
                                 hostPath:
-                                    CaptainConstants.nginxSharedLogsPathOnHost,
+                                    FlukeDeployConstants.nginxSharedLogsPathOnHost,
                                 containerPath:
-                                    CaptainConstants.nginxSharedLogsPath,
+                                    FlukeDeployConstants.nginxSharedLogsPath,
                                 mode: 'rw',
                             },
                             {
                                 hostPath: crontabFilePath,
                                 containerPath:
-                                    CaptainConstants.goAccessCrontabPath,
+                                    FlukeDeployConstants.goAccessCrontabPath,
                                 mode: 'ro',
                             },
                         ],
-                        CaptainConstants.captainNetworkName,
+                        FlukeDeployConstants.captainNetworkName,
                         [
                             {
                                 key: 'LOG_RETENTION_DAYS',
@@ -750,7 +750,7 @@ class CaptainManager {
                             },
                             {
                                 key: 'ANONYMIZE_IP',
-                                value: CaptainConstants.configs.goAccessAnonymizeIP.toString(),
+                                value: FlukeDeployConstants.configs.goAccessAnonymizeIP.toString(),
                             },
                         ],
                         [],
@@ -803,7 +803,7 @@ class CaptainManager {
             .then(function () {
                 return self.certbotManager.enableSsl(
                     `${
-                        CaptainConstants.configs.captainSubDomain
+                        FlukeDeployConstants.configs.captainSubDomain
                     }.${self.dataStore.getRootDomain()}`
                 )
             })
@@ -914,7 +914,7 @@ class CaptainManager {
         // We still allow users to specify the domains in their DNS settings individually
         // SubDomains that need to be added are "captain." "registry." "app-name."
         const url = `${uuid()}.${requestedCustomDomain}:${
-            CaptainConstants.configs.nginxPortNumber80
+            FlukeDeployConstants.configs.nginxPortNumber80
         }`
 
         return self.domainResolveChecker
@@ -989,7 +989,7 @@ class CaptainManager {
         return new Promise<void>(function (resolve, reject) {
             setTimeout(function () {
                 return self.dockerApi.updateService(
-                    CaptainConstants.captainServiceName,
+                    FlukeDeployConstants.captainServiceName,
                     undefined,
                     undefined,
                     undefined,

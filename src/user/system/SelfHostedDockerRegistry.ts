@@ -1,7 +1,7 @@
 import ApiStatusCodes from '../../api/ApiStatusCodes'
 import DataStore from '../../datastore/DataStore'
 import DockerApi from '../../docker/DockerApi'
-import CaptainConstants from '../../utils/CaptainConstants'
+import FlukeDeployConstants from '../../utils/FlukeDeployConstants'
 import Logger from '../../utils/Logger'
 import CertbotManager from './CertbotManager'
 import LoadBalancerManager from './LoadBalancerManager'
@@ -36,7 +36,7 @@ class SelfHostedDockerRegistry {
 
                 return self.certbotManager.enableSsl(
                     `${
-                        CaptainConstants.registrySubDomain
+                        FlukeDeployConstants.registrySubDomain
                     }.${self.dataStore.getRootDomain()}`
                 )
             })
@@ -57,9 +57,9 @@ class SelfHostedDockerRegistry {
         const self = this
 
         return `${
-            CaptainConstants.registrySubDomain
+            FlukeDeployConstants.registrySubDomain
         }.${self.dataStore.getRootDomain()}:${
-            CaptainConstants.configs.registrySubDomainPort
+            FlukeDeployConstants.configs.registrySubDomainPort
         }`
     }
 
@@ -72,14 +72,14 @@ class SelfHostedDockerRegistry {
             })
             .then(function () {
                 return dockerApi.isServiceRunningByName(
-                    CaptainConstants.registryServiceName
+                    FlukeDeployConstants.registryServiceName
                 )
             })
             .then(function (isRunning) {
                 if (!isRunning) return
 
                 return dockerApi.removeServiceByName(
-                    CaptainConstants.registryServiceName
+                    FlukeDeployConstants.registryServiceName
                 )
             })
     }
@@ -91,8 +91,8 @@ class SelfHostedDockerRegistry {
         function createRegistryServiceOnNode(nodeId: string) {
             return dockerApi
                 .createServiceOnNodeId(
-                    CaptainConstants.configs.registryImageName,
-                    CaptainConstants.registryServiceName,
+                    FlukeDeployConstants.configs.registryImageName,
+                    FlukeDeployConstants.registryServiceName,
                     undefined,
                     nodeId,
                     undefined,
@@ -124,17 +124,17 @@ class SelfHostedDockerRegistry {
         return Promise.resolve()
             .then(function () {
                 const authContent = `${
-                    CaptainConstants.captainRegistryUsername
+                    FlukeDeployConstants.captainRegistryUsername
                 }:${bcrypt.hashSync(password, bcrypt.genSaltSync(10))}`
 
                 return fs.outputFile(
-                    CaptainConstants.registryAuthPathOnHost,
+                    FlukeDeployConstants.registryAuthPathOnHost,
                     authContent
                 )
             })
             .then(function () {
                 return dockerApi.isServiceRunningByName(
-                    CaptainConstants.registryServiceName
+                    FlukeDeployConstants.registryServiceName
                 )
             })
             .then(function (isRunning) {
@@ -142,7 +142,7 @@ class SelfHostedDockerRegistry {
                     Logger.d('Captain Registry is already running.. ')
 
                     return dockerApi.getNodeIdByServiceName(
-                        CaptainConstants.registryServiceName,
+                        FlukeDeployConstants.registryServiceName,
                         0
                     )
                 } else {
@@ -165,7 +165,7 @@ class SelfHostedDockerRegistry {
 
                     return dockerApi
                         .removeServiceByName(
-                            CaptainConstants.registryServiceName
+                            FlukeDeployConstants.registryServiceName
                         )
                         .then(function () {
                             Logger.d('Creating Registry on this node...')
@@ -184,20 +184,20 @@ class SelfHostedDockerRegistry {
                 Logger.d('Updating Certbot service...')
 
                 return dockerApi.updateService(
-                    CaptainConstants.registryServiceName,
-                    CaptainConstants.configs.registryImageName,
+                    FlukeDeployConstants.registryServiceName,
+                    FlukeDeployConstants.configs.registryImageName,
                     [
                         {
                             containerPath: '/cert-files',
-                            hostPath: CaptainConstants.letsEncryptEtcPath,
+                            hostPath: FlukeDeployConstants.letsEncryptEtcPath,
                         },
                         {
                             containerPath: '/var/lib/registry',
-                            hostPath: CaptainConstants.registryPathOnHost,
+                            hostPath: FlukeDeployConstants.registryPathOnHost,
                         },
                         {
                             containerPath: '/etc/auth',
-                            hostPath: CaptainConstants.registryAuthPathOnHost,
+                            hostPath: FlukeDeployConstants.registryAuthPathOnHost,
                         },
                     ],
                     // No need for registry to be connected to the network
@@ -206,13 +206,13 @@ class SelfHostedDockerRegistry {
                         {
                             key: 'REGISTRY_HTTP_TLS_CERTIFICATE',
                             value: `/cert-files/live/${
-                                CaptainConstants.registrySubDomain
+                                FlukeDeployConstants.registrySubDomain
                             }.${dataStore.getRootDomain()}/fullchain.pem`,
                         },
                         {
                             key: 'REGISTRY_HTTP_TLS_KEY',
                             value: `/cert-files/live/${
-                                CaptainConstants.registrySubDomain
+                                FlukeDeployConstants.registrySubDomain
                             }.${dataStore.getRootDomain()}/privkey.pem`,
                         },
                         {
@@ -242,7 +242,7 @@ class SelfHostedDockerRegistry {
                             protocol: 'tcp',
                             containerPort: 5000,
                             hostPort:
-                                CaptainConstants.configs.registrySubDomainPort,
+                                FlukeDeployConstants.configs.registrySubDomainPort,
                         },
                     ],
                     undefined,

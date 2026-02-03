@@ -16,7 +16,7 @@ import {
 import { IBuiltImage } from '../models/IBuiltImage'
 import Authenticator from '../user/Authenticator'
 import ApacheMd5 from '../utils/ApacheMd5'
-import CaptainConstants from '../utils/CaptainConstants'
+import FlukeDeployConstants from '../utils/FlukeDeployConstants'
 import CaptainEncryptor from '../utils/Encryptor'
 import Logger from '../utils/Logger'
 import Utils from '../utils/Utils'
@@ -315,7 +315,7 @@ class AppsDataStore {
                 // captainDefinitionFilePath added in v1.2.0, we need to backfill if it doesn't exists.
                 appUnencrypted.captainDefinitionRelativeFilePath =
                     appUnencrypted.captainDefinitionRelativeFilePath ||
-                    CaptainConstants.defaultCaptainDefinitionPath
+                    FlukeDeployConstants.defaultCaptainDefinitionPath
 
                 const appSave = allApps[appName] as IAppDefSaved
 
@@ -601,7 +601,7 @@ class AppsDataStore {
             // Drop older versions
             app.versions = Utils.dropFirstElements(
                 app.versions,
-                CaptainConstants.configs.maxVersionHistory - 1
+                FlukeDeployConstants.configs.maxVersionHistory - 1
             )
 
             const versions = app.versions
@@ -937,8 +937,8 @@ class AppsDataStore {
                 description: '',
                 instanceCount: 1,
                 captainDefinitionRelativeFilePath:
-                    CaptainConstants.defaultCaptainDefinitionPath,
-                networks: [CaptainConstants.captainNetworkName],
+                    FlukeDeployConstants.defaultCaptainDefinitionPath,
+                networks: [FlukeDeployConstants.captainNetworkName],
                 envVars: [],
                 volumes: [],
                 ports: [],

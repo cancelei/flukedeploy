@@ -1,17 +1,17 @@
 import ApiStatusCodes from '../api/ApiStatusCodes'
 import DataStore from '../datastore/DataStore'
 import DataStoreProvider from '../datastore/DataStoreProvider'
-import CapRoverTheme from '../models/CapRoverTheme'
-import CaptainConstants from '../utils/CaptainConstants'
+import FlukeDeployTheme from '../models/FlukeDeployTheme'
+import FlukeDeployConstants from '../utils/FlukeDeployConstants'
 import Logger from '../utils/Logger'
 import Utils from '../utils/Utils'
 import fs = require('fs-extra')
 
-const builtInThemes = [] as CapRoverTheme[]
+const builtInThemes = [] as FlukeDeployTheme[]
 
 /**
  * Parses a string containing themed configuration fields into a JSON object.
- * Each field must start with "###CapRoverTheme." followed by the field name and its content.
+ * Each field must start with "###FlukeDeployTheme." followed by the field name and its content.
  * The function dynamically identifies and extracts these fields, preserving their original formatting.
  * Field names are converted to lowercase to serve as keys in the resulting JSON object,
  * with the corresponding content as the values, maintaining any internal formatting.
@@ -21,9 +21,9 @@ const builtInThemes = [] as CapRoverTheme[]
  *
  * Example:
  * Input:
- *   "###CapRoverTheme.name:
+ *   "###FlukeDeployTheme.name:
  *   Green Arrow
- *   ###CapRoverTheme.content:
+ *   ###FlukeDeployTheme.content:
  *   { colorA: '#fff',
  *     colorB: '#fff'
  *  }"
@@ -31,14 +31,14 @@ const builtInThemes = [] as CapRoverTheme[]
  *   { name: "Green Arrow", content: "{ colorA: '#fff' , colorB: '#fff' }" }
  */
 
-function parseCapRoverTheme(input: string) {
+function parseFlukeDeployTheme(input: string) {
     const result = {} as { [id: string]: string }
     const lines = input.split('\n')
     let currentField = undefined as string | undefined
 
     lines.forEach((line, index) => {
-        if (line.startsWith('###CapRoverTheme.')) {
-            // Calculate the start position for the field name and remove the prefix '###CapRoverTheme.'
+        if (line.startsWith('###FlukeDeployTheme.')) {
+            // Calculate the start position for the field name and remove the prefix '###FlukeDeployTheme.'
             const start = line.indexOf('.') + 1
             currentField = line.substring(start, line.length - 1).trim()
             result[currentField] = ''
@@ -84,9 +84,9 @@ function populateBuiltInThemes() {
 
     rawContent.forEach((it) => {
         const parsedTheme = {
-            ...parseCapRoverTheme(it),
+            ...parseFlukeDeployTheme(it),
             builtIn: true,
-        } as CapRoverTheme
+        } as FlukeDeployTheme
         builtInThemes.push(parsedTheme)
     })
 }
@@ -119,7 +119,7 @@ export class ThemeManager {
             })
             .then(function ([themesFetched, currentTheme]) {
                 const themes = Utils.copyObject(themesFetched)
-                const newThemes = [] as CapRoverTheme[]
+                const newThemes = [] as FlukeDeployTheme[]
                 themes.forEach((it) => {
                     if (it.name !== themeName) {
                         newThemes.push(it)
@@ -150,7 +150,7 @@ export class ThemeManager {
             })
     }
 
-    updateTheme(oldName: string, theme: CapRoverTheme) {
+    updateTheme(oldName: string, theme: FlukeDeployTheme) {
         const self = this
         return Promise.resolve()
             .then(function () {
@@ -215,7 +215,7 @@ export class ThemeManager {
             })
     }
 
-    getCurrentTheme(): Promise<CapRoverTheme | undefined> {
+    getCurrentTheme(): Promise<FlukeDeployTheme | undefined> {
         const self = this
 
         return Promise.resolve()
@@ -246,7 +246,7 @@ export class ThemeManager {
 
 export class ThemeManagerPublic {
     private static themeManagerPublic = new ThemeManager(
-        DataStoreProvider.getDataStore(CaptainConstants.rootNameSpace)
+        DataStoreProvider.getDataStore(FlukeDeployConstants.rootNameSpace)
     )
 
     getCurrentTheme() {

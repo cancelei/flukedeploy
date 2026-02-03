@@ -8,7 +8,7 @@
 ||                ||          |                                 |                                                  |
 |------------------|          |     as new ver's image          +-----------+                                      +
 +------------------+          |                                 |           |                                    CREATE
-                              +---------------------------------+           |                             img-captain--appname:5
+                              +---------------------------------+           |                             img-flukedeploy--appname:5
                               |                                 |           |
                               |    Set the Deployed Version     |           +-------------+                         ^
                               +---------------------------------+                         |                         |
@@ -21,7 +21,7 @@
                                                           |                       |                                 |
                                                           +-----------------------+                                 |
        +-------------------+                              |                       |                                 |
-       |                   |                              |    captain-definition +-------------+                   |
+       |                   |                              |    flukedeploy-definition +-------------+                   |
        |                   |                              |         content       |             |                   |
        |   ServiceManager  +----> CreateNewVersion +----> +-----------------------+             |                   |
        |                   |                              |                       |             ^                   |
@@ -46,7 +46,7 @@ import { IHashMapGeneric } from '../models/ICacheGeneric'
 import { ICaptainDefinition } from '../models/ICaptainDefinition'
 import { IImageSource } from '../models/IImageSource'
 import { AnyError } from '../models/OtherTypes'
-import CaptainConstants from '../utils/CaptainConstants'
+import FlukeDeployConstants from '../utils/FlukeDeployConstants'
 import GitHelper from '../utils/GitHelper'
 import BuildLog from './BuildLog'
 import DockerRegistryHelper from './DockerRegistryHelper'
@@ -68,7 +68,7 @@ export class BuildLogsManager {
 
         self.buildLogs[appName] =
             self.buildLogs[appName] ||
-            new BuildLog(CaptainConstants.configs.buildLogSize)
+            new BuildLog(FlukeDeployConstants.configs.buildLogSize)
 
         return self.buildLogs[appName]
     }
@@ -85,7 +85,7 @@ export default class ImageMaker {
     }
 
     private getDirectoryForRawSource(appName: string, version: number) {
-        return `${CaptainConstants.captainRawSourceDirectoryBase}/${appName}/${version}`
+        return `${FlukeDeployConstants.captainRawSourceDirectoryBase}/${appName}/${version}`
     }
 
     /**
@@ -113,7 +113,7 @@ export default class ImageMaker {
         const tarFilePath = `${baseDir}/${TAR_FILE_NAME_READY_FOR_DOCKER}`
 
         const baseImageNameWithoutVerAndReg = `img-${this.namespace}-${
-            appName // img-captain-myapp
+            appName // img-flukedeploy-myapp
         }`
         let fullImageName = '' // repo.domain.com:998/username/reponame:8
 
@@ -129,19 +129,19 @@ export default class ImageMaker {
                 gitHash = gitHashFromImageSource
 
                 const includesGitCommitEnvVar = envVars.find(
-                    (envVar) => envVar.key === CaptainConstants.gitShaEnvVarKey
+                    (envVar) => envVar.key === FlukeDeployConstants.gitShaEnvVarKey
                 )
 
                 if (gitHash && !includesGitCommitEnvVar) {
                     envVars.push({
-                        key: CaptainConstants.gitShaEnvVarKey,
+                        key: FlukeDeployConstants.gitShaEnvVarKey,
                         value: gitHash,
                     })
                 }
 
                 // some users convert the directory into TAR instead of converting the content into TAR.
                 // we go one level deep and try to find the right directory.
-                // Also, they may have no captain-definition file, in that case, fall back to Dockerfile if exists.
+                // Also, they may have no flukedeploy-definition file, in that case, fall back to Dockerfile if exists.
                 return self.getAbsolutePathOfCaptainDefinition(
                     rawDir,
                     captainDefinitionRelativeFilePath
@@ -422,7 +422,7 @@ export default class ImageMaker {
                 if (numberOfProperties !== 1) {
                     throw ApiStatusCodes.createError(
                         ApiStatusCodes.STATUS_ERROR_GENERIC,
-                        'One, and only one, of these properties should be present in captain-definition: templateId, imageName, dockerfilePath, or, dockerfileLines'
+                        'One, and only one, of these properties should be present in flukedeploy-definition: templateId, imageName, dockerfilePath, or, dockerfileLines'
                     )
                 }
 

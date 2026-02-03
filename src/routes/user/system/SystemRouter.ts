@@ -11,7 +11,7 @@ import { IAppDef } from '../../../models/AppDefinition'
 import { AutomatedCleanupConfigsCleaner } from '../../../models/AutomatedCleanupConfigs'
 import CaptainManager from '../../../user/system/CaptainManager'
 import VersionManager from '../../../user/system/VersionManager'
-import CaptainConstants from '../../../utils/CaptainConstants'
+import FlukeDeployConstants from '../../../utils/FlukeDeployConstants'
 import Logger from '../../../utils/Logger'
 import Utils from '../../../utils/Utils'
 import ThemesRouter from './ThemesRouter'
@@ -139,7 +139,7 @@ router.get('/info/', function (req, res, next) {
                 rootDomain: dataStore.hasCustomDomain()
                     ? dataStore.getRootDomain()
                     : '',
-                captainSubDomain: CaptainConstants.configs.captainSubDomain,
+                captainSubDomain: FlukeDeployConstants.configs.captainSubDomain,
             }
         })
         .then(function (data) {
@@ -257,9 +257,9 @@ router.get('/netdata/', function (req, res, next) {
         })
         .then(function (data) {
             data.netDataUrl = `${
-                CaptainConstants.configs.captainSubDomain
+                FlukeDeployConstants.configs.captainSubDomain
             }.${dataStore.getRootDomain()}${
-                CaptainConstants.netDataRelativePath
+                FlukeDeployConstants.netDataRelativePath
             }`
             const baseApi = new BaseApi(
                 ApiStatusCodes.STATUS_OK,
@@ -356,7 +356,7 @@ router.get('/goaccess/:appName/files', async function (req, res, next) {
     }
 
     const directoryPath = path.join(
-        CaptainConstants.nginxSharedLogsPathOnHost,
+        FlukeDeployConstants.nginxSharedLogsPathOnHost,
         appName
     )
 
@@ -449,16 +449,16 @@ router.get('/goaccess/:appName/files/:file', async function (req, res, next) {
     if (fileName.includes('Live')) {
         // Dynamically update the live reports by running the catchup script for the particular domain
         await DockerApi.get().createContainer({
-            imageName: CaptainConstants.configs.goAccessImageName,
+            imageName: FlukeDeployConstants.configs.goAccessImageName,
             command: ['./catchupLog.sh'],
             volumes: [
                 {
-                    hostPath: CaptainConstants.nginxSharedLogsPathOnHost,
-                    containerPath: CaptainConstants.nginxSharedLogsPath,
+                    hostPath: FlukeDeployConstants.nginxSharedLogsPathOnHost,
+                    containerPath: FlukeDeployConstants.nginxSharedLogsPath,
                     mode: 'rw',
                 },
             ],
-            network: CaptainConstants.captainNetworkName,
+            network: FlukeDeployConstants.captainNetworkName,
             arrayOfEnvKeyAndValue: [
                 {
                     key: 'FILE_PREFIX',
@@ -466,7 +466,7 @@ router.get('/goaccess/:appName/files/:file', async function (req, res, next) {
                 },
                 {
                     key: 'ANONYMIZE_IP',
-                    value: CaptainConstants.configs.goAccessAnonymizeIP.toString(),
+                    value: FlukeDeployConstants.configs.goAccessAnonymizeIP.toString(),
                 },
             ],
             sticky: false,
@@ -476,7 +476,7 @@ router.get('/goaccess/:appName/files/:file', async function (req, res, next) {
 
     const fileRelativePath = `${appName}/${file}`
     const absolutePath = path.join(
-        CaptainConstants.nginxSharedLogsPathOnHost,
+        FlukeDeployConstants.nginxSharedLogsPathOnHost,
         appName,
         file
     )

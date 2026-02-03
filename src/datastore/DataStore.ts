@@ -7,10 +7,10 @@ import {
     AutomatedCleanupConfigsCleaner,
     IAutomatedCleanupConfigs,
 } from '../models/AutomatedCleanupConfigs'
-import CapRoverTheme from '../models/CapRoverTheme'
+import FlukeDeployTheme from '../models/FlukeDeployTheme'
 import { GoAccessInfo } from '../models/GoAccessInfo'
 import { NetDataInfo } from '../models/NetDataInfo'
-import CaptainConstants from '../utils/CaptainConstants'
+import FlukeDeployConstants from '../utils/FlukeDeployConstants'
 import CaptainEncryptor from '../utils/Encryptor'
 import Utils from '../utils/Utils'
 import AppsDataStore from './AppsDataStore'
@@ -49,7 +49,7 @@ let DEFAULT_NGINX_CONFIG_FOR_APP_PATH =
     __dirname + '/../../template/server-block-conf.ejs'
 
 const SERVER_BLOCK_CONF_OVERRIDE_PATH =
-    CaptainConstants.captainDataDirectory + '/server-block-conf-override.ejs'
+    FlukeDeployConstants.captainDataDirectory + '/server-block-conf-override.ejs'
 
 if (fs.pathExistsSync(SERVER_BLOCK_CONF_OVERRIDE_PATH)) {
     DEFAULT_NGINX_CONFIG_FOR_APP_PATH = SERVER_BLOCK_CONF_OVERRIDE_PATH
@@ -70,10 +70,10 @@ class DataStore {
 
     constructor(namespace: string) {
         const data = new Configstore(
-            `captain-store-${namespace}`, // This value seems to be unused
+            `flukedeploy-store-${namespace}`, // This value seems to be unused
             {},
             {
-                configPath: `${CaptainConstants.captainDataDirectory}/config-${namespace}.json`,
+                configPath: `${FlukeDeployConstants.captainDataDirectory}/config-${namespace}.json`,
             }
         )
 
@@ -111,7 +111,7 @@ class DataStore {
         })
     }
 
-    getThemes(): Promise<CapRoverTheme[]> {
+    getThemes(): Promise<FlukeDeployTheme[]> {
         const self = this
         return Promise.resolve().then(function () {
             return self.data.get(THEMES) || []
@@ -134,7 +134,7 @@ class DataStore {
             })
     }
 
-    saveThemes(themes: CapRoverTheme[]) {
+    saveThemes(themes: FlukeDeployTheme[]) {
         const self = this
         return Promise.resolve().then(function () {
             self.data.set(

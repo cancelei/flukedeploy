@@ -10,7 +10,7 @@ import { IAllAppDefinitions } from '../../models/AppDefinition'
 import { IServerBlockDetails } from '../../models/IServerBlockDetails'
 import LoadBalancerInfo from '../../models/LoadBalancerInfo'
 import { AnyError } from '../../models/OtherTypes'
-import CaptainConstants from '../../utils/CaptainConstants'
+import FlukeDeployConstants from '../../utils/FlukeDeployConstants'
 import Logger from '../../utils/Logger'
 import CertbotManager from './CertbotManager'
 import fs = require('fs-extra')
@@ -27,7 +27,7 @@ const NGINX_CONTAINER_PATH_OF_FAKE_CERTS = '/etc/nginx/fake-certs'
 const CAPROVER_CONTAINER_PATH_OF_FAKE_CERTS =
     __dirname + '/../../../template/fake-certs-src'
 const HOST_PATH_OF_FAKE_CERTS =
-    CaptainConstants.captainRootDirectoryGenerated +
+    FlukeDeployConstants.captainRootDirectoryGenerated +
     '/nginx/fake-certs-self-signed'
 
 if (!fs.existsSync(CAPROVER_CONTAINER_PATH_OF_FAKE_CERTS))
@@ -35,13 +35,13 @@ if (!fs.existsSync(CAPROVER_CONTAINER_PATH_OF_FAKE_CERTS))
 if (!defaultPageTemplate) throw new Error('defaultPageTemplate  is empty')
 
 const DH_PARAMS_FILE_PATH_ON_HOST = path.join(
-    CaptainConstants.nginxSharedPathOnHost,
-    CaptainConstants.nginxDhParamFileName
+    FlukeDeployConstants.nginxSharedPathOnHost,
+    FlukeDeployConstants.nginxDhParamFileName
 )
 
 const DH_PARAMS_FILE_PATH_ON_NGINX = path.join(
-    CaptainConstants.nginxSharedPathOnNginx,
-    CaptainConstants.nginxDhParamFileName
+    FlukeDeployConstants.nginxSharedPathOnNginx,
+    FlukeDeployConstants.nginxDhParamFileName
 )
 
 class LoadBalancerManager {
@@ -98,7 +98,7 @@ class LoadBalancerManager {
 
         // This will resolve to something like: /captain/nginx/conf.d/captain
         const configFilePathBase = `${
-            CaptainConstants.perAppNginxConfigPathBase
+            FlukeDeployConstants.perAppNginxConfigPathBase
         }/${self.dataStore.getNameSpace()}`
 
         const FUTURE = configFilePathBase + '.fut'
@@ -126,13 +126,13 @@ class LoadBalancerManager {
                         }
 
                         s.staticWebRoot = `${
-                            CaptainConstants.nginxStaticRootDir +
-                            CaptainConstants.nginxDomainSpecificHtmlDir
+                            FlukeDeployConstants.nginxStaticRootDir +
+                            FlukeDeployConstants.nginxDomainSpecificHtmlDir
                         }/${s.publicDomain}`
 
                         s.customErrorPagesDirectory =
-                            CaptainConstants.nginxStaticRootDir +
-                            CaptainConstants.nginxDefaultHtmlDir
+                            FlukeDeployConstants.nginxStaticRootDir +
+                            FlukeDeployConstants.nginxDefaultHtmlDir
 
                         const pathOfAuthInHost = `${configFilePathBase}-${s.publicDomain}.auth`
 
@@ -208,7 +208,7 @@ class LoadBalancerManager {
         return Promise.resolve()
             .then(function () {
                 return self.dockerApi.executeCommand(
-                    CaptainConstants.nginxServiceName,
+                    FlukeDeployConstants.nginxServiceName,
                     ['nginx', '-t']
                 )
             })
@@ -235,7 +235,7 @@ class LoadBalancerManager {
             .then(function () {
                 Logger.d('sendReloadSignal...')
                 return self.dockerApi.sendSingleContainerKillHUP(
-                    CaptainConstants.nginxServiceName
+                    FlukeDeployConstants.nginxServiceName
                 )
             })
     }
@@ -342,9 +342,9 @@ class LoadBalancerManager {
                     }
 
                     serverWithSubDomain.gzipOn =
-                        CaptainConstants.configs.defaultGzipOn
+                        FlukeDeployConstants.configs.defaultGzipOn
                     serverWithSubDomain.gzipTypes =
-                        CaptainConstants.configs.defaultGzipTypes
+                        FlukeDeployConstants.configs.defaultGzipTypes
 
                     servers.push(serverWithSubDomain)
 
@@ -397,7 +397,7 @@ class LoadBalancerManager {
     getSslCertPath(domainName: string) {
         const self = this
         return (
-            CaptainConstants.letsEncryptEtcPathOnNginx +
+            FlukeDeployConstants.letsEncryptEtcPathOnNginx +
             self.certbotManager.getCertRelativePathForDomain(domainName)
         )
     }
@@ -405,13 +405,13 @@ class LoadBalancerManager {
     getSslKeyPath(domainName: string) {
         const self = this
         return (
-            CaptainConstants.letsEncryptEtcPathOnNginx +
+            FlukeDeployConstants.letsEncryptEtcPathOnNginx +
             self.certbotManager.getKeyRelativePathForDomain(domainName)
         )
     }
 
     getLogPath(appName: string, domainName: string) {
-        return `${CaptainConstants.nginxSharedLogsPath}/${this.getLogName(appName, domainName)}`
+        return `${FlukeDeployConstants.nginxSharedLogsPath}/${this.getLogName(appName, domainName)}`
     }
 
     getLogName(appName: string, domainName: string) {
@@ -437,7 +437,7 @@ class LoadBalancerManager {
 
     getInfo() {
         return new Promise<LoadBalancerInfo>(function (resolve, reject) {
-            const url = `http://${CaptainConstants.nginxServiceName}/nginx_status`
+            const url = `http://${FlukeDeployConstants.nginxServiceName}/nginx_status`
 
             request(url, function (error, response, body) {
                 if (error || !body) {
@@ -486,18 +486,18 @@ class LoadBalancerManager {
         const dataStore = self.dataStore
 
         const captainDomain = `${
-            CaptainConstants.configs.captainSubDomain
+            FlukeDeployConstants.configs.captainSubDomain
         }.${dataStore.getRootDomain()}`
         const registryDomain = `${
-            CaptainConstants.registrySubDomain
+            FlukeDeployConstants.registrySubDomain
         }.${dataStore.getRootDomain()}`
         let logAccess = false
 
         let hasRootSsl = false
 
-        const FUTURE = CaptainConstants.rootNginxConfigPath + '.fut'
-        const BACKUP = CaptainConstants.rootNginxConfigPath + '.bak'
-        const CONFIG = CaptainConstants.rootNginxConfigPath + '.conf'
+        const FUTURE = FlukeDeployConstants.rootNginxConfigPath + '.fut'
+        const BACKUP = FlukeDeployConstants.rootNginxConfigPath + '.bak'
+        const CONFIG = FlukeDeployConstants.rootNginxConfigPath + '.conf'
 
         let rootNginxTemplate: string | undefined = undefined
 
@@ -536,19 +536,19 @@ class LoadBalancerManager {
                         crtPath: self.getSslCertPath(captainDomain),
                         keyPath: self.getSslKeyPath(captainDomain),
                         hasRootSsl: hasRootSsl,
-                        serviceName: CaptainConstants.captainServiceName,
+                        serviceName: FlukeDeployConstants.captainServiceName,
                         domain: captainDomain,
                         serviceContainerPort3000:
-                            CaptainConstants.serviceContainerPort3000,
+                            FlukeDeployConstants.serviceContainerPort3000,
                         defaultHtmlDir:
-                            CaptainConstants.nginxStaticRootDir +
-                            CaptainConstants.nginxDefaultHtmlDir,
+                            FlukeDeployConstants.nginxStaticRootDir +
+                            FlukeDeployConstants.nginxDefaultHtmlDir,
                         staticWebRoot: `${
-                            CaptainConstants.nginxStaticRootDir +
-                            CaptainConstants.nginxDomainSpecificHtmlDir
+                            FlukeDeployConstants.nginxStaticRootDir +
+                            FlukeDeployConstants.nginxDomainSpecificHtmlDir
                         }/${captainDomain}`,
                         logAccessPath: logAccess
-                            ? CaptainConstants.nginxSharedLogsPath
+                            ? FlukeDeployConstants.nginxSharedLogsPath
                             : undefined,
                     },
                     registry: {
@@ -557,8 +557,8 @@ class LoadBalancerManager {
                         hasRootSsl: hasRegistrySsl,
                         domain: registryDomain,
                         staticWebRoot: `${
-                            CaptainConstants.nginxStaticRootDir +
-                            CaptainConstants.nginxDomainSpecificHtmlDir
+                            FlukeDeployConstants.nginxStaticRootDir +
+                            FlukeDeployConstants.nginxDomainSpecificHtmlDir
                         }/${registryDomain}`,
                     },
                 })
@@ -605,7 +605,7 @@ class LoadBalancerManager {
             })
             .then(function (baseNginxConfFileContent) {
                 return fs.outputFile(
-                    CaptainConstants.baseNginxConfigPath,
+                    FlukeDeployConstants.baseNginxConfigPath,
                     baseNginxConfFileContent
                 )
             })
@@ -667,29 +667,29 @@ class LoadBalancerManager {
 
             return dockerApi
                 .createServiceOnNodeId(
-                    CaptainConstants.configs.nginxImageName,
-                    CaptainConstants.nginxServiceName,
+                    FlukeDeployConstants.configs.nginxImageName,
+                    FlukeDeployConstants.nginxServiceName,
                     [
                         {
                             protocol: 'tcp',
                             publishMode: 'host',
                             containerPort: 80,
                             hostPort:
-                                CaptainConstants.configs.nginxPortNumber80,
+                                FlukeDeployConstants.configs.nginxPortNumber80,
                         },
                         {
                             protocol: 'tcp',
                             publishMode: 'host',
                             containerPort: 443,
                             hostPort:
-                                CaptainConstants.configs.nginxPortNumber443,
+                                FlukeDeployConstants.configs.nginxPortNumber443,
                         },
                         {
                             protocol: 'udp',
                             publishMode: 'host',
                             containerPort: 443,
                             hostPort:
-                                CaptainConstants.configs.nginxPortNumber443,
+                                FlukeDeployConstants.configs.nginxPortNumber443,
                         },
                     ],
                     nodeId,
@@ -718,23 +718,23 @@ class LoadBalancerManager {
 
         return fs
             .outputFile(
-                CaptainConstants.captainStaticFilesDir +
-                    CaptainConstants.nginxDefaultHtmlDir +
-                    CaptainConstants.captainConfirmationPath,
+                FlukeDeployConstants.captainStaticFilesDir +
+                    FlukeDeployConstants.nginxDefaultHtmlDir +
+                    FlukeDeployConstants.captainConfirmationPath,
                 self.getCaptainPublicRandomKey()
             )
             .then(function () {
                 return ejs.render(defaultPageTemplate, {
                     message_title: 'Nothing here yet :/',
                     message_body: '',
-                    message_link: 'https://caprover.com/',
+                    message_link: 'https://flukedeploy.com/',
                     message_link_title: 'Read Docs',
                 })
             })
             .then(function (staticPageContent) {
                 return fs.outputFile(
-                    CaptainConstants.captainStaticFilesDir +
-                        CaptainConstants.nginxDefaultHtmlDir +
+                    FlukeDeployConstants.captainStaticFilesDir +
+                        FlukeDeployConstants.nginxDefaultHtmlDir +
                         '/index.html',
                     staticPageContent
                 )
@@ -743,14 +743,14 @@ class LoadBalancerManager {
                 return ejs.render(defaultPageTemplate, {
                     message_title: 'An Error Occurred :/',
                     message_body: '',
-                    message_link: 'https://caprover.com/',
+                    message_link: 'https://flukedeploy.com/',
                     message_link_title: 'Read Docs',
                 })
             })
             .then(function (errorGenericPageContent) {
                 return fs.outputFile(
-                    CaptainConstants.captainStaticFilesDir +
-                        CaptainConstants.nginxDefaultHtmlDir +
+                    FlukeDeployConstants.captainStaticFilesDir +
+                        FlukeDeployConstants.nginxDefaultHtmlDir +
                         '/error_generic_catch_all.html',
                     errorGenericPageContent
                 )
@@ -761,14 +761,14 @@ class LoadBalancerManager {
                     message_body:
                         "If you are the developer, check your application's logs. See the link below for details",
                     message_link:
-                        'https://caprover.com/docs/troubleshooting.html#successful-deploy-but-502-bad-gateway-error',
+                        'https://flukedeploy.com/docs/troubleshooting.html#successful-deploy-but-502-bad-gateway-error',
                     message_link_title: 'Docs - 502 Troubleshooting',
                 })
             })
             .then(function (error502PageContent) {
                 return fs.outputFile(
-                    CaptainConstants.captainStaticFilesDir +
-                        CaptainConstants.nginxDefaultHtmlDir +
+                    FlukeDeployConstants.captainStaticFilesDir +
+                        FlukeDeployConstants.nginxDefaultHtmlDir +
                         '/captain_502_custom_error_page.html',
                     error502PageContent
                 )
@@ -782,14 +782,14 @@ class LoadBalancerManager {
                 )
             })
             .then(function () {
-                return fs.ensureDir(CaptainConstants.letsEncryptEtcPath)
+                return fs.ensureDir(FlukeDeployConstants.letsEncryptEtcPath)
             })
             .then(function () {
-                return fs.ensureDir(CaptainConstants.nginxSharedPathOnHost)
+                return fs.ensureDir(FlukeDeployConstants.nginxSharedPathOnHost)
             })
             .then(function () {
                 return dockerApi.isServiceRunningByName(
-                    CaptainConstants.nginxServiceName
+                    FlukeDeployConstants.nginxServiceName
                 )
             })
             .then(function (isRunning) {
@@ -797,7 +797,7 @@ class LoadBalancerManager {
                     Logger.d('Captain Nginx is already running.. ')
 
                     return dockerApi.getNodeIdByServiceName(
-                        CaptainConstants.nginxServiceName,
+                        FlukeDeployConstants.nginxServiceName,
                         0
                     )
                 } else {
@@ -814,7 +814,7 @@ class LoadBalancerManager {
                     )
 
                     return dockerApi
-                        .removeServiceByName(CaptainConstants.nginxServiceName)
+                        .removeServiceByName(FlukeDeployConstants.nginxServiceName)
                         .then(function () {
                             return createNginxServiceOnNode(myNodeId).then(
                                 function () {
@@ -836,12 +836,12 @@ class LoadBalancerManager {
                 Logger.d('Updating NGINX service...')
 
                 return dockerApi.updateService(
-                    CaptainConstants.nginxServiceName,
-                    CaptainConstants.configs.nginxImageName,
+                    FlukeDeployConstants.nginxServiceName,
+                    FlukeDeployConstants.configs.nginxImageName,
                     [
                         {
-                            containerPath: CaptainConstants.nginxStaticRootDir,
-                            hostPath: CaptainConstants.captainStaticFilesDir,
+                            containerPath: FlukeDeployConstants.nginxStaticRootDir,
+                            hostPath: FlukeDeployConstants.captainStaticFilesDir,
                         },
                         {
                             containerPath: NGINX_CONTAINER_PATH_OF_FAKE_CERTS,
@@ -849,30 +849,30 @@ class LoadBalancerManager {
                         },
                         {
                             containerPath: '/etc/nginx/nginx.conf',
-                            hostPath: CaptainConstants.baseNginxConfigPath,
+                            hostPath: FlukeDeployConstants.baseNginxConfigPath,
                         },
                         {
                             containerPath: CONTAINER_PATH_OF_CONFIG,
                             hostPath:
-                                CaptainConstants.perAppNginxConfigPathBase,
+                                FlukeDeployConstants.perAppNginxConfigPathBase,
                         },
                         {
                             containerPath:
-                                CaptainConstants.letsEncryptEtcPathOnNginx,
-                            hostPath: CaptainConstants.letsEncryptEtcPath,
+                                FlukeDeployConstants.letsEncryptEtcPathOnNginx,
+                            hostPath: FlukeDeployConstants.letsEncryptEtcPath,
                         },
                         {
                             containerPath:
-                                CaptainConstants.nginxSharedPathOnNginx,
-                            hostPath: CaptainConstants.nginxSharedPathOnHost,
+                                FlukeDeployConstants.nginxSharedPathOnNginx,
+                            hostPath: FlukeDeployConstants.nginxSharedPathOnHost,
                         },
                         {
                             hostPath:
-                                CaptainConstants.nginxSharedLogsPathOnHost,
-                            containerPath: CaptainConstants.nginxSharedLogsPath,
+                                FlukeDeployConstants.nginxSharedLogsPathOnHost,
+                            containerPath: FlukeDeployConstants.nginxSharedLogsPath,
                         },
                     ],
-                    [CaptainConstants.captainNetworkName],
+                    [FlukeDeployConstants.captainNetworkName],
                     undefined,
                     undefined,
                     undefined,

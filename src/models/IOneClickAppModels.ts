@@ -28,8 +28,8 @@ export interface IDockerComposeService {
     cap_add?: string[]
     command?: string | string[]
 
-    // These are CapRover property, not DockerCompose. We use this instead of image if we need to extend the image.
-    caproverExtra?: {
+    // These are FlukeDeploy property, not DockerCompose. We use this instead of image if we need to extend the image.
+    flukedeployExtra?: {
         dockerfileLines?: string[]
         containerHttpPort: number
         notExposeAsWebApp: boolean // This is actually a string "true", make sure to double negate!
@@ -40,7 +40,7 @@ export interface IDockerComposeService {
 export interface IOneClickTemplate {
     services: IHashMapGeneric<IDockerComposeService>
     captainVersion: number
-    caproverOneClickApp: {
+    flukedeployOneClickApp: {
         instructions: {
             start: string
             end: string

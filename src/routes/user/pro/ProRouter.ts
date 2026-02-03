@@ -7,7 +7,7 @@ import {
     TwoFactorAuthResponse,
 } from '../../../models/IProFeatures'
 import ProManagerUtils from '../../../user/pro/ProManagerUtils'
-import CaptainConstants from '../../../utils/CaptainConstants'
+import FlukeDeployConstants from '../../../utils/FlukeDeployConstants'
 
 const OTP_TOKEN_LENGTH = 6
 
@@ -26,7 +26,7 @@ router.post('/apikey/', function (req, res, next) {
         .then(function (rootDomain) {
             return userManager.proManager.validateApiKey(
                 apiKey,
-                `${CaptainConstants.configs.captainSubDomain}.${rootDomain}`
+                `${FlukeDeployConstants.configs.captainSubDomain}.${rootDomain}`
             )
         })
         .then(function (isValid) {

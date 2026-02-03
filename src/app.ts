@@ -17,7 +17,7 @@ import LoginRouter from './routes/login/LoginRouter'
 import ThemePublicRouter from './routes/public/ThemePublicRouter'
 import UserRouter from './routes/user/UserRouter'
 import CaptainManager from './user/system/CaptainManager'
-import CaptainConstants from './utils/CaptainConstants'
+import FlukeDeployConstants from './utils/FlukeDeployConstants'
 import Logger from './utils/Logger'
 import Utils from './utils/Utils'
 
@@ -35,9 +35,9 @@ app.use(
     loggerMorgan('dev', {
         skip: function (req, res) {
             return (
-                req.originalUrl === CaptainConstants.healthCheckEndPoint ||
+                req.originalUrl === FlukeDeployConstants.healthCheckEndPoint ||
                 req.originalUrl.startsWith(
-                    CaptainConstants.netDataRelativePath + '/'
+                    FlukeDeployConstants.netDataRelativePath + '/'
                 )
             )
         },
@@ -51,13 +51,13 @@ app.use(
 )
 app.use(cookieParser())
 
-if (CaptainConstants.isDebug) {
+if (FlukeDeployConstants.isDebug) {
     app.use('/', function (req, res, next) {
         res.setHeader('Access-Control-Allow-Origin', '*')
         res.setHeader('Access-Control-Allow-Credentials', 'true')
         res.setHeader(
             'Access-Control-Allow-Headers',
-            `${CaptainConstants.headerNamespace},${CaptainConstants.headerAuth},Content-Type`
+            `${FlukeDeployConstants.headerNamespace},${FlukeDeployConstants.headerAuth},Content-Type`
         )
 
         if (req.method === 'OPTIONS') {
@@ -84,7 +84,7 @@ app.use(function (req, res, next) {
             req.secure || req.get('X-Forwarded-Proto') === 'https'
 
         if (!isRequestSsl) {
-            const newUrl = `https://${req.hostname}:${CaptainConstants.configs.nginxPortNumber443}${req.originalUrl}`
+            const newUrl = `https://${req.hostname}:${FlukeDeployConstants.configs.nginxPortNumber443}${req.originalUrl}`
             res.redirect(302, newUrl)
             return
         }
@@ -97,15 +97,15 @@ app.use(express.static(path.join(__dirname, '../dist-frontend')))
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use(CaptainConstants.healthCheckEndPoint, function (req, res, next) {
+app.use(FlukeDeployConstants.healthCheckEndPoint, function (req, res, next) {
     res.send(CaptainManager.get().getHealthCheckUuid())
 })
 
 //  ************  Beginning of reverse proxy 3rd party services  ****************************************
 
-app.use(CaptainConstants.netDataRelativePath, function (req, res, next) {
+app.use(FlukeDeployConstants.netDataRelativePath, function (req, res, next) {
     if (
-        req.originalUrl.indexOf(CaptainConstants.netDataRelativePath + '/') !==
+        req.originalUrl.indexOf(FlukeDeployConstants.netDataRelativePath + '/') !==
         0
     ) {
         const isRequestSsl =
@@ -116,9 +116,9 @@ app.use(CaptainConstants.netDataRelativePath, function (req, res, next) {
             req.hostname +
             ':' +
             (isRequestSsl
-                ? CaptainConstants.configs.nginxPortNumber443
-                : CaptainConstants.configs.nginxPortNumber80) +
-            CaptainConstants.netDataRelativePath +
+                ? FlukeDeployConstants.configs.nginxPortNumber443
+                : FlukeDeployConstants.configs.nginxPortNumber80) +
+            FlukeDeployConstants.netDataRelativePath +
             '/'
         res.redirect(302, newUrl)
         return
@@ -128,11 +128,11 @@ app.use(CaptainConstants.netDataRelativePath, function (req, res, next) {
 })
 
 app.use(
-    CaptainConstants.netDataRelativePath,
+    FlukeDeployConstants.netDataRelativePath,
     Injector.injectUserUsingCookieDataOnly()
 )
 
-app.use(CaptainConstants.netDataRelativePath, function (req, res, next) {
+app.use(FlukeDeployConstants.netDataRelativePath, function (req, res, next) {
     if (!InjectionExtractor.extractUserFromInjected(res)) {
         Logger.e('User not logged in for NetData')
         res.sendStatus(500)
@@ -151,7 +151,7 @@ httpProxy.on('error', function (err, req, resOriginal: http.ServerResponse) {
     })
 
     if (
-        (err + '').indexOf('getaddrinfo ENOTFOUND captain-netdata-container') >=
+        (err + '').indexOf('getaddrinfo ENOTFOUND flukedeploy-netdata-container') >=
         0
     ) {
         resOriginal.end(
@@ -162,7 +162,7 @@ httpProxy.on('error', function (err, req, resOriginal: http.ServerResponse) {
     }
 })
 
-app.use(CaptainConstants.netDataRelativePath, function (req, res, next) {
+app.use(FlukeDeployConstants.netDataRelativePath, function (req, res, next) {
     if (Utils.isNotGetRequest(req)) {
         res.writeHead(401, {
             'Content-Type': 'text/plain',
@@ -172,7 +172,7 @@ app.use(CaptainConstants.netDataRelativePath, function (req, res, next) {
     }
 
     httpProxy.web(req, res, {
-        target: `http://${CaptainConstants.netDataContainerName}:19999`,
+        target: `http://${FlukeDeployConstants.netDataContainerName}:19999`,
     })
 })
 
@@ -183,11 +183,11 @@ app.use(CaptainConstants.netDataRelativePath, function (req, res, next) {
 const API_PREFIX = '/api/'
 
 app.use(API_PREFIX + ':apiVersionFromRequest/', function (req, res, next) {
-    if (req.params.apiVersionFromRequest !== CaptainConstants.apiVersion) {
+    if (req.params.apiVersionFromRequest !== FlukeDeployConstants.apiVersion) {
         res.send(
             new BaseApi(
                 ApiStatusCodes.STATUS_ERROR_GENERIC,
-                `This captain instance only accepts API ${CaptainConstants.apiVersion}`
+                `This captain instance only accepts API ${FlukeDeployConstants.apiVersion}`
             )
         )
         return
@@ -205,7 +205,7 @@ app.use(API_PREFIX + ':apiVersionFromRequest/', function (req, res, next) {
     if (DockerApi.get().dockerNeedsUpdate) {
         const response = new BaseApi(
             ApiStatusCodes.STATUS_ERROR_GENERIC,
-            'Docker version is too old. Please update Docker to use CapRover.'
+            'Docker version is too old. Please update Docker to use FlukeDeploy.'
         )
         res.send(response)
         return
@@ -215,15 +215,15 @@ app.use(API_PREFIX + ':apiVersionFromRequest/', function (req, res, next) {
 })
 
 // unsecured end points:
-app.use(API_PREFIX + CaptainConstants.apiVersion + '/login/', LoginRouter)
+app.use(API_PREFIX + FlukeDeployConstants.apiVersion + '/login/', LoginRouter)
 app.use(
-    API_PREFIX + CaptainConstants.apiVersion + '/downloads/',
+    API_PREFIX + FlukeDeployConstants.apiVersion + '/downloads/',
     DownloadRouter
 )
-app.use(API_PREFIX + CaptainConstants.apiVersion + '/theme/', ThemePublicRouter)
+app.use(API_PREFIX + FlukeDeployConstants.apiVersion + '/theme/', ThemePublicRouter)
 
 // secured end points
-app.use(API_PREFIX + CaptainConstants.apiVersion + '/user/', UserRouter)
+app.use(API_PREFIX + FlukeDeployConstants.apiVersion + '/user/', UserRouter)
 
 //  *********************  End of API End Points  *******************************************
 

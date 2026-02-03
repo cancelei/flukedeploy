@@ -40,17 +40,17 @@ export default {
 
     CAPTAIN_IS_DEBUG: !!process.env.CAPTAIN_IS_DEBUG,
 
-    // Host ports - external to container.  Refer it via CaptainConstants.configs.nginxPortNumber80
+    // Host ports - external to container.  Refer it via FlukeDeployConstants.configs.nginxPortNumber80
     CAPTAIN_HOST_HTTP_PORT: normalizePort(
         process.env.CAPTAIN_HOST_HTTP_PORT,
         80
     ), //Tested with 10080
-    // Host ports - external to container.  Refer it via CaptainConstants.configs.nginxPortNumber443
+    // Host ports - external to container.  Refer it via FlukeDeployConstants.configs.nginxPortNumber443
     CAPTAIN_HOST_HTTPS_PORT: normalizePort(
         process.env.CAPTAIN_HOST_HTTPS_PORT,
         443
     ), //Tested with 10443
-    // Host ports - external to container.  Refer it via CaptainConstants.configs.adminPortNumber3000
+    // Host ports - external to container.  Refer it via FlukeDeployConstants.configs.adminPortNumber3000
     CAPTAIN_HOST_ADMIN_PORT: normalizePort(
         process.env.CAPTAIN_HOST_ADMIN_PORT,
         3000

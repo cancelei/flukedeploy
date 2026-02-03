@@ -1,7 +1,7 @@
 import request = require('request')
 import axios from 'axios'
 import DockerApi from '../../docker/DockerApi'
-import CaptainConstants from '../../utils/CaptainConstants'
+import FlukeDeployConstants from '../../utils/FlukeDeployConstants'
 import Logger from '../../utils/Logger'
 import DockerRegistryHelper from '../DockerRegistryHelper'
 
@@ -20,12 +20,12 @@ class VersionManager {
         changeLogMessage: string
         canUpdate: boolean
     }> {
-        // reach out to api.v2.caprover.com/v2/versionInfo?currentVersion=1.5.3
+        // reach out to api.v2.flukedeploy.com/v2/versionInfo?currentVersion=1.5.3
         // response should be currentVersion, latestVersion, canUpdate, and changeLogMessage
 
         return Promise.resolve() //
             .then(function () {
-                return axios.get('https://api-v1.caprover.com/v2/versionInfo', {
+                return axios.get('https://api-v1.flukedeploy.com/v2/versionInfo', {
                     params: {
                         currentVersion: currentVersion,
                     },
@@ -62,12 +62,12 @@ class VersionManager {
 
     getCaptainImageTags() {
         if (
-            'caprover/caprover' ===
-            CaptainConstants.configs.publishedNameOnDockerHub
+            'flukedeploy/flukedeploy' ===
+            FlukeDeployConstants.configs.publishedNameOnDockerHub
         ) {
             // For the official image use our official API.
             return this.getCaptainImageTagsFromOfficialApi(
-                CaptainConstants.configs.version
+                FlukeDeployConstants.configs.version
             )
         }
 
@@ -75,14 +75,14 @@ class VersionManager {
         // - The API contract is not guaranteed to always be the same, it might break in the future
         // - This method does not return the changeLogMessage
 
-        const url = `https://hub.docker.com/v2/repositories/${CaptainConstants.configs.publishedNameOnDockerHub}/tags`
+        const url = `https://hub.docker.com/v2/repositories/${FlukeDeployConstants.configs.publishedNameOnDockerHub}/tags`
 
         return new Promise<string[]>(function (resolve, reject) {
             request(
                 url,
 
                 function (error, response, body) {
-                    if (CaptainConstants.isDebug) {
+                    if (FlukeDeployConstants.isDebug) {
                         resolve(['v0.0.1'])
                         return
                     }
@@ -106,8 +106,8 @@ class VersionManager {
                 }
             )
         }).then(function (tagList) {
-            const currentVersion = CaptainConstants.configs.version.split('.')
-            let latestVersion = CaptainConstants.configs.version.split('.')
+            const currentVersion = FlukeDeployConstants.configs.version.split('.')
+            let latestVersion = FlukeDeployConstants.configs.version.split('.')
 
             let canUpdate = false
 
@@ -154,7 +154,7 @@ class VersionManager {
         dockerRegistryHelper: DockerRegistryHelper
     ) {
         const self = this
-        const providedImageName = `${CaptainConstants.configs.publishedNameOnDockerHub}:${versionTag}`
+        const providedImageName = `${FlukeDeployConstants.configs.publishedNameOnDockerHub}:${versionTag}`
         return Promise.resolve()
             .then(function () {
                 return dockerRegistryHelper.getDockerAuthObjectForImageName(
@@ -166,7 +166,7 @@ class VersionManager {
             })
             .then(function () {
                 return self.dockerApi.updateService(
-                    CaptainConstants.captainServiceName,
+                    FlukeDeployConstants.captainServiceName,
                     providedImageName,
                     undefined,
                     undefined,

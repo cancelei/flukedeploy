@@ -5,10 +5,10 @@ import DataStoreProvider from '../../datastore/DataStoreProvider'
 import InjectionExtractor from '../../injection/InjectionExtractor'
 import Authenticator from '../../user/Authenticator'
 import {
-    CapRoverEventFactory,
-    CapRoverEventType,
-} from '../../user/events/ICapRoverEvent'
-import CaptainConstants from '../../utils/CaptainConstants'
+    FlukeDeployEventFactory,
+    FlukeDeployEventType,
+} from '../../user/events/IFlukeDeployEvent'
+import FlukeDeployConstants from '../../utils/FlukeDeployConstants'
 import CircularQueue from '../../utils/CircularQueue'
 
 const router = express.Router()
@@ -96,14 +96,14 @@ router.post('/', function (req, res, next) {
             )
         })
         .then(function (cookieAuth) {
-            res.cookie(CaptainConstants.headerCookieAuth, cookieAuth)
+            res.cookie(FlukeDeployConstants.headerCookieAuth, cookieAuth)
             const baseApi = new BaseApi(
                 ApiStatusCodes.STATUS_OK,
                 'Login succeeded'
             )
             baseApi.data = { token: authToken }
             eventLoggerForLoginOnly.trackEvent(
-                CapRoverEventFactory.create(CapRoverEventType.UserLoggedIn, {
+                FlukeDeployEventFactory.create(FlukeDeployEventType.UserLoggedIn, {
                     ip: req.headers['x-real-ip'] || 'unknown',
                 })
             )

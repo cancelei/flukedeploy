@@ -4,7 +4,7 @@
 
 import ApiStatusCodes from '../api/ApiStatusCodes'
 import { IHashMapGeneric } from '../models/ICacheGeneric'
-import CaptainConstants from '../utils/CaptainConstants'
+import FlukeDeployConstants from '../utils/FlukeDeployConstants'
 import DataStore from './DataStore'
 
 const dataStoreCache: IHashMapGeneric<DataStore> = {}
@@ -18,7 +18,7 @@ export default {
             )
         }
 
-        if (namespace !== CaptainConstants.rootNameSpace) {
+        if (namespace !== FlukeDeployConstants.rootNameSpace) {
             throw ApiStatusCodes.createError(
                 ApiStatusCodes.STATUS_ERROR_GENERIC,
                 'Namespace unknown'

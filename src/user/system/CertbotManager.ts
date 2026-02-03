@@ -1,19 +1,19 @@
 import ApiStatusCodes from '../../api/ApiStatusCodes'
 import DockerApi from '../../docker/DockerApi'
-import CaptainConstants, {
+import FlukeDeployConstants, {
     CertbotCertCommandRule,
-} from '../../utils/CaptainConstants'
+} from '../../utils/FlukeDeployConstants'
 import Logger from '../../utils/Logger'
 import Utils from '../../utils/Utils'
 import fs = require('fs-extra')
 import ShellQuote = require('shell-quote')
 
-const WEBROOT_PATH_IN_CERTBOT = '/captain-webroot'
+const WEBROOT_PATH_IN_CERTBOT = '/flukedeploy-webroot'
 const WEBROOT_PATH_IN_CAPTAIN =
-    CaptainConstants.captainStaticFilesDir +
-    CaptainConstants.nginxDomainSpecificHtmlDir
+    FlukeDeployConstants.captainStaticFilesDir +
+    FlukeDeployConstants.nginxDomainSpecificHtmlDir
 
-const shouldUseStaging = false // CaptainConstants.isDebug;
+const shouldUseStaging = false // FlukeDeployConstants.isDebug;
 
 function isCertCommandSuccess(output: string) {
     // https://github.com/certbot/certbot/blob/099c6c8b240400b928d6b349e023e5e8414611e6/certbot/certbot/_internal/main.py#L516
@@ -45,7 +45,7 @@ function isCertCommandSuccess(output: string) {
 class CertbotManager {
     private isOperationInProcess: boolean
     private certCommandGenerator = new CertCommandGenerator(
-        CaptainConstants.configs.certbotCertCommandRules ?? [],
+        FlukeDeployConstants.configs.certbotCertCommandRules ?? [],
         'certbot certonly --webroot -w ${webroot} -d ${domainName}'
     )
 
@@ -162,31 +162,31 @@ class CertbotManager {
     }
 
     /*
-  Certificate Name: customdomain-another.hm2.caprover.com
-    Domains: customdomain-another.hm2.caprover.com
+  Certificate Name: customdomain-another.hm2.flukedeploy.com
+    Domains: customdomain-another.hm2.flukedeploy.com
     Expiry Date: 2019-03-22 04:22:55+00:00 (VALID: 81 days)
-    Certificate Path: /etc/letsencrypt/live/customdomain-another.hm2.caprover.com/fullchain.pem
-    Private Key Path: /etc/letsencrypt/live/customdomain-another.hm2.caprover.com/privkey.pem
-  Certificate Name: testing.cp.hm.caprover.com
-    Domains: testing.cp.hm.caprover.com
+    Certificate Path: /etc/letsencrypt/live/customdomain-another.hm2.flukedeploy.com/fullchain.pem
+    Private Key Path: /etc/letsencrypt/live/customdomain-another.hm2.flukedeploy.com/privkey.pem
+  Certificate Name: testing.cp.hm.flukedeploy.com
+    Domains: testing.cp.hm.flukedeploy.com
     Expiry Date: 2019-03-21 18:42:17+00:00 (VALID: 81 days)
-    Certificate Path: /etc/letsencrypt/live/testing.cp.hm.caprover.com/fullchain.pem
-    Private Key Path: /etc/letsencrypt/live/testing.cp.hm.caprover.com/privkey.pem
-  Certificate Name: registry.cp.hm.caprover.com
-    Domains: registry.cp.hm.caprover.com
+    Certificate Path: /etc/letsencrypt/live/testing.cp.hm.flukedeploy.com/fullchain.pem
+    Private Key Path: /etc/letsencrypt/live/testing.cp.hm.flukedeploy.com/privkey.pem
+  Certificate Name: registry.cp.hm.flukedeploy.com
+    Domains: registry.cp.hm.flukedeploy.com
     Expiry Date: 2019-03-25 04:56:45+00:00 (VALID: 84 days)
-    Certificate Path: /etc/letsencrypt/live/registry.cp.hm.caprover.com/fullchain.pem
-    Private Key Path: /etc/letsencrypt/live/registry.cp.hm.caprover.com/privkey.pem
-  Certificate Name: captain.cp.hm.caprover.com
-    Domains: captain.cp.hm.caprover.com
+    Certificate Path: /etc/letsencrypt/live/registry.cp.hm.flukedeploy.com/fullchain.pem
+    Private Key Path: /etc/letsencrypt/live/registry.cp.hm.flukedeploy.com/privkey.pem
+  Certificate Name: captain.cp.hm.flukedeploy.com
+    Domains: captain.cp.hm.flukedeploy.com
     Expiry Date: 2019-03-20 22:25:50+00:00 (VALID: 80 days)
-    Certificate Path: /etc/letsencrypt/live/captain.cp.hm.caprover.com/fullchain.pem
-    Private Key Path: /etc/letsencrypt/live/captain.cp.hm.caprover.com/privkey.pem
-  Certificate Name: testing2.cp.hm.caprover.com
-    Domains: testing2.cp.hm.caprover.com
+    Certificate Path: /etc/letsencrypt/live/captain.cp.hm.flukedeploy.com/fullchain.pem
+    Private Key Path: /etc/letsencrypt/live/captain.cp.hm.flukedeploy.com/privkey.pem
+  Certificate Name: testing2.cp.hm.flukedeploy.com
+    Domains: testing2.cp.hm.flukedeploy.com
     Expiry Date: 2019-03-21 18:42:55+00:00 (VALID: 81 days)
-    Certificate Path: /etc/letsencrypt/live/testing2.cp.hm.caprover.com/fullchain.pem
-    Private Key Path: /etc/letsencrypt/live/testing2.cp.hm.caprover.com/privkey.pem
+    Certificate Path: /etc/letsencrypt/live/testing2.cp.hm.flukedeploy.com/fullchain.pem
+    Private Key Path: /etc/letsencrypt/live/testing2.cp.hm.flukedeploy.com/privkey.pem
 
 */
     ensureAllCurrentlyRegisteredDomainsHaveDirs() {
@@ -246,7 +246,7 @@ class CertbotManager {
             const nonInterActiveCommand = [...cmd, '--non-interactive']
             return dockerApi
                 .executeCommand(
-                    CaptainConstants.certbotServiceName,
+                    FlukeDeployConstants.certbotServiceName,
                     nonInterActiveCommand
                 )
                 .then(function (data) {
@@ -312,8 +312,8 @@ class CertbotManager {
 
             return dockerApi
                 .createServiceOnNodeId(
-                    CaptainConstants.configs.certbotImageName,
-                    CaptainConstants.certbotServiceName,
+                    FlukeDeployConstants.configs.certbotImageName,
+                    FlukeDeployConstants.certbotServiceName,
                     undefined,
                     nodeId,
                     undefined,
@@ -328,17 +328,17 @@ class CertbotManager {
 
         return Promise.resolve()
             .then(function () {
-                return fs.ensureDir(CaptainConstants.letsEncryptEtcPath)
+                return fs.ensureDir(FlukeDeployConstants.letsEncryptEtcPath)
             })
             .then(function () {
-                return fs.ensureDir(CaptainConstants.letsEncryptLibPath)
+                return fs.ensureDir(FlukeDeployConstants.letsEncryptLibPath)
             })
             .then(function () {
                 return fs.ensureDir(WEBROOT_PATH_IN_CAPTAIN)
             })
             .then(function () {
                 return dockerApi.isServiceRunningByName(
-                    CaptainConstants.certbotServiceName
+                    FlukeDeployConstants.certbotServiceName
                 )
             })
             .then(function (isRunning) {
@@ -346,7 +346,7 @@ class CertbotManager {
                     Logger.d('Captain Certbot is already running.. ')
 
                     return dockerApi.getNodeIdByServiceName(
-                        CaptainConstants.certbotServiceName,
+                        FlukeDeployConstants.certbotServiceName,
                         0
                     )
                 } else {
@@ -368,7 +368,7 @@ class CertbotManager {
 
                     return dockerApi
                         .removeServiceByName(
-                            CaptainConstants.certbotServiceName
+                            FlukeDeployConstants.certbotServiceName
                         )
                         .then(function () {
                             Logger.d('Waiting for Certbot to be removed...')
@@ -389,15 +389,15 @@ class CertbotManager {
                 Logger.d('Updating Certbot service...')
 
                 return dockerApi.updateService(
-                    CaptainConstants.certbotServiceName,
-                    CaptainConstants.configs.certbotImageName,
+                    FlukeDeployConstants.certbotServiceName,
+                    FlukeDeployConstants.configs.certbotImageName,
                     [
                         {
-                            hostPath: CaptainConstants.letsEncryptEtcPath,
+                            hostPath: FlukeDeployConstants.letsEncryptEtcPath,
                             containerPath: '/etc/letsencrypt',
                         },
                         {
-                            hostPath: CaptainConstants.letsEncryptLibPath,
+                            hostPath: FlukeDeployConstants.letsEncryptLibPath,
                             containerPath: '/var/lib/letsencrypt',
                         },
                         {

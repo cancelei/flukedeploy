@@ -19,7 +19,7 @@ import {
 } from '../models/OtherTypes'
 import { ServerDockerInfo } from '../models/ServerDockerInfo'
 import BuildLog from '../user/BuildLog'
-import CaptainConstants from '../utils/CaptainConstants'
+import FlukeDeployConstants from '../utils/FlukeDeployConstants'
 import EnvVars from '../utils/EnvVars'
 import Logger from '../utils/Logger'
 import Utils from '../utils/Utils'
@@ -36,7 +36,7 @@ function safeParseChunk(chunk: string): {
 }[] {
     chunk = `${chunk}`.trim()
     try {
-        // See https://github.com/caprover/caprover/issues/570
+        // See https://github.com/flukedeploy/flukedeploy/issues/570
         // This appears to be bug either in Docker or dockerone:
         // Sometimes chunk appears as two JSON objects, like
         // ```
@@ -321,7 +321,7 @@ class DockerApi {
                 const optionsForBuild: Dockerode.ImageBuildOptions = {
                     t: imageName,
                     buildargs: buildargs,
-                    version: CaptainConstants.configs.defaultDockerBuildVersion,
+                    version: FlukeDeployConstants.configs.defaultDockerBuildVersion,
                 }
 
                 if (Object.keys(registryConfig).length > 0) {
@@ -632,7 +632,7 @@ class DockerApi {
                             Type: 'json-file',
                             Config: {
                                 'max-size':
-                                    CaptainConstants.configs.defaultMaxLogSize,
+                                    FlukeDeployConstants.configs.defaultMaxLogSize,
                             },
                         },
                         ...(sticky
@@ -642,7 +642,7 @@ class DockerApi {
                                   },
                               }
                             : {}),
-                        AutoRemove: !CaptainConstants.isDebug && !sticky,
+                        AutoRemove: !FlukeDeployConstants.isDebug && !sticky,
                     },
                 })
             })
@@ -844,7 +844,7 @@ class DockerApi {
                 LogDriver: {
                     Name: 'json-file',
                     Options: {
-                        'max-size': CaptainConstants.configs.defaultMaxLogSize,
+                        'max-size': FlukeDeployConstants.configs.defaultMaxLogSize,
                     },
                 },
             },
@@ -1084,7 +1084,7 @@ class DockerApi {
             })
             .then(function (secrets) {
                 // the filter returns all secrets whose name includes the provided secretKey. e.g., if you ask for
-                // captain-me, it also returns captain-me1 and etc if exist
+                // flukedeploy-me, it also returns flukedeploy-me1 and etc if exist
 
                 for (let i = 0; i < secrets.length; i++) {
                     const specs = secrets[i].Spec
@@ -1192,7 +1192,7 @@ class DockerApi {
             })
             .then(function (secrets) {
                 // the filter returns all secrets whose name includes the provided secretKey. e.g., if you ask for
-                // captain-me, it also returns captain-me1 and etc if exist
+                // flukedeploy-me, it also returns flukedeploy-me1 and etc if exist
 
                 let secretExists = false
 
@@ -1561,7 +1561,7 @@ class DockerApi {
                 // - Create a app and have it locked to the worker node
                 // - Deploy a few sample apps, it works fine.
                 // - Then try to deploy a simple imageName such as "nginx:1". This will fail!
-                // - Even with "docker service update srv-captain--name --image nginx:1 --force" it will still fail
+                // - Even with "docker service update srv-flukedeploy--name --image nginx:1 --force" it will still fail
                 // - The only way that you can make it work is by passing --wit-registry-auth flag to CLI.
                 // I did some reverse engineering to see what happens under the hood, and it appears that docker uses empty user/pass
                 // So I did that below, and things started working!
@@ -1654,7 +1654,7 @@ class DockerApi {
                         tail: tailCount,
                         follow: false,
                         timestamps:
-                            !!CaptainConstants.configs
+                            !!FlukeDeployConstants.configs
                                 .enableDockerLogsTimestamp,
                         stdout: true,
                         stderr: true,
@@ -1773,7 +1773,7 @@ const dockerApiAddressSplited = (EnvVars.CAPTAIN_DOCKER_API || '').split(':')
 const connectionParams: Docker.DockerOptions =
     dockerApiAddressSplited.length < 2
         ? {
-              socketPath: CaptainConstants.dockerSocketPath,
+              socketPath: FlukeDeployConstants.dockerSocketPath,
           }
         : dockerApiAddressSplited.length === 2
           ? {
@@ -1785,7 +1785,7 @@ const connectionParams: Docker.DockerOptions =
                 port: Number(dockerApiAddressSplited[2]),
             }
 
-connectionParams.version = CaptainConstants.configs.dockerApiVersion
+connectionParams.version = FlukeDeployConstants.configs.dockerApiVersion
 const dockerApiInstance = new DockerApi(connectionParams)
 
 const lowVersionDocker = JSON.parse(JSON.stringify(connectionParams))
@@ -1799,12 +1799,12 @@ new Docker(lowVersionDocker)
         const majorSupported = Number(data.ApiVersion.split('.')[0])
         const minorSupported = Number(data.ApiVersion.split('.')[1])
         const majorNeeded = Number(
-            CaptainConstants.configs.dockerApiVersion
+            FlukeDeployConstants.configs.dockerApiVersion
                 .replace('v', '')
                 .split('.')[0]
         )
         const minorNeeded = Number(
-            CaptainConstants.configs.dockerApiVersion
+            FlukeDeployConstants.configs.dockerApiVersion
                 .replace('v', '')
                 .split('.')[1]
         )

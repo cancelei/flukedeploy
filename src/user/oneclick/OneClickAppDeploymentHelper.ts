@@ -187,21 +187,21 @@ export default class OneClickAppDeploymentHelper {
                         appDef.serviceUpdateOverride = overrideYaml
                     }
 
-                    if (dockerComposeService.caproverExtra) {
+                    if (dockerComposeService.flukedeployExtra) {
                         if (
-                            dockerComposeService.caproverExtra.containerHttpPort
+                            dockerComposeService.flukedeployExtra.containerHttpPort
                         ) {
                             appDef.containerHttpPort =
-                                dockerComposeService.caproverExtra.containerHttpPort
+                                dockerComposeService.flukedeployExtra.containerHttpPort
                         }
 
                         if (
-                            dockerComposeService.caproverExtra.notExposeAsWebApp
+                            dockerComposeService.flukedeployExtra.notExposeAsWebApp
                         ) {
                             appDef.notExposeAsWebApp = true
                         }
                         if (
-                            dockerComposeService.caproverExtra.websocketSupport
+                            dockerComposeService.flukedeployExtra.websocketSupport
                         ) {
                             appDef.websocketSupport = true
                         }
@@ -226,7 +226,7 @@ export default class OneClickAppDeploymentHelper {
                 captainDefinition.imageName = dockerComposeService.image
             } else {
                 captainDefinition.dockerfileLines =
-                    dockerComposeService.caproverExtra?.dockerfileLines
+                    dockerComposeService.flukedeployExtra?.dockerfileLines
             }
 
             return self.apiManager.uploadCaptainDefinitionContent(

@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import ApiStatusCodes from '../../api/ApiStatusCodes'
-import CaptainConstants from '../../utils/CaptainConstants'
+import FlukeDeployConstants from '../../utils/FlukeDeployConstants'
 import Logger from '../../utils/Logger'
 import Utils from '../../utils/Utils'
 import CertbotManager from './CertbotManager'
@@ -30,14 +30,14 @@ export default class DomainResolveChecker {
         domainName: string,
         identifierSuffix: string | undefined
     ) {
-        if (CaptainConstants.configs.skipVerifyingDomains) {
+        if (FlukeDeployConstants.configs.skipVerifyingDomains) {
             return Utils.getDelayedPromise(1000)
         }
 
         const self = this
         const randomUuid = uuid()
         const captainConfirmationPath =
-            CaptainConstants.captainConfirmationPath +
+            FlukeDeployConstants.captainConfirmationPath +
             (identifierSuffix ? identifierSuffix : '')
 
         return Promise.resolve()
@@ -47,8 +47,8 @@ export default class DomainResolveChecker {
             .then(function () {
                 return fs.outputFile(
                     `${
-                        CaptainConstants.captainStaticFilesDir +
-                        CaptainConstants.nginxDomainSpecificHtmlDir
+                        FlukeDeployConstants.captainStaticFilesDir +
+                        FlukeDeployConstants.nginxDomainSpecificHtmlDir
                     }/${domainName}${captainConfirmationPath}`,
                     randomUuid
                 )
@@ -62,7 +62,7 @@ export default class DomainResolveChecker {
             })
             .then(function () {
                 return new Promise<void>(function (resolve, reject) {
-                    const url = `http://${domainName}:${CaptainConstants.configs.nginxPortNumber80}${captainConfirmationPath}`
+                    const url = `http://${domainName}:${FlukeDeployConstants.configs.nginxPortNumber80}${captainConfirmationPath}`
 
                     request(
                         url,
@@ -92,14 +92,14 @@ export default class DomainResolveChecker {
     }
 
     verifyDomainResolvesToDefaultServerOnHost(domainName: string) {
-        if (CaptainConstants.configs.skipVerifyingDomains) {
+        if (FlukeDeployConstants.configs.skipVerifyingDomains) {
             return Utils.getDelayedPromise(1000)
         }
 
         const self = this
 
         return new Promise<void>(function (resolve, reject) {
-            const url = `http://${domainName}${CaptainConstants.captainConfirmationPath}`
+            const url = `http://${domainName}${FlukeDeployConstants.captainConfirmationPath}`
 
             Logger.d(`Sending request to ${url}`)
 

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import DataStore from '../datastore/DataStore'
-import CaptainConstants from '../utils/CaptainConstants'
+import FlukeDeployConstants from '../utils/FlukeDeployConstants'
 import Logger from '../utils/Logger'
 
 export default class FeatureFlags {
@@ -31,10 +31,10 @@ export default class FeatureFlags {
         Promise.resolve() //
             .then(function () {
                 return axios.get(
-                    'https://api-v1.caprover.com/v2/featureflags',
+                    'https://api-v1.flukedeploy.com/v2/featureflags',
                     {
                         params: {
-                            currentVersion: CaptainConstants.configs.version,
+                            currentVersion: FlukeDeployConstants.configs.version,
                         },
                     }
                 )

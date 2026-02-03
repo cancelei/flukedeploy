@@ -1,7 +1,7 @@
 import DataStore from '../../../../datastore/DataStore'
 import { ICaptainDefinition } from '../../../../models/ICaptainDefinition'
 import ServiceManager from '../../../../user/ServiceManager'
-import CaptainConstants from '../../../../utils/CaptainConstants'
+import FlukeDeployConstants from '../../../../utils/FlukeDeployConstants'
 import Logger from '../../../../utils/Logger'
 
 import ApiStatusCodes from '../../../../api/ApiStatusCodes'
@@ -50,7 +50,7 @@ export async function registerAppDefinition(
         // Create captain definition content
         const captainDefinitionContent: ICaptainDefinition = {
             schemaVersion: 2,
-            imageName: CaptainConstants.configs.appPlaceholderImageName,
+            imageName: FlukeDeployConstants.configs.appPlaceholderImageName,
         }
 
         // Schedule deployment (unless detached build)
@@ -129,7 +129,7 @@ export async function getAllAppDefinitions(
             data: {
                 appDefinitions: appsArray,
                 rootDomain: dataStore.getRootDomain(),
-                captainSubDomain: CaptainConstants.configs.captainSubDomain,
+                captainSubDomain: FlukeDeployConstants.configs.captainSubDomain,
                 defaultNginxConfig: defaultNginxConfig,
             },
         }
@@ -322,7 +322,7 @@ export async function updateAppDefinition(
         repoInfo &&
         repoInfo.sshKey &&
         repoInfo.sshKey.indexOf('ENCRYPTED') > 0 &&
-        !CaptainConstants.configs.disableEncryptedCheck
+        !FlukeDeployConstants.configs.disableEncryptedCheck
     ) {
         throw ApiStatusCodes.createError(
             ApiStatusCodes.ILLEGAL_PARAMETER,

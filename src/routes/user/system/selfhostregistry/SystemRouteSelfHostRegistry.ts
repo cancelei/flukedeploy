@@ -5,7 +5,7 @@ import BaseApi from '../../../../api/BaseApi'
 import InjectionExtractor from '../../../../injection/InjectionExtractor'
 import { IRegistryTypes } from '../../../../models/IRegistryInfo'
 import CaptainManager from '../../../../user/system/CaptainManager'
-import CaptainConstants from '../../../../utils/CaptainConstants'
+import FlukeDeployConstants from '../../../../utils/FlukeDeployConstants'
 import Logger from '../../../../utils/Logger'
 
 const router = express.Router()
@@ -41,7 +41,7 @@ router.post('/enableregistry/', function (req, res, next) {
                     )
                 }
             }
-            const user = CaptainConstants.captainRegistryUsername
+            const user = FlukeDeployConstants.captainRegistryUsername
             const domain = captainManager
                 .getDockerRegistry()
                 .getLocalRegistryDomainAndPort()

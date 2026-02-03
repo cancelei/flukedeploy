@@ -4,7 +4,7 @@ import * as path from 'path'
 import git from 'simple-git'
 import * as util from 'util'
 import * as uuid from 'uuid'
-import CaptainConstants from './CaptainConstants'
+import FlukeDeployConstants from './FlukeDeployConstants'
 import Logger from './Logger'
 import Utils from './Utils'
 const exec = util.promisify(childProcess.exec)
@@ -45,7 +45,7 @@ export default class GitHelper {
 
         if (sshKey) {
             const SSH_KEY_PATH = path.join(
-                CaptainConstants.captainRootDirectoryTemp,
+                FlukeDeployConstants.captainRootDirectoryTemp,
                 uuid.v4()
             )
 
@@ -114,7 +114,7 @@ export default class GitHelper {
         }
     }
 
-    // input is like this: ssh://git@github.com:22/caprover/caprover-cli.git
+    // input is like this: ssh://git@github.com:22/flukedeploy/flukedeploy-cli.git
     static getDomainFromSanitizedSshRepoPath(input: string) {
         return GitHelper.sanitizeRepoPathSsh(input).domain
     }
@@ -124,7 +124,7 @@ export default class GitHelper {
         input = Utils.removeHttpHttps(input)
 
         if (input.toLowerCase().startsWith('git@')) {
-            // at this point, input is like git@github.com:caprover/caprover-cli.git
+            // at this point, input is like git@github.com:flukedeploy/flukedeploy-cli.git
             input = input.substring(4)
             input = input.replace(':', '/')
         }
@@ -132,7 +132,7 @@ export default class GitHelper {
         return input.replace(/\/$/, '')
     }
 
-    // It returns a string like this "ssh://git@github.com:22/caprover/caprover-cli.git"
+    // It returns a string like this "ssh://git@github.com:22/flukedeploy/flukedeploy-cli.git"
     static sanitizeRepoPathSsh(input: string) {
         const found = input.match(GitHelper.SSH_PATH_RE)
         if (!found) {

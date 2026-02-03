@@ -3,7 +3,7 @@ import { randomBytes } from 'crypto'
 import ApiStatusCodes from '../api/ApiStatusCodes'
 import { IHashMapGeneric } from '../models/ICacheGeneric'
 import { UserJwt } from '../models/UserJwt'
-import CaptainConstants from '../utils/CaptainConstants'
+import FlukeDeployConstants from '../utils/FlukeDeployConstants'
 import EnvVar from '../utils/EnvVars'
 import Logger from '../utils/Logger'
 import bcrypt = require('bcryptjs')
@@ -52,7 +52,7 @@ class Authenticator {
     constructor(secret: string, namespace: string) {
         this.encryptionKey = secret + namespace // making encryption key unique per namespace!
         this.namespace = namespace
-        this.tokenVersion = CaptainConstants.isDebug
+        this.tokenVersion = FlukeDeployConstants.isDebug
             ? 'test'
             : generateSecureRandomString(64)
     }
@@ -349,7 +349,7 @@ class Authenticator {
             )
         }
 
-        if (namespace !== CaptainConstants.rootNameSpace) {
+        if (namespace !== FlukeDeployConstants.rootNameSpace) {
             throw ApiStatusCodes.createError(
                 ApiStatusCodes.STATUS_ERROR_NOT_AUTHORIZED,
                 'Invalid namespace'

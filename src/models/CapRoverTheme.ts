@@ -1,8 +1,8 @@
-export interface CapRoverExtraTheme {
+export interface FlukeDeployExtraTheme {
     siderTheme?: string
 }
 
-export default interface CapRoverTheme {
+export default interface FlukeDeployTheme {
     content: string
     name: string
     extra?: string

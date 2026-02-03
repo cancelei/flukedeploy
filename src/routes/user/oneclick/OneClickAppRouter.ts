@@ -5,22 +5,22 @@ import BaseApi from '../../../api/BaseApi'
 import InjectionExtractor from '../../../injection/InjectionExtractor'
 import { EventLogger } from '../../../user/events/EventLogger'
 import {
-    CapRoverEventFactory,
-    CapRoverEventType,
-} from '../../../user/events/ICapRoverEvent'
+    FlukeDeployEventFactory,
+    FlukeDeployEventType,
+} from '../../../user/events/IFlukeDeployEvent'
 import OneClickAppDeployManager from '../../../user/oneclick/OneClickAppDeployManager'
 import { OneClickDeploymentJobRegistry } from '../../../user/oneclick/OneClickDeploymentJobRegistry'
-import CaptainConstants from '../../../utils/CaptainConstants'
+import FlukeDeployConstants from '../../../utils/FlukeDeployConstants'
 import Logger from '../../../utils/Logger'
 
 const router = express.Router()
-const DEFAULT_ONE_CLICK_BASE_URL = 'https://oneclickapps.caprover.com'
+const DEFAULT_ONE_CLICK_BASE_URL = 'https://oneclickapps.flukedeploy.com'
 
 const VERSION = `v4`
 
 const HEADERS = {} as any
-HEADERS[CaptainConstants.headerCapRoverVersion] =
-    CaptainConstants.configs.version
+HEADERS[FlukeDeployConstants.headerFlukeDeployVersion] =
+    FlukeDeployConstants.configs.version
 
 interface IOneClickAppIdentifier {
     baseUrl: string
@@ -150,8 +150,8 @@ router.get('/template/list', function (req, res, next) {
             const promises = [] as Promise<IOneClickAppIdentifier[]>[]
 
             eventLogger.trackEvent(
-                CapRoverEventFactory.create(
-                    CapRoverEventType.OneClickAppListFetched,
+                FlukeDeployEventFactory.create(
+                    FlukeDeployEventType.OneClickAppListFetched,
                     {
                         numberOfRepos: urls.length,
                     }
@@ -243,8 +243,8 @@ router.get('/template/app', function (req, res, next) {
             // Only log the official repo events
             if (baseDomain === DEFAULT_ONE_CLICK_BASE_URL) {
                 eventLogger.trackEvent(
-                    CapRoverEventFactory.create(
-                        CapRoverEventType.OneClickAppDetailsFetched,
+                    FlukeDeployEventFactory.create(
+                        FlukeDeployEventType.OneClickAppDetailsFetched,
                         {
                             appName,
                         }
@@ -413,8 +413,8 @@ export function reportAnalyticsOnAppDeploy(
             : 'UNKNOWN'
 
     eventLogger.trackEvent(
-        CapRoverEventFactory.create(
-            CapRoverEventType.OneClickAppDeployStarted,
+        FlukeDeployEventFactory.create(
+            FlukeDeployEventType.OneClickAppDeployStarted,
             {
                 unusedFields: unusedDockerServiceFieldNames,
                 templateName: templateNameToReport,

@@ -10,7 +10,7 @@ import OtpAuthenticator from '../user/pro/OtpAuthenticator'
 import ServiceManager from '../user/ServiceManager'
 import CaptainManager from '../user/system/CaptainManager'
 import { UserManagerProvider } from '../user/UserManagerProvider'
-import CaptainConstants from '../utils/CaptainConstants'
+import FlukeDeployConstants from '../utils/FlukeDeployConstants'
 import Logger from '../utils/Logger'
 import InjectionExtractor from './InjectionExtractor'
 import { IAppDef } from '../models/AppDefinition'
@@ -25,10 +25,10 @@ export function injectGlobal() {
         const locals = res.locals
 
         locals.namespace =
-            req.header(CaptainConstants.headerNamespace) ||
-            CaptainConstants.rootNameSpace
+            req.header(FlukeDeployConstants.headerNamespace) ||
+            FlukeDeployConstants.rootNameSpace
 
-        if (locals.namespace !== CaptainConstants.rootNameSpace) {
+        if (locals.namespace !== FlukeDeployConstants.rootNameSpace) {
             throw ApiStatusCodes.createError(
                 ApiStatusCodes.STATUS_ERROR_GENERIC,
                 'Namespace unknown'
@@ -58,7 +58,7 @@ export function injectUser() {
         const namespace = res.locals.namespace
 
         Authenticator.getAuthenticator(namespace)
-            .decodeAuthToken(req.header(CaptainConstants.headerAuth) || '')
+            .decodeAuthToken(req.header(FlukeDeployConstants.headerAuth) || '')
             .then(function (userDecoded) {
                 if (userDecoded) {
                     const datastore = DataStoreProvider.getDataStore(namespace)
@@ -111,11 +111,11 @@ export function injectUserForBuildTrigger() {
     return function (req: Request, res: Response, next: NextFunction) {
         const locals = res.locals
 
-        const token = req.header(CaptainConstants.headerAppToken) as string
+        const token = req.header(FlukeDeployConstants.headerAppToken) as string
         const namespace = locals.namespace
         const appName = req.params.appName as string
 
-        if (req.header(CaptainConstants.headerAuth)) {
+        if (req.header(FlukeDeployConstants.headerAuth)) {
             // Auth header is present, skip user injection for app token
             next()
             return
@@ -271,9 +271,9 @@ export function injectUserForWebhook() {
  */
 export function injectUserUsingCookieDataOnly() {
     return function (req: Request, res: Response, next: NextFunction) {
-        Authenticator.getAuthenticator(CaptainConstants.rootNameSpace)
+        Authenticator.getAuthenticator(FlukeDeployConstants.rootNameSpace)
             .decodeAuthTokenFromCookies(
-                req.cookies[CaptainConstants.headerCookieAuth]
+                req.cookies[FlukeDeployConstants.headerCookieAuth]
             )
             .then(function (user) {
                 res.locals.user = user

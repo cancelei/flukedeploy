@@ -1,4 +1,4 @@
-export enum CapRoverEventType {
+export enum FlukeDeployEventType {
     UserLoggedIn = 'UserLoggedIn',
     AppBuildSuccessful = 'AppBuildSuccessful',
     AppBuildFailed = 'AppBuildFailed',
@@ -8,16 +8,16 @@ export enum CapRoverEventType {
     OneClickAppDeployStarted = 'OneClickAppDeployStarted',
 }
 
-export interface ICapRoverEvent {
-    eventType: CapRoverEventType
+export interface IFlukeDeployEvent {
+    eventType: FlukeDeployEventType
     eventMetadata: any
 }
 
-export class CapRoverEventFactory {
+export class FlukeDeployEventFactory {
     static create(
-        eventType: CapRoverEventType,
+        eventType: FlukeDeployEventType,
         eventMetadata: any
-    ): ICapRoverEvent {
+    ): IFlukeDeployEvent {
         return {
             eventType,
             eventMetadata,

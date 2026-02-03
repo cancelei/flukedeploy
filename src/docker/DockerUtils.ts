@@ -1,5 +1,5 @@
 import ApiStatusCodes from '../api/ApiStatusCodes'
-import CaptainConstants from '../utils/CaptainConstants'
+import FlukeDeployConstants from '../utils/FlukeDeployConstants'
 import Logger from '../utils/Logger'
 import DockerApi from './DockerApi'
 import SshClientImport = require('ssh2')
@@ -37,7 +37,7 @@ export default class DockerUtils {
                             Logger.d('SSH Client :: ready')
                             conn.exec(
                                 `${
-                                    CaptainConstants.disableFirewallCommand
+                                    FlukeDeployConstants.disableFirewallCommand
                                 } ${dockerApi.createJoinCommand(
                                     captainIpAddress,
                                     token,

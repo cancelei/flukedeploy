@@ -15,7 +15,7 @@ const CONSTANT_FILE_OVERRIDE_USER =
     CAPTAIN_DATA_DIRECTORY + '/config-override.json'
 
 const configs = {
-    publishedNameOnDockerHub: 'caprover/caprover',
+    publishedNameOnDockerHub: 'flukedeploy/flukedeploy',
 
     version: '1.14.1',
 
@@ -37,19 +37,19 @@ const configs = {
 
     dockerApiVersion: 'v1.44',
 
-    netDataImageName: 'caprover/netdata:v1.34.1',
+    netDataImageName: 'flukedeploy/netdata:v1.34.1',
 
-    goAccessImageName: 'caprover/goaccess:1.9.4',
+    goAccessImageName: 'flukedeploy/goaccess:1.9.4',
 
     goAccessAnonymizeIP: false,
 
     registryImageName: 'registry:2',
 
-    appPlaceholderImageName: 'caprover/caprover-placeholder-app:latest',
+    appPlaceholderImageName: 'flukedeploy/flukedeploy-placeholder-app:latest',
 
     nginxImageName: 'nginx:1.27.2',
 
-    defaultEmail: 'runner@caprover.com',
+    defaultEmail: 'runner@flukedeploy.com',
 
     captainSubDomain: 'captain',
 
@@ -57,11 +57,11 @@ const configs = {
 
     useExistingSwarm: false,
 
-    proApiDomains: ['https://pro.caprover.com'],
+    proApiDomains: ['https://pro.flukedeploy.com'],
 
-    analyticsDomain: 'https://analytics-v1.caprover.com',
+    analyticsDomain: 'https://analytics-v1.flukedeploy.com',
 
-    certbotImageName: 'caprover/certbot-sleeping:v2.11.0',
+    certbotImageName: 'flukedeploy/certbot-sleeping:v2.11.0',
 
     certbotCertCommandRules: undefined as CertbotCertCommandRule[] | undefined,
 
@@ -107,7 +107,7 @@ const data = {
 
     // *********************** Disk Paths ************************
 
-    defaultCaptainDefinitionPath: './captain-definition',
+    defaultCaptainDefinitionPath: './flukedeploy-definition',
 
     dockerSocketPath: '/var/run/docker.sock',
 
@@ -131,7 +131,7 @@ const data = {
 
     nginxDomainSpecificHtmlDir: '/domains',
 
-    captainConfirmationPath: '/.well-known/captain-identifier',
+    captainConfirmationPath: '/.well-known/flukedeploy-identifier',
 
     captainBaseDirectory: CAPTAIN_BASE_DIRECTORY,
 
@@ -154,7 +154,7 @@ const data = {
     baseNginxConfigPath: CAPTAIN_ROOT_DIRECTORY_GENERATED + '/nginx/nginx.conf', // this is a file
 
     rootNginxConfigPath:
-        CAPTAIN_ROOT_DIRECTORY_GENERATED + '/nginx/conf.d/captain-root',
+        CAPTAIN_ROOT_DIRECTORY_GENERATED + '/nginx/conf.d/flukedeploy-root',
 
     perAppNginxConfigPathBase:
         CAPTAIN_ROOT_DIRECTORY_GENERATED + '/nginx/conf.d',
@@ -177,21 +177,21 @@ const data = {
 
     // ********************* Local Docker Constants  ************************
 
-    captainSaltSecretKey: 'captain-salt',
+    captainSaltSecretKey: 'flukedeploy-salt',
 
-    nginxServiceName: 'captain-nginx',
+    nginxServiceName: 'flukedeploy-nginx',
 
-    captainServiceName: 'captain-captain',
+    captainServiceName: 'flukedeploy-flukedeploy',
 
-    certbotServiceName: 'captain-certbot',
+    certbotServiceName: 'flukedeploy-certbot',
 
-    goAccessContainerName: 'captain-goaccess-container',
+    goAccessContainerName: 'flukedeploy-goaccess-container',
 
-    netDataContainerName: 'captain-netdata-container',
+    netDataContainerName: 'flukedeploy-netdata-container',
 
-    registryServiceName: 'captain-registry',
+    registryServiceName: 'flukedeploy-registry',
 
-    captainNetworkName: 'captain-overlay-network',
+    captainNetworkName: 'flukedeploy-overlay-network',
 
     captainRegistryUsername: 'captain',
 
@@ -205,13 +205,13 @@ const data = {
 
     headerCookieAuth: 'captainCookieAuth',
 
-    headerAuth: 'x-captain-auth',
+    headerAuth: 'x-flukedeploy-auth',
 
-    headerAppToken: 'x-captain-app-token',
+    headerAppToken: 'x-flukedeploy-app-token',
 
     headerNamespace: 'x-namespace',
 
-    headerCapRoverVersion: 'x-caprover-version',
+    headerFlukeDeployVersion: 'x-flukedeploy-version',
 
     // *********************     ETC       ************************
 
@@ -263,7 +263,7 @@ if (data.isDebug) {
     }
 
     data.debugSourceDirectory = devDirectoryOnLocalMachine
-    data.configs.publishedNameOnDockerHub = 'captain-debug'
+    data.configs.publishedNameOnDockerHub = 'flukedeploy-debug'
     // data.configs.nginxPortNumber80 = 80
 }
 

@@ -4,12 +4,12 @@ import Utils from './Utils'
 
 export default class DockerComposeToServiceOverride {
     /**
-     * Converts the unsupported docker compose parameters to CapRover service override definition.
-     * Port, replicas, env vars, volumes, and image are supplied through CapRover definition,
-     * network will be set to captain-overlay restart_policy is not generally needed,
+     * Converts the unsupported docker compose parameters to FlukeDeploy service override definition.
+     * Port, replicas, env vars, volumes, and image are supplied through FlukeDeploy definition,
+     * network will be set to flukedeploy-overlay restart_policy is not generally needed,
      * by default docker services restart automatically.
      * Only parse parameters that are not from the aforementioned list.
-     * The only useful parameter that we are parsing at the moment is hostname: https://github.com/caprover/caprover/issues/404
+     * The only useful parameter that we are parsing at the moment is hostname: https://github.com/flukedeploy/flukedeploy/issues/404
      *
      * @param docker compose service definition
      * @returns the override service definition in yaml format

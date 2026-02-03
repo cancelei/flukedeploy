@@ -2,7 +2,7 @@ import express = require('express')
 import ApiStatusCodes from '../../../api/ApiStatusCodes'
 import BaseApi from '../../../api/BaseApi'
 import InjectionExtractor from '../../../injection/InjectionExtractor'
-import CapRoverTheme from '../../../models/CapRoverTheme'
+import FlukeDeployTheme from '../../../models/FlukeDeployTheme'
 import { ThemeManager } from '../../../user/ThemeManager'
 import Logger from '../../../utils/Logger'
 
@@ -30,7 +30,7 @@ router.post('/update/', function (req, res, next) {
     const dataStore =
         InjectionExtractor.extractUserFromInjected(res).user.dataStore
     const oldName = req.body.oldName || ''
-    const theme: CapRoverTheme = {
+    const theme: FlukeDeployTheme = {
         name: req.body.name || '',
         content: req.body.content || '',
         extra: req.body.extra || '',

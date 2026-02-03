@@ -2,11 +2,11 @@ import axios from 'axios'
 import ApiStatusCodes from '../../api/ApiStatusCodes'
 import ProDataStore from '../../datastore/ProDataStore'
 import { IProConfig, IProFeatures } from '../../models/IProFeatures'
-import CaptainConstants from '../../utils/CaptainConstants'
+import FlukeDeployConstants from '../../utils/FlukeDeployConstants'
 import EnvVars from '../../utils/EnvVars'
 import Logger from '../../utils/Logger'
 import FeatureFlags from '../FeatureFlags'
-import { CapRoverEventType, ICapRoverEvent } from './../events/ICapRoverEvent'
+import { FlukeDeployEventType, IFlukeDeployEvent } from './../events/IFlukeDeployEvent'
 
 type API_METHOD = 'post' | 'get'
 
@@ -28,9 +28,9 @@ export default class ProManager {
 
     private static getBaseUrl() {
         return (
-            CaptainConstants.configs.proApiDomains[
+            FlukeDeployConstants.configs.proApiDomains[
                 ProManager.activeApiIndex %
-                    CaptainConstants.configs.proApiDomains.length
+                    FlukeDeployConstants.configs.proApiDomains.length
             ] + '/api/v1'
         )
     }
@@ -77,7 +77,7 @@ export default class ProManager {
                 }
 
                 if (!data.data) throw new Error('Unexpected Pro API response')
-                return data.data // pulling out data part of CapRover Pro API response
+                return data.data // pulling out data part of FlukeDeploy Pro API response
             })
             .catch((err) => {
                 Logger.e(err)
@@ -109,8 +109,8 @@ export default class ProManager {
                     .getInstallationId()
                     .then(function (installationId) {
                         const allHeaders = {
-                            'x-caprover-version':
-                                CaptainConstants.configs.version,
+                            'x-flukedeploy-version':
+                                FlukeDeployConstants.configs.version,
                             'x-installation-id': installationId,
                         } as any
 
@@ -144,7 +144,7 @@ export default class ProManager {
         const self = this
         return Promise.resolve()
             .then(function () {
-                return self.callApi('post', `/caprover/otp/validate`, {
+                return self.callApi('post', `/flukedeploy/otp/validate`, {
                     token: tokenSuppliedByClient,
                 })
             })
@@ -159,7 +159,7 @@ export default class ProManager {
             .then(function () {
                 return self.callApi(
                     'post',
-                    `/caprover/claim`,
+                    `/flukedeploy/claim`,
                     {
                         instanceUrl,
                     },
@@ -175,7 +175,7 @@ export default class ProManager {
         const self = this
         return Promise.resolve()
             .then(function () {
-                return self.callApi('post', `/caprover/otp/secret`, {})
+                return self.callApi('post', `/flukedeploy/otp/secret`, {})
             })
             .then(function (data) {
                 return data ? `${data.otpPath || ''}` : ''
@@ -198,7 +198,7 @@ export default class ProManager {
                 return self.proDataStore
                     .updateConfig(proConfigs)
                     .then(function () {
-                        return self.callApi('post', `/caprover/configs`, {
+                        return self.callApi('post', `/flukedeploy/configs`, {
                             proConfigs: proConfigs,
                         })
                     })
@@ -222,33 +222,33 @@ export default class ProManager {
             })
     }
 
-    reportEvent(event: ICapRoverEvent) {
+    reportEvent(event: IFlukeDeployEvent) {
         const self = this
         return Promise.resolve()
             .then(function () {
-                return self.callApi('post', `/caprover/event`, { event })
+                return self.callApi('post', `/flukedeploy/event`, { event })
             })
             .catch((err) => {
                 Logger.e(err)
             })
     }
 
-    isEventEnabledForProReporting(event: ICapRoverEvent): boolean {
+    isEventEnabledForProReporting(event: IFlukeDeployEvent): boolean {
         switch (event.eventType) {
-            case CapRoverEventType.AppBuildFailed:
-            case CapRoverEventType.UserLoggedIn:
-            case CapRoverEventType.AppBuildSuccessful:
+            case FlukeDeployEventType.AppBuildFailed:
+            case FlukeDeployEventType.UserLoggedIn:
+            case FlukeDeployEventType.AppBuildSuccessful:
                 return true
 
-            case CapRoverEventType.InstanceStarted:
-            case CapRoverEventType.OneClickAppDetailsFetched:
-            case CapRoverEventType.OneClickAppListFetched:
-            case CapRoverEventType.OneClickAppDeployStarted:
+            case FlukeDeployEventType.InstanceStarted:
+            case FlukeDeployEventType.OneClickAppDetailsFetched:
+            case FlukeDeployEventType.OneClickAppListFetched:
+            case FlukeDeployEventType.OneClickAppDeployStarted:
                 return false
         }
     }
 
-    reportUnAuthAnalyticsEvent(event: ICapRoverEvent) {
+    reportUnAuthAnalyticsEvent(event: IFlukeDeployEvent) {
         const self = this
         return Promise.resolve()
             .then(function () {
@@ -259,7 +259,7 @@ export default class ProManager {
                 return axios({
                     method: 'post',
                     data: { event },
-                    url: `${CaptainConstants.configs.analyticsDomain}/api/v1/analytics/event`,
+                    url: `${FlukeDeployConstants.configs.analyticsDomain}/api/v1/analytics/event`,
                     headers: headers,
                 })
             })
@@ -275,7 +275,7 @@ export default class ProManager {
                 }
 
                 if (!data.data) throw new Error('Unexpected Pro API response')
-                return data.data // pulling out data part of CapRover Pro API response
+                return data.data // pulling out data part of FlukeDeploy Pro API response
             })
             .catch((err) => {
                 Logger.e(err, 'reportUnAuthAnalyticsEvent failed!')

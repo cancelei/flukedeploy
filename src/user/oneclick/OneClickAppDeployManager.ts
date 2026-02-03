@@ -59,7 +59,7 @@ export default class OneClickAppDeployManager {
         })
 
         if (
-            template.caproverOneClickApp.variables.find(
+            template.flukedeployOneClickApp.variables.find(
                 (v) => v.id === ONE_CLICK_APP_NAME_VAR_NAME
             ) &&
             (!values[ONE_CLICK_APP_NAME_VAR_NAME] ||
@@ -75,10 +75,10 @@ export default class OneClickAppDeployManager {
 
         for (
             let index = 0;
-            index < template.caproverOneClickApp.variables.length;
+            index < template.flukedeployOneClickApp.variables.length;
             index++
         ) {
-            const element = template.caproverOneClickApp.variables[index]
+            const element = template.flukedeployOneClickApp.variables[index]
             stringified = replaceWith(
                 element.id,
                 values[element.id] || '',
@@ -159,7 +159,7 @@ export default class OneClickAppDeployManager {
                             currentStep,
                             successMessage:
                                 currentStep >= stepsTexts.length
-                                    ? self.template!.caproverOneClickApp
+                                    ? self.template!.flukedeployOneClickApp
                                           .instructions.end
                                     : undefined,
                         })

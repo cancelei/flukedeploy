@@ -1,6 +1,9 @@
 {
-    "name": "caprover",
+    "name": "flukedeploy",
     "version": "0.0.0",
+    "description": "AI-native PaaS built on Docker Swarm, optimized for FlukeBase ecosystem. Forked from CapRover.",
+    "repository": "https://github.com/flukebase/flukedeploy",
+    "homepage": "https://deploy.flukebase.com",
     "private": true,
     "scripts": {
         "disable-otp": "node ./built/scripts/disable-otp.js",

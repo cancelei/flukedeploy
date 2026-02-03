@@ -6,21 +6,21 @@ console.log('Captain Starting ...')
 import * as http from 'http'
 import app, { initializeCaptainWithDelay } from './app'
 import { AnyError } from './models/OtherTypes'
-import CaptainConstants from './utils/CaptainConstants'
-import * as CaptainInstaller from './utils/CaptainInstaller'
+import FlukeDeployConstants from './utils/FlukeDeployConstants'
+import * as FlukeDeployInstaller from './utils/FlukeDeployInstaller'
 import EnvVars from './utils/EnvVars'
 import debugModule = require('debug')
 
-const debug = debugModule('caprover:server')
+const debug = debugModule('flukedeploy:server')
 
 function startServer() {
-    if (CaptainConstants.isDebug) {
+    if (FlukeDeployConstants.isDebug) {
         console.log('***DEBUG BUILD***')
     }
 
     if (!EnvVars.IS_CAPTAIN_INSTANCE) {
         console.log('Installing Captain Service ...')
-        CaptainInstaller.install()
+        FlukeDeployInstaller.install()
         return
     }
 
@@ -30,7 +30,7 @@ function startServer() {
      * Get port from environment and store in Express.
      */
 
-    const port = CaptainConstants.serviceContainerPort3000
+    const port = FlukeDeployConstants.serviceContainerPort3000
     app.set('port', port)
 
     /**

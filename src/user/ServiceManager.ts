@@ -15,7 +15,7 @@ import { DockerAuthObj } from '../models/DockerAuthObj'
 import { IHashMapGeneric } from '../models/ICacheGeneric'
 import { IImageSource } from '../models/IImageSource'
 import { PreDeployFunction } from '../models/OtherTypes'
-import CaptainConstants from '../utils/CaptainConstants'
+import FlukeDeployConstants from '../utils/FlukeDeployConstants'
 import Logger from '../utils/Logger'
 import Utils from '../utils/Utils'
 import Authenticator from './Authenticator'
@@ -23,9 +23,9 @@ import DockerRegistryHelper from './DockerRegistryHelper'
 import ImageMaker, { BuildLogsManager } from './ImageMaker'
 import { EventLogger } from './events/EventLogger'
 import {
-    CapRoverEventFactory,
-    CapRoverEventType,
-} from './events/ICapRoverEvent'
+    FlukeDeployEventFactory,
+    FlukeDeployEventType,
+} from './events/IFlukeDeployEvent'
 import DomainResolveChecker from './system/DomainResolveChecker'
 import LoadBalancerManager from './system/LoadBalancerManager'
 import requireFromString = require('require-from-string')
@@ -211,8 +211,8 @@ class ServiceManager {
                 self.onBuildFinished(appName)
 
                 self.eventLogger.trackEvent(
-                    CapRoverEventFactory.create(
-                        CapRoverEventType.AppBuildSuccessful,
+                    FlukeDeployEventFactory.create(
+                        FlukeDeployEventType.AppBuildSuccessful,
                         {
                             appName,
                         }
@@ -860,7 +860,7 @@ class ServiceManager {
         error = (error || '') + ''
 
         self.eventLogger.trackEvent(
-            CapRoverEventFactory.create(CapRoverEventType.AppBuildFailed, {
+            FlukeDeployEventFactory.create(FlukeDeployEventType.AppBuildFailed, {
                 appName,
                 error: error.substring(0, 1000),
             })
@@ -879,7 +879,7 @@ class ServiceManager {
             .then(function () {
                 return dockerApi.getLogForService(
                     serviceName,
-                    CaptainConstants.configs.appLogSize,
+                    FlukeDeployConstants.configs.appLogSize,
                     encoding
                 )
             })
@@ -937,7 +937,7 @@ class ServiceManager {
                     // update errors if they happen right away!
                     return dockerApi
                         .createServiceOnNodeId(
-                            CaptainConstants.configs.appPlaceholderImageName,
+                            FlukeDeployConstants.configs.appPlaceholderImageName,
                             serviceName,
                             undefined,
                             undefined,
