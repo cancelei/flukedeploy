@@ -7,7 +7,6 @@
 
 import WebSocket = require('ws')
 import { IncomingMessage } from 'http'
-import { globalDeploymentTracker } from './DeploymentTracker'
 import { FlukeDeployEventType, LogLevel, UnifiedLogEntry } from './UnifiedSchema'
 
 /**
@@ -53,7 +52,7 @@ export class LogStreamingServer {
             this.handleConnection(ws, req)
         })
 
-        this.wss.on('error', (error) => {
+        this.wss.on('error', (error: Error) => {
             console.error('WebSocket server error:', error)
         })
 
@@ -134,7 +133,7 @@ export class LogStreamingServer {
         })
 
         // Handle errors
-        ws.on('error', (error) => {
+        ws.on('error', (error: Error) => {
             console.error('WebSocket client error:', error)
             this.clients.delete(ws)
         })

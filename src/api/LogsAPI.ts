@@ -7,7 +7,7 @@
 
 import express = require('express')
 import { globalDeploymentTracker } from '../logging/DeploymentTracker'
-import { FlukeDeployEventType, UnifiedLogEntry } from '../logging/UnifiedSchema'
+import { UnifiedLogEntry } from '../logging/UnifiedSchema'
 
 /**
  * Create Express router for logs API.
