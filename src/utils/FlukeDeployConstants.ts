@@ -37,9 +37,9 @@ const configs = {
 
     dockerApiVersion: 'v1.44',
 
-    netDataImageName: 'flukedeploy/netdata:v1.34.1',
+    netDataImageName: 'caprover/netdata:v1.34.1',
 
-    goAccessImageName: 'flukedeploy/goaccess:1.9.4',
+    goAccessImageName: 'caprover/goaccess:1.9.4',
 
     goAccessAnonymizeIP: false,
 
@@ -61,7 +61,7 @@ const configs = {
 
     analyticsDomain: 'https://analytics-v1.flukedeploy.com',
 
-    certbotImageName: 'flukedeploy/certbot-sleeping:v2.11.0',
+    certbotImageName: 'caprover/certbot-sleeping:v2.11.0',
 
     certbotCertCommandRules: undefined as CertbotCertCommandRule[] | undefined,
 
