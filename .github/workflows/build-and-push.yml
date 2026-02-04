@@ -1,0 +1,98 @@
+name: Build and Push FlukeDeploy
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Docker image tag'
+        required: false
+        default: 'latest'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/flukedeploy
+
+jobs:
+  build-and-push:
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./dockerfile-flukedeploy.release
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+
+      - name: Generate deployment summary
+        run: |
+          echo "## FlukeDeploy Build Complete! 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Image**: \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Tags**:" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Quick Deploy" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          echo "docker service create \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --name flukedeploy \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --publish 80:80 \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --publish 443:443 \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --publish 3000:3000 \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --publish 8767:8767 \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --mount type=bind,src=/captain,dst=/captain \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --constraint 'node.role == manager' \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --env ACCEPTED_TERMS=true \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --env CAPTAIN_ROOT_DOMAIN=yourdomain.com \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --env CAPTAIN_ADMIN_PASSWORD=\$(openssl rand -base64 32 | tr -d '=+/' | cut -c1-25) \\" >> $GITHUB_STEP_SUMMARY
+          echo "  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
