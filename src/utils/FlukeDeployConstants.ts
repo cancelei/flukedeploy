@@ -55,7 +55,7 @@ const configs = {
 
     overlayNetworkOverride: {},
 
-    useExistingSwarm: false,
+    useExistingSwarm: true,
 
     proApiDomains: ['https://pro.flukedeploy.com'],
 
