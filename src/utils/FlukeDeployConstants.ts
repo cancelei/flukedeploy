@@ -45,7 +45,7 @@ const configs = {
 
     registryImageName: 'registry:2',
 
-    appPlaceholderImageName: 'flukedeploy/flukedeploy-placeholder-app:latest',
+    appPlaceholderImageName: 'caprover/caprover-placeholder-app:latest',
 
     nginxImageName: 'nginx:1.27.2',
 
