@@ -1,8 +1,10 @@
 <div align="center">
 <h1>FlukeDeploy</h1>
-<p><strong>AI-Native PaaS for the FlukeBase Ecosystem</strong></p>
+<p><strong>AI-First Deployment Platform</strong></p>
 
-Easiest app/database deployment platform with enhanced logging and AI agent integration.
+The deployment platform built for autonomous AI agents and modern development teams.
+
+**Smart Deployments • Agent-Ready • Production-Grade**
 
 Built on Docker Swarm. No Docker or nginx knowledge required!
 
@@ -10,13 +12,16 @@ Built on Docker Swarm. No Docker or nginx knowledge required!
 
 ## What's this?
 
-FlukeDeploy is an **AI-native Platform-as-a-Service** forked from [CapRover](https://caprover.com) with enhancements for the FlukeBase ecosystem:
+FlukeDeploy is an **AI-first deployment platform** designed for autonomous agents and modern development teams. Built on the proven [CapRover](https://caprover.com) foundation and enhanced for AI-native workflows:
 
-- ✅ **JSON-LD Logging**: Structured logs optimized for AI consumption
-- ✅ **WebSocket Streaming**: Real-time deployment updates
-- ✅ **OPERATOR Integration**: Native support for AI agent deployments
+### AI-First Features
+
+- ✅ **JSON-LD Logging**: Structured logs optimized for AI consumption and analysis
+- ✅ **WebSocket Streaming**: Real-time deployment updates for agent monitoring
+- ✅ **OPERATOR Integration**: Native support for autonomous AI agent deployments
 - ✅ **Enhanced Validation**: Pre-deployment security scans and quality gates
 - ✅ **Lifecycle Tracking**: 5-phase deployment monitoring (pre_build → build → pre_deploy → deploy → post_deploy)
+- ✅ **Smart Authentication**: Unified auth headers (x-flukedeploy-auth) for seamless agent access
 
 ### Core Features (inherited from CapRover)
 
@@ -165,19 +170,32 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 
 Same as CapRover - see [LICENSE](LICENSE)
 
+## Version 2.0.0 - Complete Rebranding (February 2026)
+
+FlukeDeploy v2.0.0 marks our transition from a CapRover fork to an **independent AI-first deployment platform**:
+
+- 🎯 **New Identity**: Fully rebranded codebase (FlukeDeploy classes, environment variables, service names)
+- 🔐 **Unified Auth**: Standardized `x-flukedeploy-auth` header for all API interactions
+- 🚀 **AI-First Architecture**: Built for autonomous deployment agents from day one
+- 🔧 **Modern Tooling**: Latest Docker Swarm best practices and security standards
+- 🌐 **Production Ready**: Deployed at https://captain.flukebase.me
+
+See [REBRANDING_COMPLETE.md](REBRANDING_COMPLETE.md) for full migration details.
+
 ## Acknowledgments
 
 **FlukeDeploy** is built on the excellent work of the [CapRover](https://github.com/caprover/caprover) project and its contributors. We are grateful for their open-source contribution to the community.
 
-Key enhancements:
-- JSON-LD structured logging
-- WebSocket real-time streaming
-- OPERATOR persona integration
-- Enhanced deployment lifecycle tracking
-- Pre-deployment validation gates
-- FlukeBase API integration
+**v2.0.0 Enhancements**:
+- Complete codebase rebranding for independent identity
+- JSON-LD structured logging for AI consumption
+- WebSocket real-time streaming for agent monitoring
+- OPERATOR persona integration for autonomous deployments
+- Enhanced deployment lifecycle tracking (5 phases)
+- Pre-deployment validation gates and security scans
+- Unified authentication system
 
 ---
 
-**Upstream**: [CapRover](https://github.com/caprover/caprover)
-**FlukeDeploy**: Enhanced for AI-native deployments in the FlukeBase ecosystem
+**Heritage**: [CapRover](https://github.com/caprover/caprover) (proven PaaS foundation)
+**FlukeDeploy v2.0**: Independent AI-first deployment platform

@@ -17,7 +17,7 @@ router.get('/', function (req, res, next) {
             ).decodeDownloadToken(downloadToken)
         })
         .then(function (obj) {
-            const fileFullPath = `${FlukeDeployConstants.captainDownloadsDirectory}/${namespace}/${obj.downloadFileName}`
+            const fileFullPath = `${FlukeDeployConstants.flukedeployDownloadsDirectory}/${namespace}/${obj.downloadFileName}`
             res.download(fileFullPath, function () {
                 Utils.deleteFileQuietly(fileFullPath)
             })

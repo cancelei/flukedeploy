@@ -192,7 +192,7 @@ class ServiceManager {
                         return self.imageMaker.ensureImage(
                             source,
                             appName,
-                            app.captainDefinitionRelativeFilePath,
+                            app.flukedeployDefinitionRelativeFilePath,
                             appVersion,
                             envVars
                         )
@@ -603,7 +603,7 @@ class ServiceManager {
         projectId: string,
         description: string,
         instanceCount: number,
-        captainDefinitionRelativeFilePath: string,
+        flukedeployDefinitionRelativeFilePath: string,
         envVars: IAppEnvVar[],
         volumes: IAppVolume[],
         tags: IAppTag[],
@@ -742,7 +742,7 @@ class ServiceManager {
                         projectId,
                         description,
                         instanceCount,
-                        captainDefinitionRelativeFilePath,
+                        flukedeployDefinitionRelativeFilePath,
                         envVars,
                         volumes,
                         tags,
@@ -768,7 +768,7 @@ class ServiceManager {
             .catch(function (error) {
                 if (
                     error &&
-                    error.captainErrorType ===
+                    error.flukedeployErrorType ===
                         ApiStatusCodes.STATUS_ERROR_NGINX_VALIDATION_FAILED
                 ) {
                     // Revert back to the old definition because the nginx config is invalid
@@ -783,7 +783,7 @@ class ServiceManager {
                                 existingAppDefinition.projectId,
                                 existingAppDefinition.description,
                                 existingAppDefinition.instanceCount,
-                                existingAppDefinition.captainDefinitionRelativeFilePath,
+                                existingAppDefinition.flukedeployDefinitionRelativeFilePath,
                                 existingAppDefinition.envVars,
                                 existingAppDefinition.volumes,
                                 existingAppDefinition.tags || [],

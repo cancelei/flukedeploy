@@ -67,7 +67,7 @@ export interface IAppDefinitionBase {
     hasPersistentData: boolean
     hasDefaultSubDomainSsl: boolean
     containerHttpPort?: number
-    captainDefinitionRelativeFilePath: string
+    flukedeployDefinitionRelativeFilePath: string
     forceSsl: boolean
     websocketSupport: boolean
     nodeId?: string

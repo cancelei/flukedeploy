@@ -10,7 +10,7 @@ export default class DockerUtils {
         dockerApi: DockerApi,
         sshUser: string,
         sshPort: number,
-        captainIpAddress: string,
+        flukedeployIpAddress: string,
         isManager: boolean,
         remoteNodeIpAddress: string,
         privateKey: string
@@ -39,7 +39,7 @@ export default class DockerUtils {
                                 `${
                                     FlukeDeployConstants.disableFirewallCommand
                                 } ${dockerApi.createJoinCommand(
-                                    captainIpAddress,
+                                    flukedeployIpAddress,
                                     token,
                                     remoteNodeIpAddress
                                 )}`,

@@ -113,8 +113,8 @@ router.post('/', function (req, res, next) {
             return new Promise(function (resolve, reject) {
                 if (
                     err &&
-                    err.captainErrorType &&
-                    err.captainErrorType ===
+                    err.flukedeployErrorType &&
+                    err.flukedeployErrorType ===
                         ApiStatusCodes.STATUS_WRONG_PASSWORD
                 ) {
                     failedLoginCircularTimestamps.push(new Date().getTime())

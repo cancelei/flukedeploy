@@ -1,7 +1,7 @@
 {
     "name": "flukedeploy",
     "version": "0.0.0",
-    "description": "AI-native PaaS built on Docker Swarm, optimized for FlukeBase ecosystem. Forked from CapRover.",
+    "description": "AI-native PaaS built on Docker Swarm, optimized for FlukeBase ecosystem. AI-First Deployment Platform.",
     "repository": "https://github.com/flukebase/flukedeploy",
     "homepage": "https://deploy.flukebase.com",
     "private": true,

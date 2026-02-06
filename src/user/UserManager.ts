@@ -7,7 +7,7 @@ import FeatureFlags from './FeatureFlags'
 import OtpAuthenticator from './pro/OtpAuthenticator'
 import ProManager from './pro/ProManager'
 import ServiceManager from './ServiceManager'
-import CaptainManager from './system/CaptainManager'
+import FlukeDeployManager from './system/FlukeDeployManager'
 
 export class UserManager {
     readonly datastore: DataStore
@@ -27,9 +27,9 @@ export class UserManager {
             Authenticator.getAuthenticator(namespace),
             this.datastore,
             DockerApi.get(),
-            CaptainManager.get().getLoadBalanceManager(),
+            FlukeDeployManager.get().getLoadBalanceManager(),
             this.eventLogger,
-            CaptainManager.get().getDomainResolveChecker()
+            FlukeDeployManager.get().getDomainResolveChecker()
         )
         this.otpAuthenticator = new OtpAuthenticator(
             this.datastore,

@@ -27,7 +27,7 @@ const NGINX_CONTAINER_PATH_OF_FAKE_CERTS = '/etc/nginx/fake-certs'
 const CAPROVER_CONTAINER_PATH_OF_FAKE_CERTS =
     __dirname + '/../../../template/fake-certs-src'
 const HOST_PATH_OF_FAKE_CERTS =
-    FlukeDeployConstants.captainRootDirectoryGenerated +
+    FlukeDeployConstants.flukedeployRootDirectoryGenerated +
     '/nginx/fake-certs-self-signed'
 
 if (!fs.existsSync(CAPROVER_CONTAINER_PATH_OF_FAKE_CERTS))
@@ -486,7 +486,7 @@ class LoadBalancerManager {
         const dataStore = self.dataStore
 
         const captainDomain = `${
-            FlukeDeployConstants.configs.captainSubDomain
+            FlukeDeployConstants.configs.flukedeploySubDomain
         }.${dataStore.getRootDomain()}`
         const registryDomain = `${
             FlukeDeployConstants.registrySubDomain
@@ -536,7 +536,7 @@ class LoadBalancerManager {
                         crtPath: self.getSslCertPath(captainDomain),
                         keyPath: self.getSslKeyPath(captainDomain),
                         hasRootSsl: hasRootSsl,
-                        serviceName: FlukeDeployConstants.captainServiceName,
+                        serviceName: FlukeDeployConstants.flukedeployServiceName,
                         domain: captainDomain,
                         serviceContainerPort3000:
                             FlukeDeployConstants.serviceContainerPort3000,
@@ -718,9 +718,9 @@ class LoadBalancerManager {
 
         return fs
             .outputFile(
-                FlukeDeployConstants.captainStaticFilesDir +
+                FlukeDeployConstants.flukedeployStaticFilesDir +
                     FlukeDeployConstants.nginxDefaultHtmlDir +
-                    FlukeDeployConstants.captainConfirmationPath,
+                    FlukeDeployConstants.flukedeployConfirmationPath,
                 self.getCaptainPublicRandomKey()
             )
             .then(function () {
@@ -733,7 +733,7 @@ class LoadBalancerManager {
             })
             .then(function (staticPageContent) {
                 return fs.outputFile(
-                    FlukeDeployConstants.captainStaticFilesDir +
+                    FlukeDeployConstants.flukedeployStaticFilesDir +
                         FlukeDeployConstants.nginxDefaultHtmlDir +
                         '/index.html',
                     staticPageContent
@@ -749,7 +749,7 @@ class LoadBalancerManager {
             })
             .then(function (errorGenericPageContent) {
                 return fs.outputFile(
-                    FlukeDeployConstants.captainStaticFilesDir +
+                    FlukeDeployConstants.flukedeployStaticFilesDir +
                         FlukeDeployConstants.nginxDefaultHtmlDir +
                         '/error_generic_catch_all.html',
                     errorGenericPageContent
@@ -767,7 +767,7 @@ class LoadBalancerManager {
             })
             .then(function (error502PageContent) {
                 return fs.outputFile(
-                    FlukeDeployConstants.captainStaticFilesDir +
+                    FlukeDeployConstants.flukedeployStaticFilesDir +
                         FlukeDeployConstants.nginxDefaultHtmlDir +
                         '/captain_502_custom_error_page.html',
                     error502PageContent
@@ -841,7 +841,7 @@ class LoadBalancerManager {
                     [
                         {
                             containerPath: FlukeDeployConstants.nginxStaticRootDir,
-                            hostPath: FlukeDeployConstants.captainStaticFilesDir,
+                            hostPath: FlukeDeployConstants.flukedeployStaticFilesDir,
                         },
                         {
                             containerPath: NGINX_CONTAINER_PATH_OF_FAKE_CERTS,
@@ -872,7 +872,7 @@ class LoadBalancerManager {
                             containerPath: FlukeDeployConstants.nginxSharedLogsPath,
                         },
                     ],
-                    [FlukeDeployConstants.captainNetworkName],
+                    [FlukeDeployConstants.flukedeployNetworkName],
                     undefined,
                     undefined,
                     undefined,

@@ -17,7 +17,7 @@ import { IBuiltImage } from '../models/IBuiltImage'
 import Authenticator from '../user/Authenticator'
 import ApacheMd5 from '../utils/ApacheMd5'
 import FlukeDeployConstants from '../utils/FlukeDeployConstants'
-import CaptainEncryptor from '../utils/Encryptor'
+import FlukeDeployEncryptor from '../utils/Encryptor'
 import Logger from '../utils/Logger'
 import Utils from '../utils/Utils'
 import configstore = require('configstore')
@@ -67,14 +67,14 @@ function isPortValid(portNumber: number) {
 }
 
 class AppsDataStore {
-    private encryptor: CaptainEncryptor
+    private encryptor: FlukeDeployEncryptor
 
     constructor(
         private data: configstore,
         private namepace: string
     ) {}
 
-    setEncryptor(encryptor: CaptainEncryptor) {
+    setEncryptor(encryptor: FlukeDeployEncryptor) {
         this.encryptor = encryptor
     }
 
@@ -313,8 +313,8 @@ class AppsDataStore {
                 const appUnencrypted = allAppsUnencrypted[appName]
 
                 // captainDefinitionFilePath added in v1.2.0, we need to backfill if it doesn't exists.
-                appUnencrypted.captainDefinitionRelativeFilePath =
-                    appUnencrypted.captainDefinitionRelativeFilePath ||
+                appUnencrypted.flukedeployDefinitionRelativeFilePath =
+                    appUnencrypted.flukedeployDefinitionRelativeFilePath ||
                     FlukeDeployConstants.defaultCaptainDefinitionPath
 
                 const appSave = allApps[appName] as IAppDefSaved
@@ -655,7 +655,7 @@ class AppsDataStore {
         projectId: string | undefined,
         description: string,
         instanceCount: number,
-        captainDefinitionRelativeFilePath: string,
+        flukedeployDefinitionRelativeFilePath: string,
         envVars: IAppEnvVar[],
         volumes: IAppVolume[],
         tags: IAppTag[],
@@ -732,9 +732,9 @@ class AppsDataStore {
                     appObj.instanceCount = instanceCount
                 }
 
-                if (captainDefinitionRelativeFilePath) {
-                    appObj.captainDefinitionRelativeFilePath =
-                        captainDefinitionRelativeFilePath + ''
+                if (flukedeployDefinitionRelativeFilePath) {
+                    appObj.flukedeployDefinitionRelativeFilePath =
+                        flukedeployDefinitionRelativeFilePath + ''
                 }
 
                 appObj.notExposeAsWebApp = !!notExposeAsWebApp
@@ -936,9 +936,9 @@ class AppsDataStore {
                 projectId: projectId,
                 description: '',
                 instanceCount: 1,
-                captainDefinitionRelativeFilePath:
+                flukedeployDefinitionRelativeFilePath:
                     FlukeDeployConstants.defaultCaptainDefinitionPath,
-                networks: [FlukeDeployConstants.captainNetworkName],
+                networks: [FlukeDeployConstants.flukedeployNetworkName],
                 envVars: [],
                 volumes: [],
                 ports: [],

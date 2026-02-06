@@ -7,7 +7,7 @@ import {
 } from '../../handlers/users/apps/appdefinition/AppDefinitionHandler'
 import { registerProject } from '../../handlers/users/ProjectHandler'
 import { IAppDef } from '../../models/AppDefinition'
-import { ICaptainDefinition } from '../../models/ICaptainDefinition'
+import { IFlukeDeployDefinition } from '../../models/IFlukeDeployDefinition'
 import { IDockerComposeService } from '../../models/IOneClickAppModels'
 import { ProjectDefinition } from '../../models/ProjectDefinition'
 import DockerComposeToServiceOverride from '../../utils/DockerComposeToServiceOverride'
@@ -50,17 +50,17 @@ class ApiManager {
     }
     uploadCaptainDefinitionContent(
         appName: string,
-        captainDefinition: ICaptainDefinition,
+        captainDefinition: IFlukeDeployDefinition,
         gitHash: string,
         isDetachedBuild: boolean
     ) {
-        const captainDefinitionContent = JSON.stringify(captainDefinition)
+        const flukedeployDefinitionContent = JSON.stringify(captainDefinition)
 
         return uploadCaptainDefinitionContentHandler(
             {
                 appName,
                 isDetachedBuild,
-                captainDefinitionContent,
+                flukedeployDefinitionContent,
                 gitHash,
             },
             this.serviceManager
@@ -218,7 +218,7 @@ export default class OneClickAppDeploymentHelper {
     ) {
         const self = this
         return Promise.resolve().then(function () {
-            const captainDefinition: ICaptainDefinition = {
+            const captainDefinition: IFlukeDeployDefinition = {
                 schemaVersion: 2,
             }
 

@@ -1,5 +1,5 @@
 import DataStore from '../../../../datastore/DataStore'
-import { ICaptainDefinition } from '../../../../models/ICaptainDefinition'
+import { IFlukeDeployDefinition } from '../../../../models/IFlukeDeployDefinition'
 import ServiceManager from '../../../../user/ServiceManager'
 import FlukeDeployConstants from '../../../../utils/FlukeDeployConstants'
 import Logger from '../../../../utils/Logger'
@@ -48,7 +48,7 @@ export async function registerAppDefinition(
         appCreated = true
 
         // Create captain definition content
-        const captainDefinitionContent: ICaptainDefinition = {
+        const flukedeployDefinitionContent: IFlukeDeployDefinition = {
             schemaVersion: 2,
             imageName: FlukeDeployConstants.configs.appPlaceholderImageName,
         }
@@ -56,9 +56,9 @@ export async function registerAppDefinition(
         // Schedule deployment (unless detached build)
         const promiseToIgnore = serviceManager
             .scheduleDeployNewVersion(appName, {
-                captainDefinitionContentSource: {
-                    captainDefinitionContent: JSON.stringify(
-                        captainDefinitionContent
+                flukedeployDefinitionContentSource: {
+                    flukedeployDefinitionContent: JSON.stringify(
+                        flukedeployDefinitionContent
                     ),
                     gitHash: '',
                 },
@@ -97,7 +97,7 @@ export interface GetAllAppDefinitionsResult extends BaseHandlerResult {
     data: {
         appDefinitions: any[]
         rootDomain: string
-        captainSubDomain: string
+        flukedeploySubDomain: string
         defaultNginxConfig: any
     }
 }
@@ -129,7 +129,7 @@ export async function getAllAppDefinitions(
             data: {
                 appDefinitions: appsArray,
                 rootDomain: dataStore.getRootDomain(),
-                captainSubDomain: FlukeDeployConstants.configs.captainSubDomain,
+                flukedeploySubDomain: FlukeDeployConstants.configs.flukedeploySubDomain,
                 defaultNginxConfig: defaultNginxConfig,
             },
         }
@@ -144,7 +144,7 @@ export interface UpdateAppDefinitionParams {
     projectId?: string
     description?: string
     instanceCount?: number | string
-    captainDefinitionRelativeFilePath?: string
+    flukedeployDefinitionRelativeFilePath?: string
     envVars?: IAppEnvVar[]
     volumes?: IAppVolume[]
     tags?: IAppTag[]
@@ -196,8 +196,8 @@ export async function patchAppDefinition(
         projectId: existingApp.projectId,
         description: existingApp.description,
         instanceCount: existingApp.instanceCount,
-        captainDefinitionRelativeFilePath:
-            existingApp.captainDefinitionRelativeFilePath,
+        flukedeployDefinitionRelativeFilePath:
+            existingApp.flukedeployDefinitionRelativeFilePath,
         envVars: existingApp.envVars,
         volumes: existingApp.volumes,
         tags: existingApp.tags,
@@ -240,7 +240,7 @@ export async function updateAppDefinition(
         projectId,
         description,
         instanceCount,
-        captainDefinitionRelativeFilePath,
+        flukedeployDefinitionRelativeFilePath,
         envVars,
         volumes,
         tags,
@@ -346,7 +346,7 @@ export async function updateAppDefinition(
         `${projectId || ''}`,
         normalizedDescription,
         instanceCountNum,
-        `${captainDefinitionRelativeFilePath || ''}`,
+        `${flukedeployDefinitionRelativeFilePath || ''}`,
         normalizedEnvVars,
         normalizedVolumes,
         normalizedTags,

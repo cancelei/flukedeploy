@@ -24,6 +24,7 @@ HTTPS_ENABLED="true"
 AUTO_GENERATE_PASSWORD="true"
 ADMIN_PASSWORD=""
 FLUKEBASE_API_TOKEN=""
+NON_INTERACTIVE="false"
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -52,6 +53,10 @@ while [[ $# -gt 0 ]]; do
         --version)
             FLUKEDEPLOY_VERSION="$2"
             shift 2
+            ;;
+        -y|--yes|--non-interactive)
+            NON_INTERACTIVE="true"
+            shift
             ;;
         -h|--help)
             cat <<EOF
@@ -396,7 +401,11 @@ It will:
 Press Ctrl+C to cancel, or Enter to continue...
 EOF
 
-    read -r
+    if [ "$NON_INTERACTIVE" != "true" ]; then
+        read -r
+    else
+        log_info "Running in non-interactive mode..."
+    fi
 
     check_root
     check_prerequisites

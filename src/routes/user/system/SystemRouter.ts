@@ -9,7 +9,7 @@ import DockerUtils from '../../../docker/DockerUtils'
 import InjectionExtractor from '../../../injection/InjectionExtractor'
 import { IAppDef } from '../../../models/AppDefinition'
 import { AutomatedCleanupConfigsCleaner } from '../../../models/AutomatedCleanupConfigs'
-import CaptainManager from '../../../user/system/CaptainManager'
+import FlukeDeployManager from '../../../user/system/FlukeDeployManager'
 import VersionManager from '../../../user/system/VersionManager'
 import FlukeDeployConstants from '../../../utils/FlukeDeployConstants'
 import Logger from '../../../utils/Logger'
@@ -23,11 +23,11 @@ router.use('/selfhostregistry/', SystemRouteSelfHostRegistry)
 router.use('/themes/', ThemesRouter)
 
 router.post('/createbackup/', function (req, res, next) {
-    const backupManager = CaptainManager.get().getBackupManager()
+    const backupManager = FlukeDeployManager.get().getBackupManager()
 
     Promise.resolve()
         .then(function () {
-            return backupManager.createBackup(CaptainManager.get())
+            return backupManager.createBackup(FlukeDeployManager.get())
         })
         .then(function (backupInfo) {
             const baseApi = new BaseApi(
@@ -60,7 +60,7 @@ router.post('/changerootdomain/', function (req, res, next) {
         return
     }
 
-    CaptainManager.get()
+    FlukeDeployManager.get()
         .changeCaptainRootDomain(requestedCustomDomain, !!req.body.force)
         .then(function () {
             res.send(
@@ -92,7 +92,7 @@ router.post('/enablessl/', function (req, res, next) {
         return
     }
 
-    CaptainManager.get()
+    FlukeDeployManager.get()
         .enableSsl(emailAddress)
         .then(function () {
             // This is necessary as the CLI immediately tries to connect to https://captain.root.com
@@ -109,7 +109,7 @@ router.post('/enablessl/', function (req, res, next) {
 router.post('/forcessl/', function (req, res, next) {
     const isEnabled = !!req.body.isEnabled
 
-    CaptainManager.get()
+    FlukeDeployManager.get()
         .forceSsl(isEnabled)
         .then(function () {
             res.send(
@@ -135,11 +135,11 @@ router.get('/info/', function (req, res, next) {
         .then(function (hasRootSsl) {
             return {
                 hasRootSsl: hasRootSsl,
-                forceSsl: CaptainManager.get().getForceSslValue(),
+                forceSsl: FlukeDeployManager.get().getForceSslValue(),
                 rootDomain: dataStore.hasCustomDomain()
                     ? dataStore.getRootDomain()
                     : '',
-                captainSubDomain: FlukeDeployConstants.configs.captainSubDomain,
+                flukedeploySubDomain: FlukeDeployConstants.configs.flukedeploySubDomain,
             }
         })
         .then(function (data) {
@@ -156,7 +156,7 @@ router.get('/info/', function (req, res, next) {
 router.get('/loadbalancerinfo/', function (req, res, next) {
     return Promise.resolve()
         .then(function () {
-            return CaptainManager.get().getLoadBalanceManager().getInfo()
+            return FlukeDeployManager.get().getLoadBalanceManager().getInfo()
         })
         .then(function (data) {
             const baseApi = new BaseApi(
@@ -212,7 +212,7 @@ router.post('/versionInfo/', function (req, res, next) {
 router.get('/diskcleanup/', function (req, res, next) {
     return Promise.resolve()
         .then(function () {
-            return CaptainManager.get().getDiskCleanupManager().getConfigs()
+            return FlukeDeployManager.get().getDiskCleanupManager().getConfigs()
         })
         .then(function (data) {
             const baseApi = new BaseApi(
@@ -233,7 +233,7 @@ router.post('/diskcleanup/', function (req, res, next) {
                 cronSchedule: req.body.cronSchedule,
                 timezone: req.body.timezone,
             })
-            return CaptainManager.get()
+            return FlukeDeployManager.get()
                 .getDiskCleanupManager()
                 .setConfig(configs)
         })
@@ -257,7 +257,7 @@ router.get('/netdata/', function (req, res, next) {
         })
         .then(function (data) {
             data.netDataUrl = `${
-                FlukeDeployConstants.configs.captainSubDomain
+                FlukeDeployConstants.configs.flukedeploySubDomain
             }.${dataStore.getRootDomain()}${
                 FlukeDeployConstants.netDataRelativePath
             }`
@@ -278,7 +278,7 @@ router.post('/netdata/', function (req, res, next) {
 
     return Promise.resolve()
         .then(function () {
-            return CaptainManager.get().updateNetDataInfo(netDataInfo)
+            return FlukeDeployManager.get().updateNetDataInfo(netDataInfo)
         })
         .then(function () {
             const baseApi = new BaseApi(
@@ -314,7 +314,7 @@ router.post('/goaccess/', function (req, res, next) {
 
     return Promise.resolve()
         .then(function () {
-            return CaptainManager.get().updateGoAccessInfo(goAccessInfo)
+            return FlukeDeployManager.get().updateGoAccessInfo(goAccessInfo)
         })
         .then(function () {
             const baseApi = new BaseApi(
@@ -331,7 +331,7 @@ router.get('/goaccess/:appName/files', async function (req, res, next) {
         InjectionExtractor.extractUserFromInjected(res).user.dataStore
 
     const goAccessInfo = await dataStore.getGoAccessInfo()
-    const loadBalanceManager = CaptainManager.get().getLoadBalanceManager()
+    const loadBalanceManager = FlukeDeployManager.get().getLoadBalanceManager()
 
     const appName = req.params.appName
 
@@ -443,7 +443,7 @@ router.get('/goaccess/:appName/files', async function (req, res, next) {
 
 router.get('/goaccess/:appName/files/:file', async function (req, res, next) {
     const { appName, file } = req.params
-    const { domainName, fileName } = CaptainManager.get()
+    const { domainName, fileName } = FlukeDeployManager.get()
         .getLoadBalanceManager()
         .parseLogPath(file)
     if (fileName.includes('Live')) {
@@ -458,7 +458,7 @@ router.get('/goaccess/:appName/files/:file', async function (req, res, next) {
                     mode: 'rw',
                 },
             ],
-            network: FlukeDeployConstants.captainNetworkName,
+            network: FlukeDeployConstants.flukedeployNetworkName,
             arrayOfEnvKeyAndValue: [
                 {
                     key: 'FILE_PREFIX',
@@ -506,7 +506,7 @@ router.get('/goaccess/:appName/files/:file', async function (req, res, next) {
 router.get('/nginxconfig/', function (req, res, next) {
     return Promise.resolve()
         .then(function () {
-            return CaptainManager.get().getNginxConfig()
+            return FlukeDeployManager.get().getNginxConfig()
         })
         .then(function (data) {
             const baseApi = new BaseApi(
@@ -525,7 +525,7 @@ router.post('/nginxconfig/', function (req, res, next) {
 
     return Promise.resolve()
         .then(function () {
-            return CaptainManager.get().setNginxConfig(
+            return FlukeDeployManager.get().setNginxConfig(
                 baseConfigCustomValue,
                 captainConfigCustomValue
             )
@@ -543,7 +543,7 @@ router.post('/nginxconfig/', function (req, res, next) {
 router.get('/nodes/', function (req, res, next) {
     return Promise.resolve()
         .then(function () {
-            return CaptainManager.get().getNodesInfo()
+            return FlukeDeployManager.get().getNodesInfo()
         })
         .then(function (data) {
             const baseApi = new BaseApi(
@@ -582,11 +582,11 @@ router.post('/nodes/', function (req, res, next) {
 
     const privateKey = req.body.privateKey
     const remoteNodeIpAddress = req.body.remoteNodeIpAddress
-    const captainIpAddress = req.body.captainIpAddress
+    const flukedeployIpAddress = req.body.flukedeployIpAddress
     const sshPort = parseInt(req.body.sshPort) || 22
     const sshUser = (req.body.sshUser || 'root').trim()
 
-    if (!captainIpAddress || !remoteNodeIpAddress || !privateKey) {
+    if (!flukedeployIpAddress || !remoteNodeIpAddress || !privateKey) {
         res.send(
             new BaseApi(
                 ApiStatusCodes.STATUS_ERROR_GENERIC,
@@ -613,7 +613,7 @@ router.post('/nodes/', function (req, res, next) {
                 DockerApi.get(),
                 sshUser,
                 sshPort,
-                captainIpAddress,
+                flukedeployIpAddress,
                 isManager,
                 remoteNodeIpAddress,
                 privateKey

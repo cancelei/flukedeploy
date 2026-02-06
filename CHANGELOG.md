@@ -1,3 +1,102 @@
+# FlukeDeploy Changelog
+
+All notable changes to FlukeDeploy will be documented in this file.
+
+## [2.0.0] - 2026-02-05 - 🎉 **MAJOR RELEASE - Complete Rebranding**
+
+FlukeDeploy v2.0.0 marks the transition from a CapRover fork to an **independent AI-first deployment platform**. This is a **breaking release** that establishes FlukeDeploy as a standalone project.
+
+### Added - AI-First Features
+
+- **AI-Native Architecture**
+  - Native support for autonomous AI agent deployments via OPERATOR persona
+  - JSON-LD structured logging optimized for AI consumption and analysis
+  - WebSocket real-time streaming for deployment monitoring (port 8767)
+  - 5-phase deployment lifecycle tracking: pre_build → build → pre_deploy → deploy → post_deploy
+  - Pre-deployment security scans and quality gates for safer autonomous deployments
+  - Smart authentication with unified `x-flukedeploy-auth` header
+
+- **Enhanced API**
+  - REST endpoints for deployment logs and metrics
+  - OpenAPI/Swagger documentation (planned)
+  - WebSocket server for real-time log streaming
+  - Lifecycle event webhooks for integration with external systems
+
+### Changed - Complete Rebranding
+
+- **Source Code (50+ changes)**
+  - Classes: `CaptainError` → `FlukeDeployError`, `CaptainManager` → `FlukeDeployManager`, `ICaptainDefinition` → `IFlukeDeployDefinition`
+  - Properties: All `captain*` variables renamed to `flukedeploy*`
+  - Service naming: `srv-captain--{app}` → `srv-flukedeploy--{app}`
+  - Network naming: `captain-overlay-network` → `flukedeploy-overlay-network`
+
+- **Environment Variables**
+  - `CAPTAIN_BASE_DIRECTORY` → `FLUKEDEPLOY_BASE_DIRECTORY`
+  - `CAPTAIN_DATA_DIRECTORY` → `FLUKEDEPLOY_DATA_DIRECTORY`
+  - `CAPTAIN_DOCKER_API` → `FLUKEDEPLOY_DOCKER_API`
+  - `CAPTAIN_IS_DEBUG` → `FLUKEDEPLOY_IS_DEBUG`
+  - `IS_CAPTAIN_INSTANCE` → `IS_FLUKEDEPLOY_INSTANCE`
+  - And 4 more environment variables
+
+- **Authentication**
+  - Standardized auth header: `x-captain-auth` → `x-flukedeploy-auth`
+  - Unified authentication across REST and WebSocket APIs
+  - Enhanced encryption with FlukeDeploy-specific keys
+
+- **Frontend & Documentation**
+  - Dashboard title: "CapRover Dashboard" → "FlukeDeploy Dashboard"
+  - Package name: `caprover` → `flukedeploy`
+  - README positioning: "AI-First Deployment Platform"
+  - Added comprehensive rebranding documentation
+
+### Breaking Changes ⚠️
+
+**This release is NOT backward compatible with CapRover or FlukeDeploy v1.x**
+
+1. **API Authentication**: Use `x-flukedeploy-auth` header instead of `x-captain-auth`
+   ```bash
+   # Before
+   curl -H "x-captain-auth: $TOKEN" https://captain.example.com/api/v2/apps
+
+   # After
+   curl -H "x-flukedeploy-auth: $TOKEN" https://captain.example.com/api/v2/apps
+   ```
+
+2. **Environment Variables**: Update all `CAPTAIN_*` to `FLUKEDEPLOY_*`
+3. **Network Names**: New services use `flukedeploy-overlay-network` (legacy network still works)
+4. **Service Prefix**: New services use `srv-flukedeploy--` prefix
+
+### Migration Notes
+
+- Existing apps continue to work without changes
+- Update API clients to use new auth header
+- Legacy `captain-overlay-network` continues to function
+- See [REBRANDING_COMPLETE.md](REBRANDING_COMPLETE.md) for detailed migration guide
+
+### Fixed
+
+- Resolved authentication header mismatch between frontend and backend
+- Fixed Configstore caching preventing password updates
+- Improved domain verification with config override support
+- Added nginx backend IP auto-update for service restarts
+
+### Technical Details
+
+- **Build**: TypeScript 125 files, 0 errors, 2 warnings (pre-existing)
+- **Image**: 845MB production image with frontend bundle
+- **Deployment**: Tested on production VPS at https://captain.flukebase.me
+- **Dashboard**: Login verified with FlukeDeploy2026 credentials
+
+### Acknowledgments
+
+FlukeDeploy v2.0 is built on the proven foundation of [CapRover](https://github.com/caprover/caprover). Grateful to the CapRover team for their excellent open-source work.
+
+---
+
+# CapRover Historical Changelog
+
+The releases below are from the CapRover upstream project. FlukeDeploy maintains compatibility with CapRover 1.14.1 features.
+
 ## [Next Version - available as `edge`]
 
 - New: Ability to deploy simplified Docker compose [PR-191](https://github.com/caprover/caprover-frontend/pull/191)

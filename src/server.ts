@@ -18,7 +18,7 @@ function startServer() {
         console.log('***DEBUG BUILD***')
     }
 
-    if (!EnvVars.IS_CAPTAIN_INSTANCE) {
+    if (!EnvVars.IS_FLUKEDEPLOY_INSTANCE) {
         console.log('Installing Captain Service ...')
         FlukeDeployInstaller.install()
         return

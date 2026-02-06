@@ -1,21 +1,21 @@
 import { Response } from 'express'
 import Logger from '../utils/Logger'
 import BaseApi from './BaseApi'
-import { CaptainError } from './CaptainError'
+import { FlukeDeployError } from './FlukeDeployError'
 
 class ApiStatusCodes {
     static createError(code: number, message: string) {
-        return new CaptainError(code, message || 'NONE')
+        return new FlukeDeployError(code, message || 'NONE')
     }
 
     static createCatcher(res: Response) {
-        return function (error: CaptainError | any) {
+        return function (error: FlukeDeployError | any) {
             if (!error || error.errorStatus !== 404) {
                 Logger.e(error)
             }
 
-            if (error && error.captainErrorType) {
-                res.send(new BaseApi(error.captainErrorType, error.apiMessage))
+            if (error && error.flukedeployErrorType) {
+                res.send(new BaseApi(error.flukedeployErrorType, error.apiMessage))
                 return
             }
 

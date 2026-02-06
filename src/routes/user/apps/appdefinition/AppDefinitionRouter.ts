@@ -9,7 +9,7 @@ import {
 } from '../../../../handlers/users/apps/appdefinition/AppDefinitionHandler'
 import InjectionExtractor from '../../../../injection/InjectionExtractor'
 import { AppDeployTokenConfig } from '../../../../models/AppDefinition'
-import CaptainManager from '../../../../user/system/CaptainManager'
+import FlukeDeployManager from '../../../../user/system/FlukeDeployManager'
 import Logger from '../../../../utils/Logger'
 import Utils from '../../../../utils/Utils'
 
@@ -20,7 +20,7 @@ router.get('/unusedImages', function (req, res, next) {
     return Promise.resolve()
         .then(function () {
             const mostRecentLimit = Number(req.query.mostRecentLimit || '0')
-            return CaptainManager.get()
+            return FlukeDeployManager.get()
                 .getDiskCleanupManager()
                 .getUnusedImages(mostRecentLimit)
         })
@@ -43,7 +43,7 @@ router.post('/deleteImages', function (req, res, next) {
 
     return Promise.resolve()
         .then(function () {
-            return CaptainManager.get()
+            return FlukeDeployManager.get()
                 .getDiskCleanupManager()
                 .deleteImages(imageIds)
         })
@@ -259,8 +259,8 @@ router.post('/update/', function (req, res, next) {
     const appName = req.body.appName
     const projectId = req.body.projectId
     const nodeId = req.body.nodeId
-    const captainDefinitionRelativeFilePath =
-        req.body.captainDefinitionRelativeFilePath
+    const flukedeployDefinitionRelativeFilePath =
+        req.body.flukedeployDefinitionRelativeFilePath
     const notExposeAsWebApp = req.body.notExposeAsWebApp
     const tags = req.body.tags
     const customNginxConfig = req.body.customNginxConfig
@@ -289,7 +289,7 @@ router.post('/update/', function (req, res, next) {
             projectId,
             description,
             instanceCount,
-            captainDefinitionRelativeFilePath,
+            flukedeployDefinitionRelativeFilePath,
             envVars,
             volumes,
             tags,

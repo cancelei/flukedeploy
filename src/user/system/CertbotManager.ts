@@ -10,7 +10,7 @@ import ShellQuote = require('shell-quote')
 
 const WEBROOT_PATH_IN_CERTBOT = '/flukedeploy-webroot'
 const WEBROOT_PATH_IN_CAPTAIN =
-    FlukeDeployConstants.captainStaticFilesDir +
+    FlukeDeployConstants.flukedeployStaticFilesDir +
     FlukeDeployConstants.nginxDomainSpecificHtmlDir
 
 const shouldUseStaging = false // FlukeDeployConstants.isDebug;

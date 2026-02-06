@@ -80,7 +80,7 @@ router.post(
 
         const appName = req.params.appName
         const isDetachedBuild = !!req.query.detached
-        const captainDefinitionContent = `${req.body.captainDefinitionContent || ''}`
+        const flukedeployDefinitionContent = `${req.body.flukedeployDefinitionContent || ''}`
         const gitHash = `${req.body.gitHash || ''}`
         const tarballSourceFilePath: string = req.file ? req.file.path : ''
 
@@ -88,7 +88,7 @@ router.post(
             {
                 appName,
                 isDetachedBuild,
-                captainDefinitionContent: captainDefinitionContent || undefined,
+                flukedeployDefinitionContent: flukedeployDefinitionContent || undefined,
                 gitHash: gitHash || undefined,
                 uploadedTarPathSource: tarballSourceFilePath || undefined,
             },

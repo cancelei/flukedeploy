@@ -16,7 +16,9 @@ import DownloadRouter from './routes/download/DownloadRouter'
 import LoginRouter from './routes/login/LoginRouter'
 import ThemePublicRouter from './routes/public/ThemePublicRouter'
 import UserRouter from './routes/user/UserRouter'
-import CaptainManager from './user/system/CaptainManager'
+import { createHealthRouter } from './api/HealthAPI'
+import { createDiagnosticsRouter } from './api/DiagnosticsAPI'
+import FlukeDeployManager from './user/system/FlukeDeployManager'
 import FlukeDeployConstants from './utils/FlukeDeployConstants'
 import Logger from './utils/Logger'
 import Utils from './utils/Utils'
@@ -98,7 +100,7 @@ app.use(express.static(path.join(__dirname, '../dist-frontend')))
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(FlukeDeployConstants.healthCheckEndPoint, function (req, res, next) {
-    res.send(CaptainManager.get().getHealthCheckUuid())
+    res.send(FlukeDeployManager.get().getHealthCheckUuid())
 })
 
 //  ************  Beginning of reverse proxy 3rd party services  ****************************************
@@ -222,6 +224,10 @@ app.use(
 )
 app.use(API_PREFIX + FlukeDeployConstants.apiVersion + '/theme/', ThemePublicRouter)
 
+// Health and monitoring endpoints (unsecured for agent access)
+app.use(API_PREFIX + FlukeDeployConstants.apiVersion + '/', createHealthRouter())
+app.use(API_PREFIX + FlukeDeployConstants.apiVersion + '/', createDiagnosticsRouter())
+
 // secured end points
 app.use(API_PREFIX + FlukeDeployConstants.apiVersion + '/user/', UserRouter)
 
@@ -245,6 +251,6 @@ export function initializeCaptainWithDelay() {
     // Initializing with delay helps with debugging. Usually, docker didn't see the CAPTAIN service
     // if this was done without a delay
     setTimeout(function () {
-        CaptainManager.get().initialize()
+        FlukeDeployManager.get().initialize()
     }, 1500)
 }

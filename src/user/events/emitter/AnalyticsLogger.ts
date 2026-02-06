@@ -8,7 +8,7 @@ export class AnalyticsLogger extends IEventsEmitter {
         super()
     }
     isEventApplicable(event: IFlukeDeployEvent): boolean {
-        if (EnvVars.CAPROVER_DISABLE_ANALYTICS) {
+        if (EnvVars.FLUKEDEPLOY_DISABLE_ANALYTICS) {
             return false
         }
 

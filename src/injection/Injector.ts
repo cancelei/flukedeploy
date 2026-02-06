@@ -4,11 +4,11 @@ import BaseApi from '../api/BaseApi'
 import DataStoreProvider from '../datastore/DataStoreProvider'
 import DockerApiProvider from '../docker/DockerApi'
 import * as UserModel from '../models/InjectionInterfaces'
-import { CaptainError } from '../models/OtherTypes'
+import { FlukeDeployError } from '../models/OtherTypes'
 import Authenticator from '../user/Authenticator'
 import OtpAuthenticator from '../user/pro/OtpAuthenticator'
 import ServiceManager from '../user/ServiceManager'
-import CaptainManager from '../user/system/CaptainManager'
+import FlukeDeployManager from '../user/system/FlukeDeployManager'
 import { UserManagerProvider } from '../user/UserManagerProvider'
 import FlukeDeployConstants from '../utils/FlukeDeployConstants'
 import Logger from '../utils/Logger'
@@ -35,8 +35,8 @@ export function injectGlobal() {
             )
         }
 
-        locals.initialized = CaptainManager.get().isInitialized()
-        locals.forceSsl = CaptainManager.get().getForceSslValue()
+        locals.initialized = FlukeDeployManager.get().isInitialized()
+        locals.forceSsl = FlukeDeployManager.get().getForceSslValue()
         locals.userManagerForLoginOnly = UserManagerProvider.get(
             locals.namespace
         )
@@ -69,9 +69,9 @@ export function injectUser() {
                         Authenticator.getAuthenticator(namespace),
                         datastore,
                         dockerApi,
-                        CaptainManager.get().getLoadBalanceManager(),
+                        FlukeDeployManager.get().getLoadBalanceManager(),
                         userManager.eventLogger,
-                        CaptainManager.get().getDomainResolveChecker()
+                        FlukeDeployManager.get().getDomainResolveChecker()
                     )
 
                     const user: UserModel.UserInjected = {
@@ -90,10 +90,10 @@ export function injectUser() {
 
                 next()
             })
-            .catch(function (error: CaptainError) {
-                if (error && error.captainErrorType) {
+            .catch(function (error: FlukeDeployError) {
+                if (error && error.flukedeployErrorType) {
                     res.send(
-                        new BaseApi(error.captainErrorType, error.apiMessage)
+                        new BaseApi(error.flukedeployErrorType, error.apiMessage)
                     )
                     return
                 }
@@ -157,9 +157,9 @@ export function injectUserForBuildTrigger() {
                     Authenticator.getAuthenticator(namespace),
                     datastore,
                     dockerApi,
-                    CaptainManager.get().getLoadBalanceManager(),
+                    FlukeDeployManager.get().getLoadBalanceManager(),
                     userManager.eventLogger,
-                    CaptainManager.get().getDomainResolveChecker()
+                    FlukeDeployManager.get().getDomainResolveChecker()
                 )
 
                 const user: UserModel.UserInjected = {
@@ -234,9 +234,9 @@ export function injectUserForWebhook() {
                     Authenticator.getAuthenticator(namespace),
                     datastore,
                     dockerApi,
-                    CaptainManager.get().getLoadBalanceManager(),
+                    FlukeDeployManager.get().getLoadBalanceManager(),
                     userManager.eventLogger,
-                    CaptainManager.get().getDomainResolveChecker()
+                    FlukeDeployManager.get().getDomainResolveChecker()
                 )
 
                 const user: UserModel.UserInjected = {
@@ -281,9 +281,9 @@ export function injectUserUsingCookieDataOnly() {
                 next()
             })
             .catch(function (error) {
-                if (error && error.captainErrorType) {
+                if (error && error.flukedeployErrorType) {
                     res.send(
-                        new BaseApi(error.captainErrorType, error.apiMessage)
+                        new BaseApi(error.flukedeployErrorType, error.apiMessage)
                     )
                     return
                 }

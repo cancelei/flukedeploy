@@ -7,6 +7,7 @@ import Authenticator from '../../user/Authenticator'
 import EnvVars from '../../utils/EnvVars'
 import Utils from '../../utils/Utils'
 import AppsRouter from './apps/AppsRouter'
+import MonitoringRouter from './MonitoringRouter'
 import OneClickAppRouter from './oneclick/OneClickAppRouter'
 import ProRouter from './pro/ProRouter'
 import ProjectsRouter from './ProjectsRouter'
@@ -135,5 +136,7 @@ router.use('/registries/', RegistriesRouter)
 router.use('/system/', SystemRouter)
 
 router.use('/pro/', ProRouter)
+
+router.use('/monitoring/', MonitoringRouter)
 
 export default router

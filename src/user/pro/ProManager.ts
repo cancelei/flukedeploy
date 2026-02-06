@@ -82,7 +82,7 @@ export default class ProManager {
             .catch((err) => {
                 Logger.e(err)
 
-                if (err.captainErrorType) {
+                if (err.flukedeployErrorType) {
                     throw err
                 }
 
@@ -132,7 +132,7 @@ export default class ProManager {
                 return {
                     isSubscribed: !!apiKey,
                     isFeatureFlagEnabled:
-                        !!EnvVars.CAPTAIN_IS_DEBUG || //
+                        !!EnvVars.FLUKEDEPLOY_IS_DEBUG || //
                         !!apiKey || // if API key is there, assume feature flag is enabled
                         !!EnvVars.FORCE_ENABLE_PRO || //
                         (flags && flags[FeatureFlags.IS_PRO_ENABLED]),
@@ -205,7 +205,7 @@ export default class ProManager {
                     .catch((err) => {
                         Logger.e(err)
                         if (
-                            err.captainErrorType ===
+                            err.flukedeployErrorType ===
                             ApiStatusCodes.STATUS_ERROR_PRO_API_KEY_INVALIDATED
                         ) {
                             return // do not revert the config if the API key is invalidated

@@ -166,7 +166,7 @@ class VersionManager {
             })
             .then(function () {
                 return self.dockerApi.updateService(
-                    FlukeDeployConstants.captainServiceName,
+                    FlukeDeployConstants.flukedeployServiceName,
                     providedImageName,
                     undefined,
                     undefined,

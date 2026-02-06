@@ -4,7 +4,7 @@ import ApiStatusCodes from '../../../../api/ApiStatusCodes'
 import BaseApi from '../../../../api/BaseApi'
 import InjectionExtractor from '../../../../injection/InjectionExtractor'
 import { IRegistryTypes } from '../../../../models/IRegistryInfo'
-import CaptainManager from '../../../../user/system/CaptainManager'
+import FlukeDeployManager from '../../../../user/system/FlukeDeployManager'
 import FlukeDeployConstants from '../../../../utils/FlukeDeployConstants'
 import Logger from '../../../../utils/Logger'
 
@@ -12,7 +12,7 @@ const router = express.Router()
 
 // ERRORS if a local already exists in DB
 router.post('/enableregistry/', function (req, res, next) {
-    const captainManager = CaptainManager.get()
+    const captainManager = FlukeDeployManager.get()
     const password = uuid()
     const registryHelper =
         InjectionExtractor.extractUserFromInjected(
@@ -21,7 +21,7 @@ router.post('/enableregistry/', function (req, res, next) {
 
     return Promise.resolve()
         .then(function () {
-            return CaptainManager.get().getDockerRegistry().enableRegistrySsl()
+            return FlukeDeployManager.get().getDockerRegistry().enableRegistrySsl()
         })
         .then(function () {
             return captainManager
@@ -41,7 +41,7 @@ router.post('/enableregistry/', function (req, res, next) {
                     )
                 }
             }
-            const user = FlukeDeployConstants.captainRegistryUsername
+            const user = FlukeDeployConstants.flukedeployRegistryUsername
             const domain = captainManager
                 .getDockerRegistry()
                 .getLocalRegistryDomainAndPort()
@@ -64,7 +64,7 @@ router.post('/enableregistry/', function (req, res, next) {
 
 // ERRORS if default push is this
 router.post('/disableregistry/', function (req, res, next) {
-    const captainManager = CaptainManager.get()
+    const captainManager = FlukeDeployManager.get()
     const registryHelper =
         InjectionExtractor.extractUserFromInjected(
             res

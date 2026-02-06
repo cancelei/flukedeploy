@@ -36,8 +36,8 @@ export default class DomainResolveChecker {
 
         const self = this
         const randomUuid = uuid()
-        const captainConfirmationPath =
-            FlukeDeployConstants.captainConfirmationPath +
+        const flukedeployConfirmationPath =
+            FlukeDeployConstants.flukedeployConfirmationPath +
             (identifierSuffix ? identifierSuffix : '')
 
         return Promise.resolve()
@@ -47,9 +47,9 @@ export default class DomainResolveChecker {
             .then(function () {
                 return fs.outputFile(
                     `${
-                        FlukeDeployConstants.captainStaticFilesDir +
+                        FlukeDeployConstants.flukedeployStaticFilesDir +
                         FlukeDeployConstants.nginxDomainSpecificHtmlDir
-                    }/${domainName}${captainConfirmationPath}`,
+                    }/${domainName}${flukedeployConfirmationPath}`,
                     randomUuid
                 )
             })
@@ -62,7 +62,7 @@ export default class DomainResolveChecker {
             })
             .then(function () {
                 return new Promise<void>(function (resolve, reject) {
-                    const url = `http://${domainName}:${FlukeDeployConstants.configs.nginxPortNumber80}${captainConfirmationPath}`
+                    const url = `http://${domainName}:${FlukeDeployConstants.configs.nginxPortNumber80}${flukedeployConfirmationPath}`
 
                     request(
                         url,
@@ -99,7 +99,7 @@ export default class DomainResolveChecker {
         const self = this
 
         return new Promise<void>(function (resolve, reject) {
-            const url = `http://${domainName}${FlukeDeployConstants.captainConfirmationPath}`
+            const url = `http://${domainName}${FlukeDeployConstants.flukedeployConfirmationPath}`
 
             Logger.d(`Sending request to ${url}`)
 

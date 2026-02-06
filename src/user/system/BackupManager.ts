@@ -59,7 +59,7 @@ export default class BackupManager {
         return !!this.longOperationInProgress
     }
 
-    startRestorationIfNeededPhase1(captainIpAddress: string) {
+    startRestorationIfNeededPhase1(flukedeployIpAddress: string) {
         // if (/captain/restore/restore-instructions.json does exist):
         // - Connect all extra nodes via SSH and get their NodeID
         // - Replace the nodeId in apps with the new nodeId based on restore-instructions.json
@@ -85,7 +85,7 @@ export default class BackupManager {
                         if (oldN.nodeData.ip === n.oldIp) {
                             oldNodeIdToNewIpMap[oldN.nodeData.nodeId] =
                                 n.newIp === CURRENT_NODE_DONT_CHANGE
-                                    ? captainIpAddress
+                                    ? flukedeployIpAddress
                                     : n.newIp
                             if (oldN.nodeData.type === 'manager') {
                                 isManager = true
@@ -108,7 +108,7 @@ export default class BackupManager {
                                     DockerApi.get(),
                                     'root',
                                     22,
-                                    captainIpAddress,
+                                    flukedeployIpAddress,
                                     isManager,
                                     NEW_IP,
                                     fs.readFileSync(PRIVATE_KEY_PATH, 'utf8')
@@ -201,14 +201,14 @@ export default class BackupManager {
                 Logger.d('Setting up salt...')
 
                 return DockerApi.get().ensureSecret(
-                    FlukeDeployConstants.captainSaltSecretKey,
+                    FlukeDeployConstants.flukedeploySaltSecretKey,
                     salt
                 )
             })
             .then(function () {
                 return fs.move(
                     FlukeDeployConstants.restoreDirectoryPath + '/data',
-                    FlukeDeployConstants.captainDataDirectory,
+                    FlukeDeployConstants.flukedeployDataDirectory,
                     { overwrite: true }
                 )
             })
@@ -560,7 +560,7 @@ export default class BackupManager {
                     newIp: IP_PLACEHOLDER,
                     oldIp: s.ip,
                     privateKeyPath:
-                        FlukeDeployConstants.captainBaseDirectory + '/id_rsa',
+                        FlukeDeployConstants.flukedeployBaseDirectory + '/id_rsa',
                     user: 'root',
                 })
             }
@@ -638,7 +638,7 @@ export default class BackupManager {
                 // Ensure .../backup/raw/meta/backup.json
                 // Create tar file FROM: .../backup/raw/   TO: .../backup/backup.tar
 
-                const RAW = FlukeDeployConstants.captainRootDirectoryBackup + '/raw'
+                const RAW = FlukeDeployConstants.flukedeployRootDirectoryBackup + '/raw'
 
                 Logger.d('Creating backup...')
 
@@ -658,7 +658,7 @@ export default class BackupManager {
                         // https://github.com/jprichardson/node-fs-extra/issues/638
                         return new Promise(function (resolve, reject) {
                             const child = exec(
-                                `mkdir -p ${dest} && cp -rp  ${FlukeDeployConstants.captainDataDirectory} ${dest} && mkdir -p ${dest}/shared-logs && rm -rf ${dest}/shared-logs`
+                                `mkdir -p ${dest} && cp -rp  ${FlukeDeployConstants.flukedeployDataDirectory} ${dest} && mkdir -p ${dest}/shared-logs && rm -rf ${dest}/shared-logs`
                             )
                             child.addListener('error', reject)
                             child.addListener('exit', resolve)
@@ -679,7 +679,7 @@ export default class BackupManager {
                     })
                     .then(function () {
                         const tarFilePath =
-                            FlukeDeployConstants.captainRootDirectoryBackup +
+                            FlukeDeployConstants.flukedeployRootDirectoryBackup +
                             '/backup.tar'
 
                         Logger.d(`Creating tar file: ${tarFilePath}`)
@@ -715,7 +715,7 @@ export default class BackupManager {
 
                         const now = moment()
                         const newName = `${
-                            FlukeDeployConstants.captainDownloadsDirectory
+                            FlukeDeployConstants.flukedeployDownloadsDirectory
                         }/${namespace}/flukedeploy-backup-${`${now.format(
                             'YYYY_MM_DD-HH_mm_ss'
                         )}-${now.valueOf()}`}${`-ip-${mainIP}.tar`}`
@@ -761,10 +761,10 @@ export default class BackupManager {
         return Promise.resolve() //
             .then(function () {
                 if (
-                    fs.existsSync(FlukeDeployConstants.captainRootDirectoryBackup)
+                    fs.existsSync(FlukeDeployConstants.flukedeployRootDirectoryBackup)
                 ) {
                     return fs.remove(
-                        FlukeDeployConstants.captainRootDirectoryBackup
+                        FlukeDeployConstants.flukedeployRootDirectoryBackup
                     )
                 }
             })

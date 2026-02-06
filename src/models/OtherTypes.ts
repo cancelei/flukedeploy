@@ -1,7 +1,7 @@
 import { IAppDef } from './AppDefinition'
 
-export type CaptainError = {
-    captainErrorType: number
+export type FlukeDeployError = {
+    flukedeployErrorType: number
     apiMessage: string
 }
 

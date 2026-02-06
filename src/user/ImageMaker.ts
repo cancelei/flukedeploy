@@ -43,7 +43,7 @@ import DockerApi from '../docker/DockerApi'
 import { IAppEnvVar } from '../models/AppDefinition'
 import { IBuiltImage } from '../models/IBuiltImage'
 import { IHashMapGeneric } from '../models/ICacheGeneric'
-import { ICaptainDefinition } from '../models/ICaptainDefinition'
+import { IFlukeDeployDefinition } from '../models/IFlukeDeployDefinition'
 import { IImageSource } from '../models/IImageSource'
 import { AnyError } from '../models/OtherTypes'
 import FlukeDeployConstants from '../utils/FlukeDeployConstants'
@@ -85,7 +85,7 @@ export default class ImageMaker {
     }
 
     private getDirectoryForRawSource(appName: string, version: number) {
-        return `${FlukeDeployConstants.captainRawSourceDirectoryBase}/${appName}/${version}`
+        return `${FlukeDeployConstants.flukedeployRawSourceDirectoryBase}/${appName}/${version}`
     }
 
     /**
@@ -94,7 +94,7 @@ export default class ImageMaker {
     ensureImage(
         imageSource: IImageSource,
         appName: string,
-        captainDefinitionRelativeFilePath: string,
+        flukedeployDefinitionRelativeFilePath: string,
         appVersion: number,
         envVars: IAppEnvVar[]
     ): Promise<IBuiltImage> {
@@ -122,7 +122,7 @@ export default class ImageMaker {
                 return self.extractContentIntoDestDirectory(
                     imageSource,
                     rawDir,
-                    captainDefinitionRelativeFilePath
+                    flukedeployDefinitionRelativeFilePath
                 )
             })
             .then(function (gitHashFromImageSource) {
@@ -144,7 +144,7 @@ export default class ImageMaker {
                 // Also, they may have no flukedeploy-definition file, in that case, fall back to Dockerfile if exists.
                 return self.getAbsolutePathOfCaptainDefinition(
                     rawDir,
-                    captainDefinitionRelativeFilePath
+                    flukedeployDefinitionRelativeFilePath
                 )
             })
             .then(function (captainDefinitionAbsolutePath) {
@@ -243,7 +243,7 @@ export default class ImageMaker {
     }
 
     private getBuildPushAndReturnImageName(
-        captainDefinition: ICaptainDefinition,
+        captainDefinition: IFlukeDeployDefinition,
         correctedDirProvided: string,
         tarFilePath: string,
         baseImageNameWithoutVersionAndReg: string,
@@ -305,7 +305,7 @@ export default class ImageMaker {
     private extractContentIntoDestDirectory(
         source: IImageSource,
         destDirectory: string,
-        captainDefinitionRelativeFilePath: string
+        flukedeployDefinitionRelativeFilePath: string
     ) {
         return Promise.resolve() //
             .then(function () {
@@ -316,7 +316,7 @@ export default class ImageMaker {
                 //
                 // If Repo then download.
                 //
-                // If captainDefinitionContent then create a directory and output to a directory
+                // If flukedeployDefinitionContent then create a directory and output to a directory
                 //
                 // Else THROW ERROR
 
@@ -348,19 +348,19 @@ export default class ImageMaker {
                         })
                 }
 
-                const captainDefinitionContentSource =
-                    source.captainDefinitionContentSource
-                if (captainDefinitionContentSource) {
+                const flukedeployDefinitionContentSource =
+                    source.flukedeployDefinitionContentSource
+                if (flukedeployDefinitionContentSource) {
                     return fs
                         .outputFile(
                             path.join(
                                 destDirectory,
-                                captainDefinitionRelativeFilePath
+                                flukedeployDefinitionRelativeFilePath
                             ),
-                            captainDefinitionContentSource.captainDefinitionContent
+                            flukedeployDefinitionContentSource.flukedeployDefinitionContent
                         )
                         .then(function () {
-                            return captainDefinitionContentSource.gitHash
+                            return flukedeployDefinitionContentSource.gitHash
                         })
                 }
                 // we should never get here!
@@ -388,7 +388,7 @@ export default class ImageMaker {
             .then(function () {
                 return fs.readJson(captainDefinitionAbsolutePath)
             })
-            .then(function (data: ICaptainDefinition) {
+            .then(function (data: IFlukeDeployDefinition) {
                 if (!data) {
                     throw ApiStatusCodes.createError(
                         ApiStatusCodes.STATUS_ERROR_GENERIC,
@@ -431,7 +431,7 @@ export default class ImageMaker {
     }
 
     private convertCaptainDefinitionToDockerfile(
-        captainDefinition: ICaptainDefinition,
+        captainDefinition: IFlukeDeployDefinition,
         directoryWithCaptainDefinition: string
     ) {
         return Promise.resolve() //
@@ -481,14 +481,14 @@ export default class ImageMaker {
 
     private getAbsolutePathOfCaptainDefinition(
         originalDirectory: string,
-        captainDefinitionRelativeFilePath: string
+        flukedeployDefinitionRelativeFilePath: string
     ) {
         const self = this
 
         function isCaptainDefinitionOrDockerfileInDir(dir: string) {
             const captainDefinitionPossiblePath = path.join(
                 dir,
-                captainDefinitionRelativeFilePath
+                flukedeployDefinitionRelativeFilePath
             )
             return Promise.resolve()
                 .then(function () {
@@ -517,7 +517,7 @@ export default class ImageMaker {
                         .then(function (dockerfileExists) {
                             if (!dockerfileExists) return false
 
-                            const captainDefinitionDefault: ICaptainDefinition =
+                            const captainDefinitionDefault: IFlukeDeployDefinition =
                                 {
                                     schemaVersion: 2,
                                     dockerfilePath: `./${DOCKER_FILE}`,
@@ -578,7 +578,7 @@ export default class ImageMaker {
             .then(function (correctedRootDirectory) {
                 return path.join(
                     correctedRootDirectory,
-                    captainDefinitionRelativeFilePath
+                    flukedeployDefinitionRelativeFilePath
                 )
             })
     }

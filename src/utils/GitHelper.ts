@@ -45,7 +45,7 @@ export default class GitHelper {
 
         if (sshKey) {
             const SSH_KEY_PATH = path.join(
-                FlukeDeployConstants.captainRootDirectoryTemp,
+                FlukeDeployConstants.flukedeployRootDirectoryTemp,
                 uuid.v4()
             )
 

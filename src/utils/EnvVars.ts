@@ -23,36 +23,36 @@ function normalizePort(val: string | undefined, defaultPort: number): number {
 
 export default {
     keys: {
-        CAPTAIN_DOCKER_API: 'CAPTAIN_DOCKER_API',
-        CAPTAIN_IS_DEBUG: 'CAPTAIN_IS_DEBUG',
+        FLUKEDEPLOY_DOCKER_API: 'FLUKEDEPLOY_DOCKER_API',
+        FLUKEDEPLOY_IS_DEBUG: 'FLUKEDEPLOY_IS_DEBUG',
         DEFAULT_PASSWORD: 'DEFAULT_PASSWORD',
-        IS_CAPTAIN_INSTANCE: 'IS_CAPTAIN_INSTANCE',
+        IS_FLUKEDEPLOY_INSTANCE: 'IS_FLUKEDEPLOY_INSTANCE',
         DEMO_MODE_ADMIN_IP: 'DEMO_MODE_ADMIN_IP',
-        CAPTAIN_BASE_DIRECTORY: 'CAPTAIN_BASE_DIRECTORY',
-        CAPTAIN_HOST_HTTP_PORT: 'CAPTAIN_HOST_HTTP_PORT',
-        CAPTAIN_HOST_HTTPS_PORT: 'CAPTAIN_HOST_HTTPS_PORT',
-        CAPTAIN_HOST_ADMIN_PORT: 'CAPTAIN_HOST_ADMIN_PORT',
+        FLUKEDEPLOY_BASE_DIRECTORY: 'FLUKEDEPLOY_BASE_DIRECTORY',
+        FLUKEDEPLOY_HOST_HTTP_PORT: 'FLUKEDEPLOY_HOST_HTTP_PORT',
+        FLUKEDEPLOY_HOST_HTTPS_PORT: 'FLUKEDEPLOY_HOST_HTTPS_PORT',
+        FLUKEDEPLOY_HOST_ADMIN_PORT: 'FLUKEDEPLOY_HOST_ADMIN_PORT',
     },
 
     BY_PASS_PROXY_CHECK: process.env.BY_PASS_PROXY_CHECK,
 
-    CAPTAIN_DOCKER_API: process.env.CAPTAIN_DOCKER_API,
+    FLUKEDEPLOY_DOCKER_API: process.env.FLUKEDEPLOY_DOCKER_API,
 
-    CAPTAIN_IS_DEBUG: !!process.env.CAPTAIN_IS_DEBUG,
+    FLUKEDEPLOY_IS_DEBUG: !!process.env.FLUKEDEPLOY_IS_DEBUG,
 
     // Host ports - external to container.  Refer it via FlukeDeployConstants.configs.nginxPortNumber80
-    CAPTAIN_HOST_HTTP_PORT: normalizePort(
-        process.env.CAPTAIN_HOST_HTTP_PORT,
+    FLUKEDEPLOY_HOST_HTTP_PORT: normalizePort(
+        process.env.FLUKEDEPLOY_HOST_HTTP_PORT,
         80
     ), //Tested with 10080
     // Host ports - external to container.  Refer it via FlukeDeployConstants.configs.nginxPortNumber443
-    CAPTAIN_HOST_HTTPS_PORT: normalizePort(
-        process.env.CAPTAIN_HOST_HTTPS_PORT,
+    FLUKEDEPLOY_HOST_HTTPS_PORT: normalizePort(
+        process.env.FLUKEDEPLOY_HOST_HTTPS_PORT,
         443
     ), //Tested with 10443
     // Host ports - external to container.  Refer it via FlukeDeployConstants.configs.adminPortNumber3000
-    CAPTAIN_HOST_ADMIN_PORT: normalizePort(
-        process.env.CAPTAIN_HOST_ADMIN_PORT,
+    FLUKEDEPLOY_HOST_ADMIN_PORT: normalizePort(
+        process.env.FLUKEDEPLOY_HOST_ADMIN_PORT,
         3000
     ), //Tested with 13000
 
@@ -60,7 +60,7 @@ export default {
 
     ACCEPTED_TERMS: !!process.env.ACCEPTED_TERMS,
 
-    IS_CAPTAIN_INSTANCE: process.env.IS_CAPTAIN_INSTANCE,
+    IS_FLUKEDEPLOY_INSTANCE: process.env.IS_FLUKEDEPLOY_INSTANCE,
 
     DEMO_MODE_ADMIN_IP: process.env.DEMO_MODE_ADMIN_IP,
 
@@ -68,8 +68,8 @@ export default {
 
     FORCE_ENABLE_PRO: process.env.FORCE_ENABLE_PRO,
 
-    CAPROVER_DISABLE_ANALYTICS:
-        !!process.env.CAPROVER_DISABLE_ANALYTICS || !!process.env.DO_NOT_TRACK,
+    FLUKEDEPLOY_DISABLE_ANALYTICS:
+        !!process.env.FLUKEDEPLOY_DISABLE_ANALYTICS || !!process.env.DO_NOT_TRACK,
 
-    CAPTAIN_BASE_DIRECTORY: process.env.CAPTAIN_BASE_DIRECTORY,
+    FLUKEDEPLOY_BASE_DIRECTORY: process.env.FLUKEDEPLOY_BASE_DIRECTORY,
 }

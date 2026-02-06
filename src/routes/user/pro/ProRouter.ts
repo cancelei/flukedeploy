@@ -26,7 +26,7 @@ router.post('/apikey/', function (req, res, next) {
         .then(function (rootDomain) {
             return userManager.proManager.validateApiKey(
                 apiKey,
-                `${FlukeDeployConstants.configs.captainSubDomain}.${rootDomain}`
+                `${FlukeDeployConstants.configs.flukedeploySubDomain}.${rootDomain}`
             )
         })
         .then(function (isValid) {

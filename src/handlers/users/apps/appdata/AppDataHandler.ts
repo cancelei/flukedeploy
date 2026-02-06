@@ -6,7 +6,7 @@ import { BaseHandlerResult } from '../../../BaseHandlerResult'
 export interface UploadCaptainDefinitionContentParams {
     appName: string
     isDetachedBuild: boolean
-    captainDefinitionContent?: string
+    flukedeployDefinitionContent?: string
     gitHash?: string
     uploadedTarPathSource?: string
 }
@@ -18,18 +18,18 @@ export async function uploadCaptainDefinitionContent(
     const {
         appName,
         isDetachedBuild,
-        captainDefinitionContent,
+        flukedeployDefinitionContent,
         gitHash,
         uploadedTarPathSource,
     } = params
 
     const hasTar = !!uploadedTarPathSource
-    const hasCaptainDef = !!captainDefinitionContent
+    const hasCaptainDef = !!flukedeployDefinitionContent
 
     if (hasTar === hasCaptainDef) {
         throw ApiStatusCodes.createError(
             ApiStatusCodes.ILLEGAL_OPERATION,
-            'Either uploadedTarPathSource or captainDefinitionContent should be provided, but not both.'
+            'Either uploadedTarPathSource or flukedeployDefinitionContent should be provided, but not both.'
         )
     }
 
@@ -42,10 +42,10 @@ export async function uploadCaptainDefinitionContent(
                       gitHash: `${gitHash || ''}`,
                   }
                 : undefined,
-            captainDefinitionContentSource: hasCaptainDef
+            flukedeployDefinitionContentSource: hasCaptainDef
                 ? {
-                      captainDefinitionContent:
-                          captainDefinitionContent as string,
+                      flukedeployDefinitionContent:
+                          flukedeployDefinitionContent as string,
                       gitHash: `${gitHash || ''}`,
                   }
                 : undefined,

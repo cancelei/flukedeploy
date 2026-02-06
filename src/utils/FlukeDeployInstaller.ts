@@ -411,26 +411,26 @@ export function install() {
         .then(function (nodeId: string) {
             const volumeToMount = [
                 {
-                    hostPath: FlukeDeployConstants.captainBaseDirectory,
-                    containerPath: FlukeDeployConstants.captainBaseDirectory,
+                    hostPath: FlukeDeployConstants.flukedeployBaseDirectory,
+                    containerPath: FlukeDeployConstants.flukedeployBaseDirectory,
                 },
             ]
 
             const env = [] as IAppEnvVar[]
             env.push({
-                key: EnvVar.keys.IS_CAPTAIN_INSTANCE,
+                key: EnvVar.keys.IS_FLUKEDEPLOY_INSTANCE,
                 value: '1',
             })
             env.push({
-                key: EnvVar.keys.CAPTAIN_HOST_ADMIN_PORT,
+                key: EnvVar.keys.FLUKEDEPLOY_HOST_ADMIN_PORT,
                 value: FlukeDeployConstants.configs.adminPortNumber3000 + '',
             })
             env.push({
-                key: EnvVar.keys.CAPTAIN_HOST_HTTP_PORT,
+                key: EnvVar.keys.FLUKEDEPLOY_HOST_HTTP_PORT,
                 value: FlukeDeployConstants.configs.nginxPortNumber80 + '',
             })
             env.push({
-                key: EnvVar.keys.CAPTAIN_HOST_HTTPS_PORT,
+                key: EnvVar.keys.FLUKEDEPLOY_HOST_HTTPS_PORT,
                 value: FlukeDeployConstants.configs.nginxPortNumber443 + '',
             })
 
@@ -441,10 +441,10 @@ export function install() {
                 })
             }
 
-            if (EnvVar.CAPTAIN_DOCKER_API) {
+            if (EnvVar.FLUKEDEPLOY_DOCKER_API) {
                 env.push({
-                    key: EnvVar.keys.CAPTAIN_DOCKER_API,
-                    value: EnvVar.CAPTAIN_DOCKER_API,
+                    key: EnvVar.keys.FLUKEDEPLOY_DOCKER_API,
+                    value: EnvVar.FLUKEDEPLOY_DOCKER_API,
                 })
             } else {
                 volumeToMount.push({
@@ -453,10 +453,10 @@ export function install() {
                 })
             }
 
-            if (EnvVar.CAPTAIN_BASE_DIRECTORY) {
+            if (EnvVar.FLUKEDEPLOY_BASE_DIRECTORY) {
                 env.push({
-                    key: EnvVar.keys.CAPTAIN_BASE_DIRECTORY,
-                    value: EnvVar.CAPTAIN_BASE_DIRECTORY,
+                    key: EnvVar.keys.FLUKEDEPLOY_BASE_DIRECTORY,
+                    value: EnvVar.FLUKEDEPLOY_BASE_DIRECTORY,
                 })
             }
 
@@ -469,8 +469,8 @@ export function install() {
                     FlukeDeployConstants.configs.publishedNameOnDockerHub // debug doesn't have version.
 
                 env.push({
-                    key: EnvVar.keys.CAPTAIN_IS_DEBUG,
-                    value: EnvVar.CAPTAIN_IS_DEBUG + '',
+                    key: EnvVar.keys.FLUKEDEPLOY_IS_DEBUG,
+                    value: EnvVar.FLUKEDEPLOY_IS_DEBUG + '',
                 })
 
                 volumeToMount.push({
@@ -493,7 +493,7 @@ export function install() {
 
             return DockerApi.get().createServiceOnNodeId(
                 captainNameAndVersion,
-                FlukeDeployConstants.captainServiceName,
+                FlukeDeployConstants.flukedeployServiceName,
                 ports,
                 nodeId,
                 volumeToMount,

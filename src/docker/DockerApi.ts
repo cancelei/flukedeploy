@@ -218,11 +218,11 @@ class DockerApi {
     }
 
     createJoinCommand(
-        captainIpAddress: string,
+        flukedeployIpAddress: string,
         token: string,
         workerIp: string
     ) {
-        return `docker swarm join --token ${token} ${captainIpAddress}:2377 --advertise-addr ${workerIp}:2377`
+        return `docker swarm join --token ${token} ${flukedeployIpAddress}:2377 --advertise-addr ${workerIp}:2377`
     }
 
     getNodesInfo() {
@@ -1730,6 +1730,29 @@ class DockerApi {
         })
     }
 
+    // Monitoring methods
+    inspectService(serviceName: string) {
+        return this.dockerode.getService(serviceName).inspect()
+    }
+
+    getServiceTasks(serviceName: string) {
+        return this.dockerode.listTasks({
+            filters: JSON.stringify({ service: [serviceName] })
+        })
+    }
+
+    getContainerStats(containerId: string) {
+        return this.dockerode.getContainer(containerId).stats({ stream: false })
+    }
+
+    inspectContainerById(containerId: string) {
+        return this.dockerode.getContainer(containerId).inspect()
+    }
+
+    getInfo() {
+        return this.dockerode.info()
+    }
+
     getNodeLables(nodeId: string) {
         const self = this
         return self.dockerode
@@ -1769,7 +1792,7 @@ class DockerApi {
     }
 }
 
-const dockerApiAddressSplited = (EnvVars.CAPTAIN_DOCKER_API || '').split(':')
+const dockerApiAddressSplited = (EnvVars.FLUKEDEPLOY_DOCKER_API || '').split(':')
 const connectionParams: Docker.DockerOptions =
     dockerApiAddressSplited.length < 2
         ? {

@@ -124,7 +124,7 @@ class SelfHostedDockerRegistry {
         return Promise.resolve()
             .then(function () {
                 const authContent = `${
-                    FlukeDeployConstants.captainRegistryUsername
+                    FlukeDeployConstants.flukedeployRegistryUsername
                 }:${bcrypt.hashSync(password, bcrypt.genSaltSync(10))}`
 
                 return fs.outputFile(

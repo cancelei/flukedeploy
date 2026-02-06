@@ -2,17 +2,17 @@ import fs = require('fs-extra')
 import path = require('path')
 import EnvVars from './EnvVars'
 
-const CAPTAIN_BASE_DIRECTORY = EnvVars.CAPTAIN_BASE_DIRECTORY || '/captain'
-const CAPTAIN_DATA_DIRECTORY = CAPTAIN_BASE_DIRECTORY + '/data' // data that sits here can be backed up
-const CAPTAIN_ROOT_DIRECTORY_TEMP = CAPTAIN_BASE_DIRECTORY + '/temp'
-const CAPTAIN_ROOT_DIRECTORY_GENERATED = CAPTAIN_BASE_DIRECTORY + '/generated'
+const FLUKEDEPLOY_BASE_DIRECTORY = EnvVars.FLUKEDEPLOY_BASE_DIRECTORY || '/captain'
+const FLUKEDEPLOY_DATA_DIRECTORY = FLUKEDEPLOY_BASE_DIRECTORY + '/data' // data that sits here can be backed up
+const FLUKEDEPLOY_ROOT_DIRECTORY_TEMP = FLUKEDEPLOY_BASE_DIRECTORY + '/temp'
+const FLUKEDEPLOY_ROOT_DIRECTORY_GENERATED = FLUKEDEPLOY_BASE_DIRECTORY + '/generated'
 
 const CONSTANT_FILE_OVERRIDE_BUILD = path.join(
     __dirname,
     '../../config-override.json'
 )
 const CONSTANT_FILE_OVERRIDE_USER =
-    CAPTAIN_DATA_DIRECTORY + '/config-override.json'
+    FLUKEDEPLOY_DATA_DIRECTORY + '/config-override.json'
 
 const configs = {
     publishedNameOnDockerHub: 'flukedeploy/flukedeploy',
@@ -51,7 +51,7 @@ const configs = {
 
     defaultEmail: 'runner@flukedeploy.com',
 
-    captainSubDomain: 'captain',
+    flukedeploySubDomain: 'captain',
 
     overlayNetworkOverride: {},
 
@@ -68,12 +68,12 @@ const configs = {
     // this is added in 1.13 just as a safety - remove this after 1.14
     disableEncryptedCheck: false,
 
-    // The port can be overridden via env variable CAPTAIN_HOST_HTTP_PORT
-    nginxPortNumber80: EnvVars.CAPTAIN_HOST_HTTP_PORT,
-    // The port can be overridden via env variable CAPTAIN_HOST_HTTPS_PORT
-    nginxPortNumber443: EnvVars.CAPTAIN_HOST_HTTPS_PORT,
-    // The port can be overridden via env variable CAPTAIN_HOST_ADMIN_PORT
-    adminPortNumber3000: EnvVars.CAPTAIN_HOST_ADMIN_PORT,
+    // The port can be overridden via env variable FLUKEDEPLOY_HOST_HTTP_PORT
+    nginxPortNumber80: EnvVars.FLUKEDEPLOY_HOST_HTTP_PORT,
+    // The port can be overridden via env variable FLUKEDEPLOY_HOST_HTTPS_PORT
+    nginxPortNumber443: EnvVars.FLUKEDEPLOY_HOST_HTTPS_PORT,
+    // The port can be overridden via env variable FLUKEDEPLOY_HOST_ADMIN_PORT
+    adminPortNumber3000: EnvVars.FLUKEDEPLOY_HOST_ADMIN_PORT,
 
     defaultGzipOn: true,
 
@@ -99,7 +99,7 @@ const data = {
 
     apiVersion: 'v2',
 
-    isDebug: EnvVars.CAPTAIN_IS_DEBUG,
+    isDebug: EnvVars.FLUKEDEPLOY_IS_DEBUG,
 
     serviceContainerPort3000: 3000,
 
@@ -115,7 +115,7 @@ const data = {
 
     nginxStaticRootDir: '/usr/share/nginx',
 
-    captainStaticFilesDir: CAPTAIN_ROOT_DIRECTORY_GENERATED + '/static',
+    flukedeployStaticFilesDir: FLUKEDEPLOY_ROOT_DIRECTORY_GENERATED + '/static',
 
     nginxSharedPathOnNginx: '/nginx-shared',
 
@@ -131,57 +131,57 @@ const data = {
 
     nginxDomainSpecificHtmlDir: '/domains',
 
-    captainConfirmationPath: '/.well-known/flukedeploy-identifier',
+    flukedeployConfirmationPath: '/.well-known/flukedeploy-identifier',
 
-    captainBaseDirectory: CAPTAIN_BASE_DIRECTORY,
+    flukedeployBaseDirectory: FLUKEDEPLOY_BASE_DIRECTORY,
 
-    restoreTarFilePath: CAPTAIN_BASE_DIRECTORY + '/backup.tar',
+    restoreTarFilePath: FLUKEDEPLOY_BASE_DIRECTORY + '/backup.tar',
 
-    restoreDirectoryPath: CAPTAIN_BASE_DIRECTORY + '/restoring',
+    restoreDirectoryPath: FLUKEDEPLOY_BASE_DIRECTORY + '/restoring',
 
-    captainRootDirectoryTemp: CAPTAIN_ROOT_DIRECTORY_TEMP,
+    flukedeployRootDirectoryTemp: FLUKEDEPLOY_ROOT_DIRECTORY_TEMP,
 
-    captainRootDirectoryBackup: CAPTAIN_ROOT_DIRECTORY_TEMP + '/backup',
+    flukedeployRootDirectoryBackup: FLUKEDEPLOY_ROOT_DIRECTORY_TEMP + '/backup',
 
-    captainDownloadsDirectory: CAPTAIN_ROOT_DIRECTORY_TEMP + '/downloads',
+    flukedeployDownloadsDirectory: FLUKEDEPLOY_ROOT_DIRECTORY_TEMP + '/downloads',
 
-    captainRawSourceDirectoryBase: CAPTAIN_ROOT_DIRECTORY_TEMP + '/image_raw',
+    flukedeployRawSourceDirectoryBase: FLUKEDEPLOY_ROOT_DIRECTORY_TEMP + '/image_raw',
 
-    captainRootDirectoryGenerated: CAPTAIN_ROOT_DIRECTORY_GENERATED,
+    flukedeployRootDirectoryGenerated: FLUKEDEPLOY_ROOT_DIRECTORY_GENERATED,
 
-    registryAuthPathOnHost: CAPTAIN_ROOT_DIRECTORY_GENERATED + '/registry-auth', // this is a file
+    registryAuthPathOnHost: FLUKEDEPLOY_ROOT_DIRECTORY_GENERATED + '/registry-auth', // this is a file
 
-    baseNginxConfigPath: CAPTAIN_ROOT_DIRECTORY_GENERATED + '/nginx/nginx.conf', // this is a file
+    baseNginxConfigPath: FLUKEDEPLOY_ROOT_DIRECTORY_GENERATED + '/nginx/nginx.conf', // this is a file
 
     rootNginxConfigPath:
-        CAPTAIN_ROOT_DIRECTORY_GENERATED + '/nginx/conf.d/flukedeploy-root',
+        FLUKEDEPLOY_ROOT_DIRECTORY_GENERATED + '/nginx/conf.d/flukedeploy-root',
 
     perAppNginxConfigPathBase:
-        CAPTAIN_ROOT_DIRECTORY_GENERATED + '/nginx/conf.d',
+        FLUKEDEPLOY_ROOT_DIRECTORY_GENERATED + '/nginx/conf.d',
 
-    goaccessConfigPathBase: CAPTAIN_ROOT_DIRECTORY_GENERATED + '/goaccess',
+    goaccessConfigPathBase: FLUKEDEPLOY_ROOT_DIRECTORY_GENERATED + '/goaccess',
 
-    captainDataDirectory: CAPTAIN_DATA_DIRECTORY,
+    flukedeployDataDirectory: FLUKEDEPLOY_DATA_DIRECTORY,
 
-    letsEncryptLibPath: CAPTAIN_DATA_DIRECTORY + '/letencrypt/lib',
+    letsEncryptLibPath: FLUKEDEPLOY_DATA_DIRECTORY + '/letencrypt/lib',
 
-    letsEncryptEtcPath: CAPTAIN_DATA_DIRECTORY + '/letencrypt/etc',
+    letsEncryptEtcPath: FLUKEDEPLOY_DATA_DIRECTORY + '/letencrypt/etc',
 
-    registryPathOnHost: CAPTAIN_DATA_DIRECTORY + '/registry',
+    registryPathOnHost: FLUKEDEPLOY_DATA_DIRECTORY + '/registry',
 
-    nginxSharedPathOnHost: CAPTAIN_DATA_DIRECTORY + '/nginx-shared',
+    nginxSharedPathOnHost: FLUKEDEPLOY_DATA_DIRECTORY + '/nginx-shared',
 
-    nginxSharedLogsPathOnHost: CAPTAIN_DATA_DIRECTORY + '/shared-logs',
+    nginxSharedLogsPathOnHost: FLUKEDEPLOY_DATA_DIRECTORY + '/shared-logs',
 
     debugSourceDirectory: '', // Only used in debug mode
 
     // ********************* Local Docker Constants  ************************
 
-    captainSaltSecretKey: 'flukedeploy-salt',
+    flukedeploySaltSecretKey: 'flukedeploy-salt',
 
     nginxServiceName: 'flukedeploy-nginx',
 
-    captainServiceName: 'flukedeploy-flukedeploy',
+    flukedeployServiceName: 'flukedeploy-flukedeploy',
 
     certbotServiceName: 'flukedeploy-certbot',
 
@@ -191,9 +191,9 @@ const data = {
 
     registryServiceName: 'flukedeploy-registry',
 
-    captainNetworkName: 'flukedeploy-overlay-network',
+    flukedeployNetworkName: 'flukedeploy-overlay-network',
 
-    captainRegistryUsername: 'captain',
+    flukedeployRegistryUsername: 'captain',
 
     // ********************* HTTP Related Constants  ************************
 

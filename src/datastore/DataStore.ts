@@ -11,7 +11,7 @@ import FlukeDeployTheme from '../models/FlukeDeployTheme'
 import { GoAccessInfo } from '../models/GoAccessInfo'
 import { NetDataInfo } from '../models/NetDataInfo'
 import FlukeDeployConstants from '../utils/FlukeDeployConstants'
-import CaptainEncryptor from '../utils/Encryptor'
+import FlukeDeployEncryptor from '../utils/Encryptor'
 import Utils from '../utils/Utils'
 import AppsDataStore from './AppsDataStore'
 import ProDataStore from './ProDataStore'
@@ -49,7 +49,7 @@ let DEFAULT_NGINX_CONFIG_FOR_APP_PATH =
     __dirname + '/../../template/server-block-conf.ejs'
 
 const SERVER_BLOCK_CONF_OVERRIDE_PATH =
-    FlukeDeployConstants.captainDataDirectory + '/server-block-conf-override.ejs'
+    FlukeDeployConstants.flukedeployDataDirectory + '/server-block-conf-override.ejs'
 
 if (fs.pathExistsSync(SERVER_BLOCK_CONF_OVERRIDE_PATH)) {
     DEFAULT_NGINX_CONFIG_FOR_APP_PATH = SERVER_BLOCK_CONF_OVERRIDE_PATH
@@ -60,7 +60,7 @@ const DEFAULT_NGINX_CONFIG_FOR_APP = fs
     .toString()
 
 class DataStore {
-    private encryptor: CaptainEncryptor
+    private encryptor: FlukeDeployEncryptor
     private namespace: string
     private data: Configstore
     private appsDataStore: AppsDataStore
@@ -73,7 +73,7 @@ class DataStore {
             `flukedeploy-store-${namespace}`, // This value seems to be unused
             {},
             {
-                configPath: `${FlukeDeployConstants.captainDataDirectory}/config-${namespace}.json`,
+                configPath: `${FlukeDeployConstants.flukedeployDataDirectory}/config-${namespace}.json`,
             }
         )
 
@@ -90,7 +90,7 @@ class DataStore {
     }
 
     setEncryptionSalt(salt: string) {
-        this.encryptor = new CaptainEncryptor(this.namespace + salt)
+        this.encryptor = new FlukeDeployEncryptor(this.namespace + salt)
         this.appsDataStore.setEncryptor(this.encryptor)
         this.registriesDataStore.setEncryptor(this.encryptor)
     }

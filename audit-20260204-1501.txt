@@ -1,0 +1,368 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔍 VPS Resource Audit Report
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Generated: Wed Feb  4 18:01:45 UTC 2026
+Host: srv772488
+
+━━━ SECTION 1: System Overview ━━━
+
+=== OS Info ===
+Linux srv772488 6.8.0-90-generic #91-Ubuntu SMP PREEMPT_DYNAMIC Tue Nov 18 14:14:30 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+NAME="Ubuntu"
+VERSION="24.04.3 LTS (Noble Numbat)"
+
+=== Uptime ===
+ 18:01:45 up 28 min,  2 users,  load average: 2.91, 4.75, 6.37
+
+=== Load Average (last 1, 5, 15 min) ===
+2.91 4.75 6.37 3/856 13272
+
+━━━ SECTION 2: CPU Usage ━━━
+
+=== CPU Info ===
+Architecture:                         x86_64
+CPU(s):                               4
+Model name:                           AMD EPYC 7543P 32-Core Processor
+Thread(s) per core:                   1
+
+=== Top 10 CPU Consuming Processes ===
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+netdata      917 44.0  9.1 2136188 1491368 ?     Ssl  17:36  11:02 /usr/sbin/netdata -P /run/netdata/netdata.pid -D
+root         964 22.1  1.0 3722968 177064 ?      Ssl  17:36   5:29 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+ubuntu      2652 18.5  1.7 1036492 293472 ?      Ssl  17:42   3:35 puma 7.1.0 (tcp://0.0.0.0:80) [rails]
+root        1324  9.0  0.1 1243292 32068 ?       SNsl 17:37   2:09 /usr/bin/monarx-agent
+root       11894  7.5  0.6 21721660 106660 ?     Ssl  18:01   0:01 node ./built/server.js
+root         779  5.6  0.3 2166352 64276 ?       Ssl  17:35   1:28 /usr/bin/containerd
+root       13112  3.7  0.0 727912 16128 ?        Ssl  18:01   0:00 registry serve /etc/docker/registry/config.yml
+root           1  3.4  0.0  22548 13284 ?        Ss   17:33   0:58 /sbin/init
+netdata     5840  2.8  0.0 100868  9856 ?        Sl   17:57   0:07 /usr/libexec/netdata/plugins.d/apps.plugin 1
+ubuntu      4936  2.4  1.7 1056080 284984 ?      Sl   17:56   0:07 solid-queue-worker(1.2.4): waiting for jobs in *
+
+=== CPU Usage by Docker Containers ===
+NAME                                                            CPU %     MEM USAGE / LIMIT     MEM %
+flukedeploy-registry.1.u63btfnherc1gugh7kzph577o                0.00%     4.375MiB / 15.62GiB   0.03%
+flukedeploy-goaccess-container                                  0.00%     344KiB / 15.62GiB     0.00%
+flukedeploy-nginx.1.xtn6pjjckpm6t1uwjf3xebg6f                   0.00%     7.496MiB / 15.62GiB   0.05%
+flukedeploy-flukedeploy.1.38fw5ws6zdzug6wvak92otdq4             0.00%     46.85MiB / 15.62GiB   0.29%
+srv-captain--myfmv-pg.1.vloe111axl4u6za09emlkclso               0.01%     21.09MiB / 15.62GiB   0.13%
+srv-captain--playground-pg.1.fi52zqc318x16imkvjt1n7v4p          0.00%     19.35MiB / 15.62GiB   0.12%
+srv-captain--flukebase.1.q6tnn957mc4botl3xwovh2ta0              4.63%     1.015GiB / 15.62GiB   6.50%
+srv-captain--feeltrack-db.1.v6wml16mpgiwtczli2v2frday           0.72%     43.48MiB / 15.62GiB   0.27%
+srv-captain--feeltrack-staging.1.h3gngx4zyh01jszdh17rnq8ly      1.64%     416MiB / 15.62GiB     2.60%
+srv-captain--feeltrack-staging-db.1.uex76mdchtt3xcgx53pboeekr   0.73%     43.88MiB / 15.62GiB   0.27%
+srv-captain--flukebase-db.1.20w1pim6va26e5t88j9cjiihc           1.94%     92.79MiB / 15.62GiB   0.58%
+srv-captain--seeinsp-db.1.xh79vcx4agbqrjhxb26vl2ku9             0.63%     39.3MiB / 15.62GiB    0.25%
+srv-captain--feeltrack.1.y2qj0kcqwlzmovit9x9xb75mp              1.68%     446.9MiB / 15.62GiB   2.79%
+srv-captain--seeinsp.1.tyflfl9s3w7pcwrhkxby8hi39                1.90%     654.4MiB / 15.62GiB   4.09%
+flukedeploy-certbot.1.lo77irouwe8ol8w23v9tgnp9a                 0.00%     352KiB / 15.62GiB     0.00%
+
+━━━ SECTION 3: Memory Usage ━━━
+
+=== Memory Overview ===
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       4.6Gi       7.7Gi        91Mi       3.7Gi        10Gi
+Swap:             0B          0B          0B
+
+=== Detailed Memory Info ===
+MemTotal:       16377052 kB
+MemFree:         8072480 kB
+MemAvailable:   11533536 kB
+Buffers:          378696 kB
+Cached:          3260864 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+
+=== Top 10 Memory Consuming Processes ===
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+netdata      917 44.0  9.1 2136316 1491496 ?     Ssl  17:36  11:04 /usr/sbin/netdata -P /run/netdata/netdata.pid -D
+ubuntu      2652 18.5  1.7 1036492 293472 ?      Ssl  17:42   3:35 puma 7.1.0 (tcp://0.0.0.0:80) [rails]
+ubuntu      4936  2.4  1.7 1056080 284984 ?      Sl   17:56   0:07 solid-queue-worker(1.2.4): waiting for jobs in *
+ubuntu      4944  2.0  1.7 1045324 282980 ?      Sl   17:56   0:06 solid-queue-worker(1.2.4): waiting for jobs in *
+ubuntu      4949  2.0  1.6 1039628 277396 ?      Sl   17:56   0:06 solid-queue-worker(1.2.4): waiting for jobs in *
+ubuntu      4963  0.5  1.6 1055888 276680 ?      Sl   17:56   0:01 solid-queue-scheduler(1.2.4): scheduling github_commit_polling,pattern_analysis,cloudflare_worker_health,cloudflare_usage_polling
+ubuntu      4928  0.6  1.6 1047632 276036 ?      Sl   17:56   0:02 solid-queue-dispatcher(1.2.4): dispatching every 1 seconds
+ubuntu      4871  0.2  1.6 1038988 273000 ?      Sl   17:56   0:00 solid-queue-supervisor(1.2.4): supervising 33, 40, 47, 51, 59
+ubuntu      5145  1.5  1.2 878772 200948 ?       Sl   17:56   0:05 puma 7.1.0 (tcp://0.0.0.0:80) [rails]
+ubuntu      5066  1.8  1.2 1153684 200060 ?      Sl   17:56   0:06 solid-queue-supervisor(1.2.4): supervising 249, 253, 256
+
+=== OOM Killer History (last 50 lines) ===
+
+━━━ SECTION 4: Disk Usage ━━━
+
+=== Filesystem Usage ===
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           1.6G  2.4M  1.6G   1% /run
+/dev/sda1       193G  184G  9.6G  96% /
+tmpfs           7.9G  332K  7.9G   1% /dev/shm
+tmpfs           5.0M     0  5.0M   0% /run/lock
+/dev/sda16      881M  119M  701M  15% /boot
+/dev/sda15      105M  6.1M   99M   6% /boot/efi
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/3ef77bac36fa95b3f3fc1d182ae52ed1e1c498d1ea636099a97b345c09b109a8/merged
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/bd7dc9731728f073cf56fb8db8603888a8886741e1cd3acb10cd206fa890cda3/merged
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/ef1bc3164870bb96b53e3428c9988c9893400795b4c0061cb47306fd900dda78/merged
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/aaf299dbf96fa516705fc5010b221f25d06c962ce7c756f8a3c7727fefb2096a/merged
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/6da5706eda53c6ced0361ce5099e7bd9576940c8b19665766bca28f8ee01f6bf/merged
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/811db8de5f6ee59d73bf24033b94a226fcc707149f4a9987fbfa0983410a592e/merged
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/aac3ab9af151a64f420d187791e3a4f58b09109fcd90c3bfe2d4db2686f0ea8a/merged
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/5593a845e85832e069def89599d825c27a49d5823db8869d121b44040cd8369a/merged
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/124aa74712c4ce7f4820953ed3403a3b206e8da10f21ff21c13118cd928e9611/merged
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/20ca21f72179d131196c08419348e099f0f77cfc8d57cc40babdd981f0dc00a5/merged
+tmpfs           1.6G   12K  1.6G   1% /run/user/0
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/2c7a9e2adc52f0f989209722249d122c74d50f329a11bbfc21ac31ff71fa8a78/merged
+tmpfs           7.9G  4.0K  7.9G   1% /var/lib/docker/containers/4f25a0d1cd15062cb0e1797fa3350b3107b70f1c5f909ee1cacf857d248ac49c/mounts/secrets
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/e2661109aeea77db99fda837cceaff2d5e63be25f8f2ae9091bac5a728666f02/merged
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/6b86c9c0f443a4e5fb528325f3e27f8fc50ea37413ce746047121e5f80bee7d8/merged
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/c75be219ad48c0eba6024405275881224e3d3a88159195fe7877d0cc44fe2fae/merged
+overlay         193G  184G  9.6G  96% /var/lib/docker/overlay2/7358928972a56725143f2f897e9d59690563247f1f4629b18c56038821a8ca37/merged
+
+=== Inode Usage ===
+Filesystem       Inodes   IUsed    IFree IUse% Mounted on
+tmpfs           2047131    1162  2045969    1% /run
+/dev/sda1      26083328 3503646 22579682   14% /
+tmpfs           2047131       3  2047128    1% /dev/shm
+tmpfs           2047131       3  2047128    1% /run/lock
+/dev/sda16        58496     604    57892    2% /boot
+/dev/sda15            0       0        0     - /boot/efi
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/3ef77bac36fa95b3f3fc1d182ae52ed1e1c498d1ea636099a97b345c09b109a8/merged
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/bd7dc9731728f073cf56fb8db8603888a8886741e1cd3acb10cd206fa890cda3/merged
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/ef1bc3164870bb96b53e3428c9988c9893400795b4c0061cb47306fd900dda78/merged
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/aaf299dbf96fa516705fc5010b221f25d06c962ce7c756f8a3c7727fefb2096a/merged
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/6da5706eda53c6ced0361ce5099e7bd9576940c8b19665766bca28f8ee01f6bf/merged
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/811db8de5f6ee59d73bf24033b94a226fcc707149f4a9987fbfa0983410a592e/merged
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/aac3ab9af151a64f420d187791e3a4f58b09109fcd90c3bfe2d4db2686f0ea8a/merged
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/5593a845e85832e069def89599d825c27a49d5823db8869d121b44040cd8369a/merged
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/124aa74712c4ce7f4820953ed3403a3b206e8da10f21ff21c13118cd928e9611/merged
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/20ca21f72179d131196c08419348e099f0f77cfc8d57cc40babdd981f0dc00a5/merged
+tmpfs            409426      34   409392    1% /run/user/0
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/2c7a9e2adc52f0f989209722249d122c74d50f329a11bbfc21ac31ff71fa8a78/merged
+tmpfs           2047131       2  2047129    1% /var/lib/docker/containers/4f25a0d1cd15062cb0e1797fa3350b3107b70f1c5f909ee1cacf857d248ac49c/mounts/secrets
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/e2661109aeea77db99fda837cceaff2d5e63be25f8f2ae9091bac5a728666f02/merged
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/6b86c9c0f443a4e5fb528325f3e27f8fc50ea37413ce746047121e5f80bee7d8/merged
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/c75be219ad48c0eba6024405275881224e3d3a88159195fe7877d0cc44fe2fae/merged
+overlay        26083328 3503646 22579682   14% /var/lib/docker/overlay2/7358928972a56725143f2f897e9d59690563247f1f4629b18c56038821a8ca37/merged
+
+=== Top 10 Largest Directories in / ===
+191G	/
+129G	/var
+49G	/captain
+6.1G	/root
+2.8G	/usr
+125M	/boot
+9.7M	/etc
+2.4M	/run
+332K	/dev
+92K	/tmp
+60K	/flukedeploy
+
+=== Docker Disk Usage ===
+Docker not running
+
+=== Large Log Files (>100MB) ===
+
+━━━ SECTION 5: Docker Services ━━━
+
+=== Docker Info ===
+ Containers: 19
+ Images: 717
+ Server Version: 29.2.0
+ Storage Driver: overlay2
+ Swarm: active
+
+=== Docker Containers (Running) ===
+NAMES                                                           IMAGE                                                        STATUS          PORTS
+flukedeploy-goaccess-container                                  caprover/goaccess:1.9.4                                      Up 25 seconds   7890/tcp
+flukedeploy-registry.1.zbs0ynjg0luxf7lwxpfaa0vh1                26b2eb03618e                                                 Up 28 seconds   5000/tcp
+flukedeploy-certbot.1.6m5ab2kto31z2b6u7pscfjuau                 caprover/certbot-sleeping:v2.11.0                            Up 21 seconds   80/tcp, 443/tcp
+flukedeploy-nginx.1.zo2cjhdb64247r09pvmh82g0c                   nginx:1.27.2                                                 Up 34 seconds   0.0.0.0:80->80/tcp, [::]:80->80/tcp, 0.0.0.0:443->443/tcp, [::]:443->443/tcp, 0.0.0.0:443->443/udp, [::]:443->443/udp
+flukedeploy-flukedeploy.1.odtpod4oa85rzccitpxbc5x9x             ghcr.io/cancelei/flukedeploy:latest                          Up 43 seconds   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+srv-captain--myfmv-pg.1.vloe111axl4u6za09emlkclso               postgres:17.0                                                Up 25 minutes   5432/tcp
+srv-captain--playground-pg.1.fi52zqc318x16imkvjt1n7v4p          postgres:17.0                                                Up 25 minutes   5432/tcp
+srv-captain--flukebase.1.q6tnn957mc4botl3xwovh2ta0              registry.hub.docker.com/cancelei/img-captain-flukebase:174   Up 25 minutes   80/tcp
+srv-captain--feeltrack-db.1.v6wml16mpgiwtczli2v2frday           postgres:17.0                                                Up 25 minutes   5432/tcp
+srv-captain--feeltrack-staging.1.h3gngx4zyh01jszdh17rnq8ly      ttl.sh/cancelei-feeltrack-staging-perf:2h                    Up 25 minutes   80/tcp
+srv-captain--feeltrack-staging-db.1.uex76mdchtt3xcgx53pboeekr   postgres:17.0                                                Up 25 minutes   5432/tcp
+srv-captain--flukebase-db.1.20w1pim6va26e5t88j9cjiihc           postgres:17.0                                                Up 25 minutes   5432/tcp
+srv-captain--seeinsp-db.1.xh79vcx4agbqrjhxb26vl2ku9             postgres:17.0                                                Up 25 minutes   5432/tcp
+srv-captain--feeltrack.1.y2qj0kcqwlzmovit9x9xb75mp              registry.hub.docker.com/cancelei/img-captain-feeltrack:65    Up 26 minutes   80/tcp
+srv-captain--seeinsp.1.tyflfl9s3w7pcwrhkxby8hi39                registry.hub.docker.com/cancelei/img-captain-seeinsp:85      Up 25 minutes   3000/tcp
+
+=== Docker Containers (All) ===
+NAMES                                                           IMAGE                                                        STATUS
+flukedeploy-goaccess-container                                  caprover/goaccess:1.9.4                                      Up 26 seconds
+flukedeploy-registry.1.zbs0ynjg0luxf7lwxpfaa0vh1                26b2eb03618e                                                 Up 28 seconds
+flukedeploy-certbot.1.6m5ab2kto31z2b6u7pscfjuau                 caprover/certbot-sleeping:v2.11.0                            Up 21 seconds
+flukedeploy-nginx.1.zo2cjhdb64247r09pvmh82g0c                   nginx:1.27.2                                                 Up 34 seconds
+flukedeploy-flukedeploy.1.odtpod4oa85rzccitpxbc5x9x             ghcr.io/cancelei/flukedeploy:latest                          Up 43 seconds
+flukedeploy-certbot.1.93dtugc6tu2psdk76i4fvgnr0                 caprover/certbot-sleeping:v2.11.0                            Exited (137) 22 seconds ago
+flukedeploy-registry.1.74zp0ybwi8yz2w96akq9k5fw2                26b2eb03618e                                                 Exited (2) 29 seconds ago
+srv-captain--myfmv-pg.1.vloe111axl4u6za09emlkclso               postgres:17.0                                                Up 25 minutes
+srv-captain--playground-pg.1.fi52zqc318x16imkvjt1n7v4p          postgres:17.0                                                Up 25 minutes
+srv-captain--flukebase.1.q6tnn957mc4botl3xwovh2ta0              registry.hub.docker.com/cancelei/img-captain-flukebase:174   Up 25 minutes
+srv-captain--feeltrack-db.1.v6wml16mpgiwtczli2v2frday           postgres:17.0                                                Up 25 minutes
+srv-captain--feeltrack-staging.1.h3gngx4zyh01jszdh17rnq8ly      ttl.sh/cancelei-feeltrack-staging-perf:2h                    Up 25 minutes
+srv-captain--feeltrack-staging-db.1.uex76mdchtt3xcgx53pboeekr   postgres:17.0                                                Up 25 minutes
+srv-captain--flukebase-db.1.20w1pim6va26e5t88j9cjiihc           postgres:17.0                                                Up 25 minutes
+srv-captain--seeinsp-db.1.xh79vcx4agbqrjhxb26vl2ku9             postgres:17.0                                                Up 25 minutes
+srv-captain--feeltrack.1.y2qj0kcqwlzmovit9x9xb75mp              registry.hub.docker.com/cancelei/img-captain-feeltrack:65    Up 26 minutes
+srv-captain--seeinsp.1.tyflfl9s3w7pcwrhkxby8hi39                registry.hub.docker.com/cancelei/img-captain-seeinsp:85      Up 25 minutes
+                                                                nginx:1.27.2                                                 Dead
+                                                                870d1aa5ee8f                                                 Dead
+
+=== Docker Swarm Services ===
+ID             NAME                                MODE         REPLICAS   IMAGE                                                           PORTS
+va6bgh19fzfa   flukedeploy-certbot                 replicated   1/1        caprover/certbot-sleeping:v2.11.0                               
+kdao8o9odlc1   flukedeploy-flukedeploy             replicated   1/1        ghcr.io/cancelei/flukedeploy:latest                             
+u79q2cthzn0h   flukedeploy-nginx                   replicated   1/1        nginx:1.27.2                                                    
+j6bpdduqq5n4   flukedeploy-registry                replicated   1/1        registry:2                                                      *:996->5000/tcp
+1ykexwsfqayh   srv-captain--connect                replicated   0/0        registry.hub.docker.com/cancelei/img-captain-connect:30         
+gfz76njdewng   srv-captain--feeltrack              replicated   1/1        registry.hub.docker.com/cancelei/img-captain-feeltrack:65       
+mebecujwapl3   srv-captain--feeltrack-db           replicated   1/1        postgres:17.0                                                   
+t55kvz9e1qsa   srv-captain--feeltrack-staging      replicated   1/1        ttl.sh/cancelei-feeltrack-staging-perf:2h                       
+xknzz8jg3p1v   srv-captain--feeltrack-staging-db   replicated   1/1        postgres:17.0                                                   
+fyt3gdzium36   srv-captain--flukebase              replicated   1/1        registry.hub.docker.com/cancelei/img-captain-flukebase:174      
+2v5m2yy7vny4   srv-captain--flukebase-db           replicated   1/1        postgres:17.0                                                   
+szlfvedu60qq   srv-captain--github-strike          replicated   0/0        registry.hub.docker.com/cancelei/img-captain-github-strike:23   
+wolyk0nade0n   srv-captain--myfmv                  replicated   0/0        registry.flukebase.me:996/captain/img-captain-myfmv:18          
+rcixcmtw1zcz   srv-captain--myfmv-pg               replicated   1/1        postgres:17.0                                                   *:5432->5432/tcp, *:5432->5432/udp
+ouwd47vuiksr   srv-captain--playground-pg          replicated   1/1        postgres:17.0                                                   
+m4wdjusgnpr8   srv-captain--seeinsp                replicated   1/1        registry.hub.docker.com/cancelei/img-captain-seeinsp:85         
+jc7emo58r673   srv-captain--seeinsp-db             replicated   1/1        postgres:17.0                                                   
+
+=== Docker Images ===
+REPOSITORY                                                       TAG          SIZE      CREATED
+ghcr.io/cancelei/flukedeploy                                     latest       524MB     15 hours ago
+ttl.sh/cancelei-feeltrack-staging-perf                           2h           913MB     26 hours ago
+cancelei/img-captain-feeltrack-staging                           patched-v3   887MB     43 hours ago
+img-captain-connect                                              30           245MB     47 hours ago
+img-captain-connect                                              latest       245MB     47 hours ago
+registry.hub.docker.com/cancelei/img-captain-connect             30           245MB     47 hours ago
+registry.hub.docker.com/cancelei/img-captain-flukebase           174          1.08GB    6 days ago
+img-captain-flukebase-staging                                    58           1.08GB    6 days ago
+img-captain-flukebase-staging                                    latest       1.08GB    6 days ago
+img-captain-flukebase                                            174          1.08GB    6 days ago
+img-captain-flukebase                                            latest       1.08GB    6 days ago
+registry.hub.docker.com/cancelei/img-captain-flukebase-staging   58           1.08GB    6 days ago
+img-captain-feeltrack-staging                                    116          888MB     7 days ago
+registry.hub.docker.com/cancelei/img-captain-feeltrack-staging   116          888MB     7 days ago
+img-captain-feeltrack-staging                                    110          887MB     9 days ago
+registry.hub.docker.com/cancelei/img-captain-feeltrack-staging   110          887MB     9 days ago
+img-captain-flukebase                                            166          1.08GB    11 days ago
+registry.hub.docker.com/cancelei/img-captain-flukebase           166          1.08GB    11 days ago
+img-captain-github-strike                                        4            146MB     12 days ago
+
+=== Docker Volumes ===
+DRIVER    VOLUME NAME
+local     5fab3029c2b569523df3ee4a6db60f84bee14da82bfc9b5f3b18ebe611d29875
+local     6f1d6054ed80485082a14c559be5248d4810b2c158c6eac50ce08804021d69b8
+local     8d11545036ff1052f580ec43149c0216a17385ddfaa8b5964f4610ce11fbc082
+local     37b3eabc16568acf5f37364fa89ea79800e24e9a958190443f636201329463ad
+local     48aaf1773ee534d3e514d01ac6a5887c880c4c363903dd095e68e8ed95f5e754
+local     80fb19d31275f3ed716286170ebf69fba03ab8f8b8beb71b68a0b44e7889b76a
+local     96c004e760ae2a72db03dc6d60365cb2c7a54192c82170a64a5c00b4a4154740
+local     549f794c1fcc1ad701657e96d7f8f369d0384af8cf71bf70f949f7abe56374ff
+local     abf2d8a0e26eeed610dff463f4c9d439df149e50bf9e623d053a536583b65c1e
+local     c2915bd4e7d5739e27a6bd373acbd28b30195425e6d3b9c425a6d40e97a8c623
+local     captain--feeltrack-db-data
+local     captain--feeltrack-staging-db-data
+local     captain--flukebase-db-data
+local     captain--myfmv-pg-data
+local     captain--playground-pg-data
+local     captain--seeinsp-db-data
+
+=== Docker Networks ===
+NETWORK ID     NAME                          DRIVER    SCOPE
+5fb5925ff7f3   bridge                        bridge    local
+rtknj5wzlbwh   captain-overlay-network       overlay   swarm
+e02530cff6e7   docker_gwbridge               bridge    local
+v61ngd1u2bu9   flukedeploy-overlay-network   overlay   swarm
+8e51ce8d9255   host                          host      local
+tr93nv1tydza   ingress                       overlay   swarm
+95075ea0e1e5   none                          null      local
+
+━━━ SECTION 6: CapRover/FlukeDeploy Services ━━━
+
+=== CapRover Captain Service ===
+CapRover not found
+
+=== All CapRover Apps (srv-captain-*) ===
+ID             NAME                                MODE         REPLICAS   IMAGE                                                           PORTS
+1ykexwsfqayh   srv-captain--connect                replicated   0/0        registry.hub.docker.com/cancelei/img-captain-connect:30         
+gfz76njdewng   srv-captain--feeltrack              replicated   1/1        registry.hub.docker.com/cancelei/img-captain-feeltrack:65       
+mebecujwapl3   srv-captain--feeltrack-db           replicated   1/1        postgres:17.0                                                   
+t55kvz9e1qsa   srv-captain--feeltrack-staging      replicated   1/1        ttl.sh/cancelei-feeltrack-staging-perf:2h                       
+xknzz8jg3p1v   srv-captain--feeltrack-staging-db   replicated   1/1        postgres:17.0                                                   
+fyt3gdzium36   srv-captain--flukebase              replicated   1/1        registry.hub.docker.com/cancelei/img-captain-flukebase:174      
+2v5m2yy7vny4   srv-captain--flukebase-db           replicated   1/1        postgres:17.0                                                   
+szlfvedu60qq   srv-captain--github-strike          replicated   0/0        registry.hub.docker.com/cancelei/img-captain-github-strike:23   
+wolyk0nade0n   srv-captain--myfmv                  replicated   0/0        registry.flukebase.me:996/captain/img-captain-myfmv:18          
+rcixcmtw1zcz   srv-captain--myfmv-pg               replicated   1/1        postgres:17.0                                                   *:5432->5432/tcp, *:5432->5432/udp
+ouwd47vuiksr   srv-captain--playground-pg          replicated   1/1        postgres:17.0                                                   
+m4wdjusgnpr8   srv-captain--seeinsp                replicated   1/1        registry.hub.docker.com/cancelei/img-captain-seeinsp:85         
+jc7emo58r673   srv-captain--seeinsp-db             replicated   1/1        postgres:17.0                                                   
+
+=== FlukeDeploy Service ===
+FlukeDeploy not found
+
+=== CapRover Data Directory Size ===
+49G	/captain
+
+=== FlukeDeploy Data Directory Size ===
+60K	/flukedeploy
+
+━━━ SECTION 7: System Services ━━━
+
+=== Systemd Services (Failed) ===
+  UNIT LOAD ACTIVE SUB DESCRIPTION
+
+0 loaded units listed.
+
+=== Systemd Services (Running, top 10 by memory) ===
+    State: running
+               │ ├─20297 grep running
+
+━━━ SECTION 8: Network Services ━━━
+
+=== Listening Ports ===
+tcp        0      0 0.0.0.0:19999           0.0.0.0:*               LISTEN      917/netdata         
+tcp        0      0 127.0.0.54:53           0.0.0.0:*               LISTEN      580/systemd-resolve 
+tcp        0      0 0.0.0.0:3000            0.0.0.0:*               LISTEN      18838/docker-proxy  
+tcp        0      0 0.0.0.0:443             0.0.0.0:*               LISTEN      19246/docker-proxy  
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      19220/docker-proxy  
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1/init              
+tcp        0      0 127.0.0.1:4317          0.0.0.0:*               LISTEN      5838/otel-plugin    
+tcp        0      0 127.0.0.1:8125          0.0.0.0:*               LISTEN      917/netdata         
+tcp        0      0 127.0.0.1:65529         0.0.0.0:*               LISTEN      1324/monarx-agent   
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      580/systemd-resolve 
+tcp6       0      0 :::19999                :::*                    LISTEN      917/netdata         
+tcp6       0      0 :::3000                 :::*                    LISTEN      18845/docker-proxy  
+tcp6       0      0 :::2377                 :::*                    LISTEN      964/dockerd         
+tcp6       0      0 :::996                  :::*                    LISTEN      964/dockerd         
+tcp6       0      0 :::443                  :::*                    LISTEN      19252/docker-proxy  
+tcp6       0      0 :::80                   :::*                    LISTEN      19229/docker-proxy  
+tcp6       0      0 :::22                   :::*                    LISTEN      1/init              
+tcp6       0      0 :::7946                 :::*                    LISTEN      964/dockerd         
+tcp6       0      0 ::1:8125                :::*                    LISTEN      917/netdata         
+tcp6       0      0 :::5432                 :::*                    LISTEN      964/dockerd         
+
+=== Active Connections Count ===
+5
+
+━━━ SECTION 9: Resource Analysis ━━━
+
+Memory Usage: 32% (5229MB / 15993MB)
+Disk Usage: 92% (179GB / 193GB)
+
+⚠️  WARNING: Disk usage >80% - Clean up logs, images, or old containers
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Audit Complete
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Next Steps:
+1. Review resource usage by container (Section 5)
+2. Check for large log files (Section 4)
+3. Identify services that can be consolidated
+4. Set resource limits on Docker containers
+5. Clean up unused images/volumes
+

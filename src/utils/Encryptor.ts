@@ -7,7 +7,7 @@ import crypto = require('crypto')
 const algorithm = 'aes-256-ctr'
 const IV_LENGTH = 16 // For AES, this is always 16
 
-export default class CaptainEncryptor {
+export default class FlukeDeployEncryptor {
     private encryptionKey: string
 
     constructor(encryptionKey: string) {
